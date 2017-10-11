@@ -2,6 +2,11 @@
 #define IM_H
 
 #include <QMainWindow>
+#include <QProcess>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QLabel>
 
 namespace Ui {
 class im;
