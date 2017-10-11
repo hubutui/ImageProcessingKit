@@ -7,6 +7,10 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QLabel>
+#include <QImage>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
 
 namespace Ui {
 class im;
@@ -22,6 +26,8 @@ public:
 
 private:
     Ui::im *ui;
+    QGraphicsScene *inScene, *outScene;
+    QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
 };
 
 #endif // IM_H
