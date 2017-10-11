@@ -17,3 +17,8 @@ void im::on_action_Quit_triggered()
 {
     QApplication::quit();
 }
+
+void im::on_action_Open_triggered()
+{
+
+}
