@@ -23,9 +23,12 @@ class im : public QMainWindow
 public:
     explicit im(QWidget *parent = 0);
     ~im();
+    void cleanImage(void);
 
 private slots:
     void on_action_Quit_triggered();
+
+    void on_action_Open_triggered();
 
 private:
     Ui::im *ui;
