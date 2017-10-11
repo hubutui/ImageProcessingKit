@@ -12,3 +12,8 @@ im::~im()
 {
     delete ui;
 }
+
+void im::on_action_Quit_triggered()
+{
+    QApplication::quit();
+}

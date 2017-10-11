@@ -24,6 +24,9 @@ public:
     explicit im(QWidget *parent = 0);
     ~im();
 
+private slots:
+    void on_action_Quit_triggered();
+
 private:
     Ui::im *ui;
     QGraphicsScene *inScene, *outScene;
