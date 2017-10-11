@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>im</class>
+ <widget class="QMainWindow" name="im">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>1024</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>1024</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>im</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Open"/>
+    <addaction name="action_Save"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="action_Print"/>
+    <addaction name="action_Quit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="action_Reset"/>
+    <addaction name="action_Histogram"/>
+    <addaction name="action_Grayscale"/>
+   </widget>
+   <widget class="QMenu" name="menuColor_Space">
+    <property name="title">
+     <string>&amp;Color Space</string>
+    </property>
+    <addaction name="actionRGB2HSV"/>
+    <addaction name="actionAdjust_HSV"/>
+   </widget>
+   <widget class="QMenu" name="menuSpatial_Transform">
+    <property name="title">
+     <string>&amp;Gray Transform</string>
+    </property>
+    <addaction name="action_Linear_transform"/>
+    <addaction name="actionPiecewise_linear_transformation"/>
+    <addaction name="actionHistogram_equalization"/>
+   </widget>
+   <widget class="QMenu" name="menuSpatial_Filter">
+    <property name="title">
+     <string>&amp;Spatial Filter</string>
+    </property>
+    <addaction name="actionMedian_filter"/>
+    <addaction name="actionMaxmun_filter"/>
+    <addaction name="actionMinimum_filter"/>
+    <addaction name="actionTemplate_filter"/>
+   </widget>
+   <widget class="QMenu" name="menuFrequency_Filter">
+    <property name="title">
+     <string>Freq&amp;uency Filter</string>
+    </property>
+    <addaction name="actionlow_pass_filter"/>
+    <addaction name="actionIdeal_high_pass_filter"/>
+    <addaction name="actionButterworth_filter"/>
+    <addaction name="actionButterworth_high_pass_filter"/>
+   </widget>
+   <widget class="QMenu" name="menuImage_Recovery">
+    <property name="title">
+     <string>Image &amp;Recovery</string>
+    </property>
+    <addaction name="actionInverse_filter"/>
+    <addaction name="actionWiener_filter"/>
+   </widget>
+   <widget class="QMenu" name="menuImage_Thresholding">
+    <property name="title">
+     <string>Image &amp;Thresholding</string>
+    </property>
+    <addaction name="actionManual_threshold"/>
+    <addaction name="actionOstu_s_method"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout_ImageProcessingKit"/>
+    <addaction name="actionAbout_Qt"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menuColor_Space"/>
+   <addaction name="menuSpatial_Transform"/>
+   <addaction name="menuSpatial_Filter"/>
+   <addaction name="menuFrequency_Filter"/>
+   <addaction name="menuImage_Recovery"/>
+   <addaction name="menuImage_Thresholding"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action_Open">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as</string>
+   </property>
+  </action>
+  <action name="action_Print">
+   <property name="text">
+    <string>&amp;Print</string>
+   </property>
+  </action>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+  </action>
+  <action name="action_Reset">
+   <property name="text">
+    <string>&amp;Restore</string>
+   </property>
+  </action>
+  <action name="action_Histogram">
+   <property name="text">
+    <string>&amp;Histogram</string>
+   </property>
+  </action>
+  <action name="action_Grayscale">
+   <property name="text">
+    <string>&amp;Grayscale</string>
+   </property>
+  </action>
+  <action name="actionRGB2HSV">
+   <property name="text">
+    <string>RGB2HSV</string>
+   </property>
+  </action>
+  <action name="actionAdjust_HSV">
+   <property name="text">
+    <string>Adjust HSV</string>
+   </property>
+  </action>
+  <action name="action_Linear_transform">
+   <property name="text">
+    <string>&amp;Linear transform</string>
+   </property>
+  </action>
+  <action name="actionPiecewise_linear_transformation">
+   <property name="text">
+    <string>Piecewise linear transformation</string>
+   </property>
+  </action>
+  <action name="actionHistogram_equalization">
+   <property name="text">
+    <string>Histogram equalization</string>
+   </property>
+  </action>
+  <action name="actionMedian_filter">
+   <property name="text">
+    <string>Median filter</string>
+   </property>
+  </action>
+  <action name="actionMaxmun_filter">
+   <property name="text">
+    <string>Maximum filter</string>
+   </property>
+  </action>
+  <action name="actionMinimum_filter">
+   <property name="text">
+    <string>Minimum filter</string>
+   </property>
+  </action>
+  <action name="actionTemplate_filter">
+   <property name="text">
+    <string>Template filter</string>
+   </property>
+  </action>
+  <action name="actionlow_pass_filter">
+   <property name="text">
+    <string>Ideal low-pass filter</string>
+   </property>
+  </action>
+  <action name="actionIdeal_high_pass_filter">
+   <property name="text">
+    <string>Ideal high-pass filter</string>
+   </property>
+  </action>
+  <action name="actionButterworth_filter">
+   <property name="text">
+    <string>Butterworth low-pass filter</string>
+   </property>
+  </action>
+  <action name="actionButterworth_high_pass_filter">
+   <property name="text">
+    <string>Butterworth high-pass filter</string>
+   </property>
+  </action>
+  <action name="actionInverse_filter">
+   <property name="text">
+    <string>Inverse filter</string>
+   </property>
+  </action>
+  <action name="actionWiener_filter">
+   <property name="text">
+    <string>Wiener filter</string>
+   </property>
+  </action>
+  <action name="actionManual_threshold">
+   <property name="text">
+    <string>Manual threshold</string>
+   </property>
+  </action>
+  <action name="actionOstu_s_method">
+   <property name="text">
+    <string>Ostu's method</string>
+   </property>
+  </action>
+  <action name="actionAbout_ImageProcessingKit">
+   <property name="text">
+    <string>About ImageProcessingKit</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
