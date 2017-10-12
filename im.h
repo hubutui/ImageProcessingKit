@@ -12,6 +12,15 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 
+// CImg 中用自己的函数来显示图像
+// 但是 Qt 是跨平台，我们这里直接用 Qt 来做图像的显示
+// 定义下面这个宏就可以不包含 CImg 用于显示图像的那部分
+#define cimg_display 0
+#include "CImg.h"
+
+using namespace cimg_library;
+
+
 namespace Ui {
 class im;
 }
