@@ -73,3 +73,8 @@ void im::on_actionSave_as_triggered()
         outPixmapItem->pixmap().save(savePath);
     }
 }
+
+void im::on_actionClose_triggered()
+{
+    cleanImage();
+}

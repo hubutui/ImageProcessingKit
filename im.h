@@ -41,6 +41,8 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_actionClose_triggered();
+
 private:
     Ui::im *ui;
     QGraphicsScene *inScene, *outScene;

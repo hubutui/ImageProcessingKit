@@ -77,6 +77,7 @@
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
     <addaction name="actionSave_as"/>
+    <addaction name="actionClose"/>
     <addaction name="action_Print"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -318,6 +319,11 @@
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
    </property>
   </action>
  </widget>
