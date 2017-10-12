@@ -28,7 +28,8 @@ SOURCES += \
         im.cpp
 
 HEADERS += \
-        im.h
+        im.h \
+    CImg.h
 
 FORMS += \
         im.ui

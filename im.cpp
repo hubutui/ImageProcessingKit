@@ -1,5 +1,8 @@
 #include "im.h"
 #include "ui_im.h"
+#include "CImg.h"
+
+using namespace cimg_library;
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
