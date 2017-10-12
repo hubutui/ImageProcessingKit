@@ -60,3 +60,19 @@ void im::on_action_Open_triggered()
         outScene->setSceneRect(QRectF(outPixmap.rect()));
     }
 }
+
+void im::on_actionSave_as_triggered()
+{
+    QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QString(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
+
+    if (!savePath.isEmpty()) {
+        QFile file(savePath);
+
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Unable to save image!"));
+            return;
+        }
+
+        outPixmapItem->pixmap().save(savePath);
+    }
+}
