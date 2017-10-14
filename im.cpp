@@ -34,7 +34,7 @@ void im::on_action_Quit_triggered()
 
 void im::on_action_Open_triggered()
 {
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::currentPath(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
 
     if (!imagePath.isEmpty()) {
         QFile file(imagePath);
@@ -60,7 +60,7 @@ void im::on_action_Open_triggered()
 
 void im::on_actionSave_as_triggered()
 {
-    QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QString(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
+    QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QDir::homePath(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
 
     if (!savePath.isEmpty()) {
         QFile file(savePath);
