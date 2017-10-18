@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "qgraphicssceneplus.h"
 #include <QMainWindow>
 #include <QProcess>
 #include <QFileDialog>
@@ -11,6 +12,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
+#include <QPixmap>
 
 // CImg 中用自己的函数来显示图像
 // 但是 Qt 是跨平台，我们这里直接用 Qt 来做图像的显示
@@ -43,10 +45,14 @@ private slots:
 
     void on_actionClose_triggered();
 
+public slots:
+    void receiveCoord(QPointF point);
 private:
     Ui::im *ui;
-    QGraphicsScene *inScene, *outScene;
+    QGraphicsScenePlus *inScene, *outScene;
+    QPixmap inPixmap, outPixmap;
     QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
+
 };
 
 #endif // IM_H

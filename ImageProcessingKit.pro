@@ -25,11 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        im.cpp
+        im.cpp \
+    qgraphicssceneplus.cpp
 
 HEADERS += \
         im.h \
-    CImg.h
+    CImg.h \
+    qgraphicssceneplus.h
 
 FORMS += \
         im.ui
