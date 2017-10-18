@@ -104,6 +104,6 @@ void im::showColorValue(const QPointF &position)
     QRect rect = inPixmap.rect();
     if (rect.contains(pixel)) {
         ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
-        ui->label_color_value->setText(tr("R: %1, G: %2, B: %3, gray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+        ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
     }
 }
