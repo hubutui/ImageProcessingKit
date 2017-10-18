@@ -1,6 +1,7 @@
 #include "im.h"
 #include "ui_im.h"
 #include <QDebug>
+#include <QColor>
 #include <QRgb>
 
 im::im(QWidget *parent) :
@@ -9,13 +10,21 @@ im::im(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // 初始化 QGraphicsScene，将 UI 中的控件与 im 类中对应的对象联系起来
+    // TOTO:
+    // set mouse tracking, by default, mouse tracking is only enable the mouse button is pressed
+    // however, I could not figure out why it doesn't work here.
+    if (!hasMouseTracking()) {
+        setMouseTracking(true);
+    }
+
+    // create new QGraphicsScene obeject, and binding to ui widget.
     inScene = new QGraphicsScenePlus;
     outScene = new QGraphicsScenePlus;
-    setMouseTracking(true);
-    connect(inScene, SIGNAL(sendCoord(QPointF)), this, SLOT(receiveCoord(QPointF)));
     ui->graphicsView_in->setScene(inScene);
     ui->graphicsView_out->setScene(outScene);
+
+    connect(inScene, SIGNAL(sendCoord(const QPointF&)), this, SLOT(showColorValue(const QPointF&)));
+
 }
 
 im::~im()
@@ -82,15 +91,19 @@ void im::on_actionClose_triggered()
     cleanImage();
 }
 
-void im::receiveCoord(QPointF point)
+void im::showColorValue(const QPointF &position)
 {
-    qDebug() << "coord: " << point.x() << ", " << point.y() << endl;
-    QPointF pos = inPixmapItem->mapFromScene(point);
-    ui->label->setText(tr("coord: %1, %2").arg(pos.x()).arg(pos.y()));
+    // map position from scene to current item
+    QPointF pos = inPixmapItem->mapFromScene(position);
 	QPoint pixel;
 	pixel.setX(int(pos.x()));
 	pixel.setY(int(pos.y()));
     QRgb rgbValue = inPixmap.toImage().pixel(pixel);
-	int gray = qGray(rgbValue);
-    ui->label->setText(tr("gray: %1").arg(gray));
+    QColor color(rgbValue);
+    int gray = qGray(rgbValue);
+    QRect rect = inPixmap.rect();
+    if (rect.contains(pixel)) {
+        ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
+        ui->label_color_value->setText(tr("R: %1, G: %2, B: %3, gray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+    }
 }

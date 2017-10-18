@@ -3,29 +3,24 @@
 
 QGraphicsScenePlus::QGraphicsScenePlus(QObject *parent) : QGraphicsScene(parent)
 {
-    //point.setX(0);
-    //point.setY(0);
-
-    update();
+    position.setX(0);
+    position.setY(0);
 }
 
 void QGraphicsScenePlus::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    point.setX(mouseEvent->pos().x());
-    point.setY(mouseEvent->pos().y());
+    position.setX(mouseEvent->scenePos().x());
+    position.setY(mouseEvent->scenePos().y());
 
-    //emit sendCoord(point);
-
-    update();
+    emit sendCoord(position);
 }
 
 void QGraphicsScenePlus::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    point.setX(mouseEvent->scenePos().x());
-    point.setY(mouseEvent->scenePos().y());
+    position.setX(mouseEvent->scenePos().x());
+    position.setY(mouseEvent->scenePos().y());
 
-    //qDebug() << point.x() << ", " << point.y() << endl;
-
-    emit sendCoord(point);
+    emit sendCoord(position);
 }
+
 

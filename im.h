@@ -46,7 +46,8 @@ private slots:
     void on_actionClose_triggered();
 
 public slots:
-    void receiveCoord(QPointF point);
+    void showColorValue(const QPointF &position);
+
 private:
     Ui::im *ui;
     QGraphicsScenePlus *inScene, *outScene;

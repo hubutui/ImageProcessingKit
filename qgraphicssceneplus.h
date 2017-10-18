@@ -9,18 +9,18 @@
 class QGraphicsScenePlus : public QGraphicsScene
 {
 Q_OBJECT
+
 public:
     QGraphicsScenePlus(QObject* parent = 0);
-
-public slots:
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent);
-    void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 signals:
-    void sendCoord(QPointF);
+    void sendCoord(const QPointF&);
 
-public:
-    QPointF point;
+private:
+    // we save position of the mouse cursor in QPoint position
+    QPointF position;
 };
 
 #endif // QGRAPHICSSCENEPLUS_H

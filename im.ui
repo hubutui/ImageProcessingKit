@@ -70,16 +70,16 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_coord">
         <property name="text">
-         <string>coord</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_color_value">
         <property name="text">
-         <string>gray</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -93,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>35</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
