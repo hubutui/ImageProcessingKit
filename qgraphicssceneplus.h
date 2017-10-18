@@ -16,7 +16,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 signals:
-    void sendCoord(const QPointF&);
+    void coordChanged(const QPointF&);
 
 private:
     // we save position of the mouse cursor in QPoint position

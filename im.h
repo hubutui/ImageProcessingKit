@@ -51,9 +51,8 @@ public slots:
 private:
     Ui::im *ui;
     QGraphicsScenePlus *inScene, *outScene;
-    QPixmap inPixmap, outPixmap;
+    QPixmap *inPixmap, *outPixmap;
     QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
-
 };
 
 #endif // IM_H

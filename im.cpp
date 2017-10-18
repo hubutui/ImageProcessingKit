@@ -23,8 +23,20 @@ im::im(QWidget *parent) :
     ui->graphicsView_in->setScene(inScene);
     ui->graphicsView_out->setScene(outScene);
 
-    connect(inScene, SIGNAL(sendCoord(const QPointF&)), this, SLOT(showColorValue(const QPointF&)));
+    // TODO:
+    // initialize a 512x512 white pixmap
+    // and add to scene
+    // but it seems not work
+    inPixmap = new QPixmap(512, 512);
+    inPixmap->fill();
+    outPixmap = new QPixmap(*inPixmap);
+    inScene->addPixmap(*inPixmap);
+    outScene->addPixmap(*outPixmap);
 
+    // connect signal and slot
+    // once coord change, we emit a sinal from mouseMoveEvent
+    // and then a slot is called to show the color value
+    connect(inScene, SIGNAL(coordChanged(const QPointF&)), this, SLOT(showColorValue(const QPointF&)));
 }
 
 im::~im()
@@ -60,13 +72,13 @@ void im::on_action_Open_triggered()
         cleanImage();
 
         // show image
-        inPixmap.load(imagePath);
-        inPixmapItem = inScene->addPixmap(inPixmap);
-        outScene->setSceneRect(QRectF(inPixmap.rect()));
+        inPixmap->load(imagePath);
+        inPixmapItem = inScene->addPixmap(*inPixmap);
+        inScene->setSceneRect(QRectF(inPixmap->rect()));
 
-        outPixmap.load(imagePath);
-        outPixmapItem = outScene->addPixmap(outPixmap);
-        outScene->setSceneRect(QRectF(outPixmap.rect()));
+        outPixmap->load(imagePath);
+        outPixmapItem = outScene->addPixmap(*outPixmap);
+        outScene->setSceneRect(QRectF(outPixmap->rect()));
     }
 }
 
@@ -98,10 +110,10 @@ void im::showColorValue(const QPointF &position)
 	QPoint pixel;
 	pixel.setX(int(pos.x()));
 	pixel.setY(int(pos.y()));
-    QRgb rgbValue = inPixmap.toImage().pixel(pixel);
+    QRgb rgbValue = inPixmap->toImage().pixel(pixel);
     QColor color(rgbValue);
     int gray = qGray(rgbValue);
-    QRect rect = inPixmap.rect();
+    QRect rect = inPixmap->rect();
     if (rect.contains(pixel)) {
         ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
         ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));

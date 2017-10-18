@@ -12,7 +12,7 @@ void QGraphicsScenePlus::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     position.setX(mouseEvent->scenePos().x());
     position.setY(mouseEvent->scenePos().y());
 
-    emit sendCoord(position);
+    emit coordChanged(position);
 }
 
 void QGraphicsScenePlus::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -20,7 +20,7 @@ void QGraphicsScenePlus::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     position.setX(mouseEvent->scenePos().x());
     position.setY(mouseEvent->scenePos().y());
 
-    emit sendCoord(position);
+    emit coordChanged(position);
 }
 
 
