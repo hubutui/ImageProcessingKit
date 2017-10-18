@@ -32,7 +32,7 @@ im::~im()
     delete ui;
 }
 
-// 清除图像
+// clear image diplayed in scene
 void im::cleanImage()
 {
     inScene->clear();
@@ -56,10 +56,10 @@ void im::on_action_Open_triggered()
             return;
         }
 
-        // 清除之前显示的图片，然后再显示
+        // clear previouly showed image
         cleanImage();
 
-        // 显示图片
+        // show image
         inPixmap.load(imagePath);
         inPixmapItem = inScene->addPixmap(inPixmap);
         outScene->setSceneRect(QRectF(inPixmap.rect()));
