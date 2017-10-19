@@ -27,7 +27,7 @@
        <widget class="QLabel" name="label_in">
         <property name="sizeIncrement">
          <size>
-          <width>256</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -40,7 +40,7 @@
        <widget class="QLabel" name="label_out">
         <property name="sizeIncrement">
          <size>
-          <width>256</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -53,8 +53,8 @@
        <widget class="QGraphicsView" name="graphicsView_in">
         <property name="minimumSize">
          <size>
-          <width>256</width>
-          <height>256</height>
+          <width>512</width>
+          <height>512</height>
          </size>
         </property>
        </widget>
@@ -63,8 +63,8 @@
        <widget class="QGraphicsView" name="graphicsView_out">
         <property name="minimumSize">
          <size>
-          <width>256</width>
-          <height>256</height>
+          <width>512</width>
+          <height>512</height>
          </size>
         </property>
        </widget>

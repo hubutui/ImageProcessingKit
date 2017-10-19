@@ -30,8 +30,8 @@ im::im(QWidget *parent) :
     inPixmap = new QPixmap(512, 512);
     inPixmap->fill();
     outPixmap = new QPixmap(*inPixmap);
-    inScene->addPixmap(*inPixmap);
-    outScene->addPixmap(*outPixmap);
+    inPixmapItem = inScene->addPixmap(*inPixmap);
+    outPixmapItem = outScene->addPixmap(*outPixmap);
 
     // connect signal and slot
     // once coord change, we emit a sinal from mouseMoveEvent
