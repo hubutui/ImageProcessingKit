@@ -2,6 +2,8 @@
 #define IM_H
 
 #include "qgraphicssceneplus.h"
+#include "dialogadjusthsv.h"
+#include "ui_dialogadjusthsv.h"
 #include <QMainWindow>
 #include <QProcess>
 #include <QFileDialog>
@@ -18,7 +20,7 @@
 // 但是 Qt 是跨平台，我们这里直接用 Qt 来做图像的显示
 // 定义下面这个宏就可以不包含 CImg 用于显示图像的那部分
 #define cimg_display 0
-#include "CImg.h"
+#include <CImg.h>
 
 using namespace cimg_library;
 
@@ -45,14 +47,19 @@ private slots:
 
     void on_actionClose_triggered();
 
+    void on_actionAdjust_HSV_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
+    void adjustHsv(const int &h, const float &s, const float &v);
 
 private:
     Ui::im *ui;
     QGraphicsScenePlus *inScene, *outScene;
     QPixmap *inPixmap, *outPixmap;
     QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
+    DialogAdjustHsv *dialogAdjustHsv;
+    QString fileName;
 };
 
 #endif // IM_H

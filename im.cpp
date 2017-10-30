@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QColor>
 #include <QRgb>
+#include <algorithm>
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -118,4 +119,36 @@ void im::showColorValue(const QPointF &position)
         ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
         ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
     }
+}
+
+void im::adjustHsv(const int &h, const float &s, const float &v)
+{
+    CImg<float> img(fileName.toStdString().data());
+
+    cimg_forXY(img, x, y) {
+        img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
+
+        if (s > 0) {
+            img(x, y, 1) = std::max(img(x, y, 1)*s, 1.0f);
+        } else {
+            img(x, y, 1) /= -s;
+        }
+
+        if (v > 0) {
+            img(x, y, 1) = std::max(img(x, y, 1)*v, 1.0f);
+        } else {
+            img(x, y, 1) /= -h;
+        }
+    }
+
+    save("tmp.bmp");
+}
+
+void im::on_actionAdjust_HSV_triggered()
+{
+    dialogAdjustHsv = new DialogAdjustHsv;
+    dialogAdjustHsv->setModal(true);
+    dialogAdjustHsv->show();
+
+    connect(dialogAdjustHsv, SIGNAL(sendHsvData(int,qreal,qreal)), this, SLOT(adjustHsv(qreal,qreal,qreal)));
 }
