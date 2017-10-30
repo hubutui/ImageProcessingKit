@@ -61,6 +61,7 @@ private:
     DialogAdjustHsv *dialogAdjustHsv;
     QString fileName;
     void setFileName(const QString &fileName);
+    void updateOutScene(const QString &fileName);
 };
 
 #endif // IM_H

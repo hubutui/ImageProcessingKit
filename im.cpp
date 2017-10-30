@@ -76,9 +76,10 @@ void im::on_action_Open_triggered()
         inPixmapItem = inScene->addPixmap(*inPixmap);
         inScene->setSceneRect(QRectF(inPixmap->rect()));
 
-        outPixmap->load(imagePath);
-        outPixmapItem = outScene->addPixmap(*outPixmap);
-        outScene->setSceneRect(QRectF(outPixmap->rect()));
+//  considering load image to outScene?
+//        outPixmap->load(imagePath);
+//        outPixmapItem = outScene->addPixmap(*outPixmap);
+//        outScene->setSceneRect(QRectF(outPixmap->rect()));
 
         // save fileName for later use
         setFileName(imagePath);
@@ -144,11 +145,21 @@ void im::adjustHsv(const int &h, const float &s, const float &v)
     }
 
     img.save_png("tmp.png");
+    updateOutScene("tmp.png");
 }
 
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
+}
+
+void im::updateOutScene(const QString &fileName)
+{
+    qDebug() << "repaint out image." << endl;
+    outScene->clear();
+    outPixmap->load(fileName);
+    outPixmapItem = outScene->addPixmap(*outPixmap);
+    outScene->setSceneRect(QRectF(outPixmap->rect()));
 }
 
 void im::on_actionAdjust_HSV_triggered()
