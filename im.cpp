@@ -24,11 +24,10 @@ im::im(QWidget *parent) :
     ui->graphicsView_in->setScene(inScene);
     ui->graphicsView_out->setScene(outScene);
 
-    // TODO:
-    // initialize a 512x512 white pixmap
+    // initialize a 1x1 white pixmap
     // and add to scene
-    // but it seems not work
-    inPixmap = new QPixmap(512, 512);
+    // so everything looks great
+    inPixmap = new QPixmap(1, 1);
     inPixmap->fill();
     outPixmap = new QPixmap(*inPixmap);
     inPixmapItem = inScene->addPixmap(*inPixmap);
