@@ -60,6 +60,7 @@ private:
     QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
     DialogAdjustHsv *dialogAdjustHsv;
     QString fileName;
+    void setFileName(const QString &fileName);
 };
 
 #endif // IM_H

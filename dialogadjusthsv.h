@@ -19,7 +19,7 @@ private:
     Ui::DialogAdjustHsv *ui;
 
 signals:
-    void sendHsvData(const int &h, const qreal &s, const qreal &v);
+    void sendHsvData(const int &h, const float &s, const float &v);
 
 private slots:
     void on_buttonBox_accepted();

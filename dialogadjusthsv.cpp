@@ -20,15 +20,15 @@ void DialogAdjustHsv::on_buttonBox_accepted()
     qreal s, v;
 
     if (ui->horizontalSlider_S->value() < 0) {
-        s = -log(1 - value/16.0f);
+        s = -log(1 - ui->horizontalSlider_S->value()/16.0f);
     } else {
-        s = log(1 + value/16.0f);
+        s = log(1 + ui->horizontalSlider_S->value()/16.0f);
     }
 
     if (ui->horizontalSlider_V->value() < 0) {
-        v = -log(1 - value/16.0f);
+        v = -log(1 - ui->horizontalSlider_V->value()/16.0f);
     } else {
-        v = log(1 + value/16.0f);
+        v = log(1 + ui->horizontalSlider_V->value()/16.0f);
     }
 
     emit sendHsvData(h, s, v);

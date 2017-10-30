@@ -80,6 +80,9 @@ void im::on_action_Open_triggered()
         outPixmap->load(imagePath);
         outPixmapItem = outScene->addPixmap(*outPixmap);
         outScene->setSceneRect(QRectF(outPixmap->rect()));
+
+        // save fileName for later use
+        setFileName(imagePath);
     }
 }
 
@@ -141,7 +144,12 @@ void im::adjustHsv(const int &h, const float &s, const float &v)
         }
     }
 
-    save("tmp.bmp");
+    img.save_png("tmp.png");
+}
+
+void im::setFileName(const QString &fileName)
+{
+    this->fileName = fileName;
 }
 
 void im::on_actionAdjust_HSV_triggered()
@@ -150,5 +158,5 @@ void im::on_actionAdjust_HSV_triggered()
     dialogAdjustHsv->setModal(true);
     dialogAdjustHsv->show();
 
-    connect(dialogAdjustHsv, SIGNAL(sendHsvData(int,qreal,qreal)), this, SLOT(adjustHsv(qreal,qreal,qreal)));
+    connect(dialogAdjustHsv, SIGNAL(sendHsvData(int, float, float)), this, SLOT(adjustHsv(int, float, float)));
 }
