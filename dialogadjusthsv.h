@@ -17,6 +17,15 @@ public:
 
 private:
     Ui::DialogAdjustHsv *ui;
+
+signals:
+    void sendHsvData(const int &h, const qreal &s, const qreal &v);
+
+private slots:
+    void on_buttonBox_accepted();
+    void on_horizontalSlider_H_valueChanged(int value);
+    void on_horizontalSlider_S_valueChanged(int value);
+    void on_horizontalSlider_V_valueChanged(int value);
 };
 
 #endif // DIALOGADJUSTHSV_H
