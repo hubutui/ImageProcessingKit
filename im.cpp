@@ -130,21 +130,11 @@ void im::adjustHsv(const int &h, const float &s, const float &v)
 
     cimg_forXY(img, x, y) {
         img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
-
-        if (s > 0) {
-            img(x, y, 1) = std::max(img(x, y, 1)*s, 1.0f);
-        } else {
-            img(x, y, 1) /= -s;
-        }
-
-        if (v > 0) {
-            img(x, y, 1) = std::max(img(x, y, 1)*v, 1.0f);
-        } else {
-            img(x, y, 1) /= -h;
-        }
+        img(x, y, 1) *= s;
+        img(x, y, 2) *= v;
     }
 
-    img.save_png("tmp.png");
+    img.HSVtoRGB().save_png("tmp.png");
     updateOutScene("tmp.png");
 }
 
