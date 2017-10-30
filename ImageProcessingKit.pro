@@ -26,12 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         im.cpp \
-    qgraphicssceneplus.cpp
+    qgraphicssceneplus.cpp \
+    dialogadjusthsv.cpp
 
 HEADERS += \
         im.h \
-    CImg.h \
-    qgraphicssceneplus.h
+    qgraphicssceneplus.h \
+    dialogadjusthsv.h
 
 FORMS += \
-        im.ui
+        im.ui \
+    dialogadjusthsv.ui
