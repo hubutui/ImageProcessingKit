@@ -127,11 +127,13 @@ void im::showColorValue(const QPointF &position)
 void im::adjustHsv(const int &h, const float &s, const float &v)
 {
     CImg<float> img(fileName.toStdString().data());
+    img.RGBtoHSV();
+    qDebug() << "h = " << h << ", s = " << s << ", v = " << v << endl;
 
     cimg_forXY(img, x, y) {
         img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
-        img(x, y, 1) *= s;
-        img(x, y, 2) *= v;
+        img(x, y, 1) = s*img(x, y, 1);
+        img(x, y, 2) = v*img(x, y, 2);
     }
 
     img.HSVtoRGB().save_png("tmp.png");

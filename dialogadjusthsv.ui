@@ -41,7 +41,7 @@
         </size>
        </property>
        <property name="text">
-        <string>0</string>
+        <string>1</string>
        </property>
       </widget>
      </item>
@@ -70,7 +70,7 @@
         </size>
        </property>
        <property name="text">
-        <string>0</string>
+        <string>1</string>
        </property>
       </widget>
      </item>
@@ -99,7 +99,7 @@
         </size>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -122,10 +122,13 @@
         </sizepolicy>
        </property>
        <property name="minimum">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="maximum">
         <number>100</number>
+       </property>
+       <property name="value">
+        <number>25</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -135,10 +138,13 @@
      <item row="2" column="2">
       <widget class="QSlider" name="horizontalSlider_V">
        <property name="minimum">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="maximum">
-        <number>360</number>
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>25</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
