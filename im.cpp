@@ -154,6 +154,14 @@ void im::updateOutScene(const QString &fileName)
     outScene->setSceneRect(QRectF(outPixmap->rect()));
 }
 
+// convert RGB to gray scale
+// note the formular here assume that
+// RGB weight differs.
+int im::rgbToGray(const int &r, const int &g, const int &b)
+{
+    return (r * 11 + g * 16 + b * 5)/32;
+}
+
 void im::on_actionAdjust_HSV_triggered()
 {
     dialogAdjustHsv = new DialogAdjustHsv;
@@ -161,4 +169,21 @@ void im::on_actionAdjust_HSV_triggered()
     dialogAdjustHsv->show();
 
     connect(dialogAdjustHsv, SIGNAL(sendHsvData(int, float, float)), this, SLOT(adjustHsv(int, float, float)));
+}
+
+void im::on_action_Grayscale_triggered()
+{
+    // read RGB file
+    CImg<int> img(fileName.toStdString().data());
+    // create a gray scale image
+    CImg<int> dest(img.width(), img.height());
+
+    // convert RGB to gray scale, store in dest
+    cimg_forXY(dest, x, y) {
+        dest(x, y) = rgbToGray(img(x, y, 0), img(x, y, 1), img(x, y, 2));
+    }
+
+    // save image
+    dest.save_png("tmp.png");
+    updateOutScene("tmp.png");
 }

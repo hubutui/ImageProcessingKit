@@ -49,6 +49,8 @@ private slots:
 
     void on_actionAdjust_HSV_triggered();
 
+    void on_action_Grayscale_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -62,6 +64,7 @@ private:
     QString fileName;
     void setFileName(const QString &fileName);
     void updateOutScene(const QString &fileName);
+    inline int rgbToGray(const int &r, const int &g, const int &b);
 };
 
 #endif // IM_H
