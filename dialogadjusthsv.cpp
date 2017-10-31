@@ -18,9 +18,11 @@ void DialogAdjustHsv::on_buttonBox_accepted()
 {
     int h = ui->horizontalSlider_H->value();
     qreal s, v;
+    float sliderRange = 100.0f;
+    float lambdaRange = 4.0f;
 
-    s = log(1 + ui->horizontalSlider_S->value());
-    v = log(1 + ui->horizontalSlider_V->value());
+    s = ui->horizontalSlider_S->value()/sliderRange*lambdaRange;
+    v = ui->horizontalSlider_V->value()/sliderRange*lambdaRange;
 
     emit sendHsvData(h, s, v);
 }
@@ -32,18 +34,23 @@ void DialogAdjustHsv::on_horizontalSlider_H_valueChanged(int value)
 
 void DialogAdjustHsv::on_horizontalSlider_S_valueChanged(int value)
 {
-    if (value < 0) {
-        ui->label_S_Value->setText(tr("%1").arg(-log(1 - value/16.0f)));
-    } else {
-        ui->label_S_Value->setText(tr("%1").arg(log(1 + value/16.0f)));
-    }
+    // coefficient lambda range (0, 4.0)
+    // slider range (0, 100)
+    // so lambda = value/sliderRange*lambdaRange
+    // one may change sliderRange & lambdaRange to one's need
+    float sliderRange = 100.0f;
+    float lambdaRange = 4.0f;
+    float lambda = value/sliderRange*lambdaRange;
+
+    ui->label_S_Value->setText(QString::number(lambda));
 }
 
 void DialogAdjustHsv::on_horizontalSlider_V_valueChanged(int value)
 {
-    if (value < 0) {
-        ui->label_V_Value->setText(tr("%1").arg(-log(1 - value/16.0f)));
-    } else {
-        ui->label_V_Value->setText(tr("%1").arg(log(1 + value/16.0f)));
-    }
+    // same as S's coefficient lambda range
+    float sliderRange = 100.0f;
+    float lambdaRange = 4.0f;
+    float lambda = value/sliderRange*lambdaRange;
+
+    ui->label_V_Value->setText(QString::number(lambda));
 }
