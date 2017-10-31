@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QColor>
 #include <QRgb>
+#include <algorithm>
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -23,11 +24,10 @@ im::im(QWidget *parent) :
     ui->graphicsView_in->setScene(inScene);
     ui->graphicsView_out->setScene(outScene);
 
-    // TODO:
-    // initialize a 512x512 white pixmap
+    // initialize a 1x1 white pixmap
     // and add to scene
-    // but it seems not work
-    inPixmap = new QPixmap(512, 512);
+    // so everything looks great
+    inPixmap = new QPixmap(1, 1);
     inPixmap->fill();
     outPixmap = new QPixmap(*inPixmap);
     inPixmapItem = inScene->addPixmap(*inPixmap);
@@ -76,9 +76,13 @@ void im::on_action_Open_triggered()
         inPixmapItem = inScene->addPixmap(*inPixmap);
         inScene->setSceneRect(QRectF(inPixmap->rect()));
 
-        outPixmap->load(imagePath);
-        outPixmapItem = outScene->addPixmap(*outPixmap);
-        outScene->setSceneRect(QRectF(outPixmap->rect()));
+//  considering load image to outScene?
+//        outPixmap->load(imagePath);
+//        outPixmapItem = outScene->addPixmap(*outPixmap);
+//        outScene->setSceneRect(QRectF(outPixmap->rect()));
+
+        // save fileName for later use
+        setFileName(imagePath);
     }
 }
 
@@ -118,4 +122,43 @@ void im::showColorValue(const QPointF &position)
         ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
         ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
     }
+}
+
+void im::adjustHsv(const int &h, const float &s, const float &v)
+{
+    CImg<float> img(fileName.toStdString().data());
+    img.RGBtoHSV();
+    qDebug() << "h = " << h << ", s = " << s << ", v = " << v << endl;
+
+    cimg_forXY(img, x, y) {
+        img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
+        img(x, y, 1) = s*img(x, y, 1);
+        img(x, y, 2) = v*img(x, y, 2);
+    }
+
+    img.HSVtoRGB().save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::setFileName(const QString &fileName)
+{
+    this->fileName = fileName;
+}
+
+void im::updateOutScene(const QString &fileName)
+{
+    qDebug() << "repaint out image." << endl;
+    outScene->clear();
+    outPixmap->load(fileName);
+    outPixmapItem = outScene->addPixmap(*outPixmap);
+    outScene->setSceneRect(QRectF(outPixmap->rect()));
+}
+
+void im::on_actionAdjust_HSV_triggered()
+{
+    dialogAdjustHsv = new DialogAdjustHsv;
+    dialogAdjustHsv->setModal(true);
+    dialogAdjustHsv->show();
+
+    connect(dialogAdjustHsv, SIGNAL(sendHsvData(int, float, float)), this, SLOT(adjustHsv(int, float, float)));
 }
