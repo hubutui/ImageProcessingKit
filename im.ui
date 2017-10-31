@@ -119,7 +119,6 @@
     <property name="title">
      <string>&amp;Color Space</string>
     </property>
-    <addaction name="actionRGB2HSV"/>
     <addaction name="actionAdjust_HSV"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Transform">
