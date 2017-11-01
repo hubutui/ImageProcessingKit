@@ -140,6 +140,18 @@ void im::adjustHsv(const int &h, const float &s, const float &v)
     updateOutScene("tmp.png");
 }
 
+void im::linearTransformation(const double &k, const double &b)
+{
+    CImg<double> img(fileName.toStdString().data());
+
+    cimg_forXY(img, x, y) {
+        img(x, y, 0) = img(x, y, 0)*k + b;
+    }
+
+    img.save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -186,4 +198,13 @@ void im::on_action_Grayscale_triggered()
     // save image
     dest.save_png("tmp.png");
     updateOutScene("tmp.png");
+}
+
+void im::on_action_Linear_transformation_triggered()
+{
+    dialogLinearTransform = new DialogLinearTransform;
+    dialogLinearTransform->setModal(true);
+    dialogLinearTransform->show();
+
+    connect(dialogLinearTransform, SIGNAL(sendData(double,double)), this, SLOT(linearTransformation(double,double)));
 }

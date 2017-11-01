@@ -4,6 +4,8 @@
 #include "qgraphicssceneplus.h"
 #include "dialogadjusthsv.h"
 #include "ui_dialogadjusthsv.h"
+#include "dialoglineartransform.h"
+#include "ui_dialoglineartransform.h"
 #include <QMainWindow>
 #include <QProcess>
 #include <QFileDialog>
@@ -16,9 +18,8 @@
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
 
-// CImg 中用自己的函数来显示图像
-// 但是 Qt 是跨平台，我们这里直接用 Qt 来做图像的显示
-// 定义下面这个宏就可以不包含 CImg 用于显示图像的那部分
+// here we use Qt for GUI
+// disable CImg's display function by define this macro
 #define cimg_display 0
 #include <CImg.h>
 
@@ -51,9 +52,12 @@ private slots:
 
     void on_action_Grayscale_triggered();
 
+    void on_action_Linear_transformation_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
+    void linearTransformation(const double &k, const double &b);
 
 private:
     Ui::im *ui;
@@ -61,6 +65,7 @@ private:
     QPixmap *inPixmap, *outPixmap;
     QGraphicsPixmapItem *inPixmapItem, *outPixmapItem;
     DialogAdjustHsv *dialogAdjustHsv;
+    DialogLinearTransform *dialogLinearTransform;
     QString fileName;
     void setFileName(const QString &fileName);
     void updateOutScene(const QString &fileName);

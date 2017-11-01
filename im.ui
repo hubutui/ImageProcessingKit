@@ -125,7 +125,7 @@
     <property name="title">
      <string>&amp;Gray Transform</string>
     </property>
-    <addaction name="action_Linear_transform"/>
+    <addaction name="action_Linear_transformation"/>
     <addaction name="actionPiecewise_linear_transformation"/>
     <addaction name="actionHistogram_equalization"/>
    </widget>
@@ -258,9 +258,12 @@
     <string>Adjust HSV</string>
    </property>
   </action>
-  <action name="action_Linear_transform">
+  <action name="action_Linear_transformation">
    <property name="text">
-    <string>&amp;Linear transform</string>
+    <string>&amp;Linear transformation</string>
+   </property>
+   <property name="toolTip">
+    <string>Linear transformation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
