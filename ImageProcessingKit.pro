@@ -27,13 +27,16 @@ SOURCES += \
         main.cpp \
         im.cpp \
     qgraphicssceneplus.cpp \
-    dialogadjusthsv.cpp
+    dialogadjusthsv.cpp \
+    dialoglineartransform.cpp
 
 HEADERS += \
         im.h \
     qgraphicssceneplus.h \
-    dialogadjusthsv.h
+    dialogadjusthsv.h \
+    dialoglineartransform.h
 
 FORMS += \
         im.ui \
-    dialogadjusthsv.ui
+    dialogadjusthsv.ui \
+    dialoglineartransform.ui
