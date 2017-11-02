@@ -21,10 +21,10 @@ DialogLinearTransform::~DialogLinearTransform()
 void DialogLinearTransform::plotTranformationFunction(const double &k, const double &b)
 {
     // generate some data:
-    QVector<double> x(1001), y(1001);
-    for (int i=0; i<1001; ++i)
+    QVector<double> x(25501), y(25501);
+    for (int i=0; i<25501; ++i)
     {
-      x[i] = i/50.0 - 10;
+      x[i] = i + 0.01;
       y[i] = x[i]*k + b;
     }
     // create graph and assign data to it:
@@ -34,8 +34,8 @@ void DialogLinearTransform::plotTranformationFunction(const double &k, const dou
     ui->transformationFunctionPlot->xAxis->setLabel("x");
     ui->transformationFunctionPlot->yAxis->setLabel("y");
     // set axes ranges, so we see all data:
-    ui->transformationFunctionPlot->xAxis->setRange(-10, 10);
-    ui->transformationFunctionPlot->yAxis->setRange(-10, 10);
+    ui->transformationFunctionPlot->xAxis->setRange(0, 255);
+    ui->transformationFunctionPlot->yAxis->setRange(0, 255);
     ui->transformationFunctionPlot->replot();
 }
 
