@@ -20,7 +20,7 @@
 
 // here we use Qt for GUI
 // disable CImg's display function by define this macro
-#define cimg_display 0
+//#define cimg_display 0
 #include <CImg.h>
 
 using namespace cimg_library;
@@ -53,6 +53,10 @@ private slots:
     void on_action_Grayscale_triggered();
 
     void on_action_Linear_transformation_triggered();
+
+    void on_action_Histogram_triggered();
+
+    void on_actionHistogram_equalization_triggered();
 
 public slots:
     void showColorValue(const QPointF &position);

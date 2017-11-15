@@ -4,6 +4,9 @@
 #include <QColor>
 #include <QRgb>
 #include <algorithm>
+#include <qcustomplot.h>
+
+QT_CHARTS_USE_NAMESPACE
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -207,4 +210,27 @@ void im::on_action_Linear_transformation_triggered()
     dialogLinearTransform->show();
 
     connect(dialogLinearTransform, SIGNAL(sendData(double,double)), this, SLOT(linearTransformation(double,double)));
+}
+
+void im::on_action_Histogram_triggered()
+{
+    CImg<float> img(fileName.toStdString().data());
+    // 计算直方图
+    // hist 中保存每个灰度级的像素数量
+    CImg<float> hist = img.histogram(255);
+    // 直方图窗口标题
+    QString title = "Histogram of " + fileName;
+    // 新建一个 CImgDisplay 对象用来显示直方图
+    CImgDisplay display(800, 600, title.toStdString().data());
+    // 直方图显示
+    hist.display_graph(display, 3);
+}
+
+void im::on_actionHistogram_equalization_triggered()
+{
+    CImg<unsigned char> img(fileName.toStdString().data());
+    CImg<unsigned char> dest = img.get_equalize(256);
+    dest.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
 }

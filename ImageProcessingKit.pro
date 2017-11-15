@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -42,3 +42,5 @@ FORMS += \
     dialoglineartransform.ui
 
 unix:!macx: LIBS += -lqcustomplot
+
+unix|win32: LIBS += -lX11
