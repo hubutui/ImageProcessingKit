@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -28,18 +28,21 @@ SOURCES += \
         im.cpp \
     qgraphicssceneplus.cpp \
     dialogadjusthsv.cpp \
-    dialoglineartransform.cpp
+    dialoglineartransform.cpp \
+    dialogpiecewiselineartransformation.cpp
 
 HEADERS += \
         im.h \
     qgraphicssceneplus.h \
     dialogadjusthsv.h \
-    dialoglineartransform.h
+    dialoglineartransform.h \
+    dialogpiecewiselineartransformation.h
 
 FORMS += \
         im.ui \
     dialogadjusthsv.ui \
-    dialoglineartransform.ui
+    dialoglineartransform.ui \
+    dialogpiecewiselineartransformation.ui
 
 unix:!macx: LIBS += -lqcustomplot
 

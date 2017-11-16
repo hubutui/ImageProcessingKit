@@ -128,6 +128,7 @@
     <addaction name="action_Linear_transformation"/>
     <addaction name="actionPiecewise_linear_transformation"/>
     <addaction name="actionHistogram_equalization"/>
+    <addaction name="actionHistogram_Specication"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Filter">
     <property name="title">
@@ -352,6 +353,11 @@
   <action name="actionClose">
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="actionHistogram_Specication">
+   <property name="text">
+    <string>Histogram Specification</string>
    </property>
   </action>
  </widget>

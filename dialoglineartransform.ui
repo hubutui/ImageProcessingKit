@@ -48,7 +48,7 @@
            <item>
             <widget class="QLabel" name="label_y">
              <property name="text">
-              <string>y =</string>
+              <string>s =</string>
              </property>
             </widget>
            </item>
@@ -74,7 +74,7 @@
            <item>
             <widget class="QLabel" name="label_x">
              <property name="text">
-              <string>x +</string>
+              <string>r +</string>
              </property>
             </widget>
            </item>

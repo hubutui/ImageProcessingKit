@@ -6,8 +6,6 @@
 #include <algorithm>
 #include <qcustomplot.h>
 
-QT_CHARTS_USE_NAMESPACE
-
 im::im(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::im)
@@ -155,6 +153,25 @@ void im::linearTransformation(const double &k, const double &b)
     updateOutScene("tmp.png");
 }
 
+void im::piecewiseLinearTransformation(const double &r1, const double &s1, const double &r2, const double &s2)
+{
+    CImg<double> img(fileName.toStdString().data());
+
+    cimg_forXY(img, x, y) {
+        if (img(x, y) < r1) {
+            img(x, y) = s1/r1*img(x, y);
+        } else if (img(x, y) < r2) {
+            img(x, y) = (s2 - s1)/(r2 - r1)*(img(x, y) - r1) + s1;
+        } else {
+            img(x, y) = (255 - s2)/(255 - r1)*(img(x, y) - r2) + s2;
+        }
+    }
+
+    img.save_png("tmp.png");
+    updateOutScene("tmp.png");
+
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -233,4 +250,33 @@ void im::on_actionHistogram_equalization_triggered()
     dest.save_png("tmp.png");
 
     updateOutScene("tmp.png");
+}
+
+void im::on_actionHistogram_Specication_triggered()
+{
+    CImg<float> img(fileName.toStdString().data());
+    CImg<float> dest(img.width(), img.height());
+    float threshold = 128;
+    cimg_forXY(img, x, y) {
+        if (img(x, y) < threshold)
+        {
+            dest(x, y) = img(x, y);
+        } else {
+            dest(x, y) = 0.7 * img(x, y);
+        }
+    }
+    dest.save_png("hist-spec.png");
+    CImg<float> hist = dest.histogram(256);
+    hist.display_graph(0, 3);
+
+    updateOutScene("hist-spec.png");
+}
+
+void im::on_actionPiecewise_linear_transformation_triggered()
+{
+    dlgPiecewiseLinearTranformation = new DialogPiecewiseLinearTransformation;
+    dlgPiecewiseLinearTranformation->setModal(true);
+    dlgPiecewiseLinearTranformation->show();
+
+    connect(dlgPiecewiseLinearTranformation, SIGNAL(sendData(double, double, double, double)), this, SLOT(piecewiseLinearTransformation(double, double, double, double)));
 }

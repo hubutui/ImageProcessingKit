@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogpiecewiselineartransformation.h"
+#include "ui_dialogpiecewiselineartransformation.h"
 #include "qgraphicssceneplus.h"
 #include "dialogadjusthsv.h"
 #include "ui_dialogadjusthsv.h"
@@ -58,10 +60,15 @@ private slots:
 
     void on_actionHistogram_equalization_triggered();
 
+    void on_actionHistogram_Specication_triggered();
+
+    void on_actionPiecewise_linear_transformation_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
     void linearTransformation(const double &k, const double &b);
+    void piecewiseLinearTransformation(const double &r1, const double &s1, const double &r2, const double &s2);
 
 private:
     Ui::im *ui;
@@ -74,6 +81,8 @@ private:
     void setFileName(const QString &fileName);
     void updateOutScene(const QString &fileName);
     inline int rgbToGray(const int &r, const int &g, const int &b);
+
+    DialogPiecewiseLinearTransformation *dlgPiecewiseLinearTranformation;
 };
 
 #endif // IM_H
