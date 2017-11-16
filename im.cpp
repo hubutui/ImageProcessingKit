@@ -196,13 +196,13 @@ void im::maximumFilter(const int &size)
 {
     CImg<unsigned int> img(fileName.toStdString().data());
     CImg<unsigned int> tmp(size, size, 1, 1, 0);
-    CImg<unsigned int> dest = img;
+    CImg<unsigned int> dest(img);
 
     cimg_forXY(img, x, y) {
         cimg_forXY(tmp, u, v) {
             tmp(u, v) = img(x + u, y + v);
         }
-        dest(x + (size - 1), y + (size - 1)/2) = tmp.max();
+        dest(x + (size - 1)/2, y + (size - 1)/2) = tmp.max();
     }
 
     dest.save_png("tmp.png");
@@ -214,13 +214,13 @@ void im::minimumFilter(const int &size)
 {
     CImg<unsigned int> img(fileName.toStdString().data());
     CImg<unsigned int> tmp(size, size, 1, 1, 255);
-    CImg<unsigned int> dest = img;
+    CImg<unsigned int> dest(img);
 
     cimg_forXY(img, x, y) {
         cimg_forXY(tmp, u, v) {
             tmp(u, v) = img(x + u, y + v);
         }
-        dest(x + (size - 1), y + (size - 1)/2) = tmp.min();
+        dest(x + (size - 1)/2, y + (size - 1)/2) = tmp.min();
     }
 
     dest.save_png("tmp.png");
@@ -238,7 +238,7 @@ void im::customFilter(const int &w00, const int &w01, const int &w02, const int 
                        w20, w21, w22);
     // if sum of all pixels in kernel is not zero
     // make sure it's 1
-    if (!kernel.sum() < DBL_EPSILON) {
+    if (!(kernel.sum() < DBL_EPSILON)) {
         kernel = kernel/(size*size);
     }
 
