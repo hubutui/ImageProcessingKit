@@ -31,8 +31,8 @@ void DialogLinearTransform::plotTranformationFunction(const double &k, const dou
     ui->transformationFunctionPlot->addGraph();
     ui->transformationFunctionPlot->graph(0)->setData(x, y);
     // give the axes some labels:
-    ui->transformationFunctionPlot->xAxis->setLabel("x");
-    ui->transformationFunctionPlot->yAxis->setLabel("y");
+    ui->transformationFunctionPlot->xAxis->setLabel("r");
+    ui->transformationFunctionPlot->yAxis->setLabel("s");
     // set axes ranges, so we see all data:
     ui->transformationFunctionPlot->xAxis->setRange(0, 255);
     ui->transformationFunctionPlot->yAxis->setRange(0, 255);
