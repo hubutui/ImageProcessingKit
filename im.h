@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogminimumfilter.h"
+#include "ui_dialogminimumfilter.h"
 #include "dialogmaximumfilter.h"
 #include "ui_dialogmaximumfilter.h"
 #include "dialogmedianfilter.h"
@@ -78,6 +80,8 @@ private slots:
 
     void on_actionMaximum_filter_triggered();
 
+    void on_actionMinimum_filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -86,6 +90,7 @@ public slots:
     void averageFilter(const int &size);
     void medianFilter(const int &size);
     void maximumFilter(const int &size);
+    void minimumFilter(const int &size);
 
 private:
     Ui::im *ui;
@@ -103,6 +108,7 @@ private:
     DialogAvarageFilter *dlgAverageFilter;
     DialogMedianFilter *dlgMedianFilter;
     DialogMaximumFilter *dlgMaximumFilter;
+    DialogMinimumFilter *dlgMinimumFilter;
 };
 
 #endif // IM_H
