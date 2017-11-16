@@ -1,6 +1,10 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogmedianfilter.h"
+#include "ui_dialogmedianfilter.h"
+#include "dialogavaragefilter.h"
+#include "ui_dialogavaragefilter.h"
 #include "dialogpiecewiselineartransformation.h"
 #include "ui_dialogpiecewiselineartransformation.h"
 #include "qgraphicssceneplus.h"
@@ -64,11 +68,19 @@ private slots:
 
     void on_actionPiecewise_linear_transformation_triggered();
 
+    void on_actionAverage_filter_triggered();
+
+    void on_actionLaplacian_filter_triggered();
+
+    void on_actionMedian_filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
     void linearTransformation(const double &k, const double &b);
     void piecewiseLinearTransformation(const double &r1, const double &s1, const double &r2, const double &s2);
+    void averageFilter(const int &size);
+    void medianFilter(const int &size);
 
 private:
     Ui::im *ui;
@@ -83,6 +95,8 @@ private:
     inline int rgbToGray(const int &r, const int &g, const int &b);
 
     DialogPiecewiseLinearTransformation *dlgPiecewiseLinearTranformation;
+    DialogAvarageFilter *dlgAverageFilter;
+    DialogMedianFilter *dlgMedianFilter;
 };
 
 #endif // IM_H

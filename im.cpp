@@ -172,6 +172,26 @@ void im::piecewiseLinearTransformation(const double &r1, const double &s1, const
 
 }
 
+void im::averageFilter(const int &size)
+{
+    CImg<float> img(fileName.toStdString().data());
+    CImg<float> kernel(size, size, 1, 1, 1.0f/size/size);
+
+    CImg<float> dest = img.convolve(kernel);
+    dest.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}
+
+void im::medianFilter(const int &size)
+{
+    CImg<float> img(fileName.toStdString().data());
+    img.blur_median(size);
+    img.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -279,4 +299,33 @@ void im::on_actionPiecewise_linear_transformation_triggered()
     dlgPiecewiseLinearTranformation->show();
 
     connect(dlgPiecewiseLinearTranformation, SIGNAL(sendData(double, double, double, double)), this, SLOT(piecewiseLinearTransformation(double, double, double, double)));
+}
+
+void im::on_actionAverage_filter_triggered()
+{
+    dlgAverageFilter = new DialogAvarageFilter;
+    dlgAverageFilter->setModal(true);
+    dlgAverageFilter->show();
+
+    connect(dlgAverageFilter, SIGNAL(sendData(int)), this, SLOT(averageFilter(int)));
+}
+
+void im::on_actionLaplacian_filter_triggered()
+{
+    CImg<float> img(fileName.toStdString().data());
+    CImg<float> dest = img.get_laplacian();
+    dest.save_png("laplacian.png");
+    dest = img + 0.5*dest;
+    dest.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}
+
+void im::on_actionMedian_filter_triggered()
+{
+    dlgMedianFilter = new DialogMedianFilter;
+    dlgMedianFilter->setModal(true);
+    dlgMedianFilter->show();
+
+    connect(dlgMedianFilter, SIGNAL(sendData(int)), this, SLOT(medianFilter(int)));
 }

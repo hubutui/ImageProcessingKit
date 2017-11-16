@@ -29,20 +29,26 @@ SOURCES += \
     qgraphicssceneplus.cpp \
     dialogadjusthsv.cpp \
     dialoglineartransform.cpp \
-    dialogpiecewiselineartransformation.cpp
+    dialogpiecewiselineartransformation.cpp \
+    dialogavaragefilter.cpp \
+    dialogmedianfilter.cpp
 
 HEADERS += \
         im.h \
     qgraphicssceneplus.h \
     dialogadjusthsv.h \
     dialoglineartransform.h \
-    dialogpiecewiselineartransformation.h
+    dialogpiecewiselineartransformation.h \
+    dialogavaragefilter.h \
+    dialogmedianfilter.h
 
 FORMS += \
         im.ui \
     dialogadjusthsv.ui \
     dialoglineartransform.ui \
-    dialogpiecewiselineartransformation.ui
+    dialogpiecewiselineartransformation.ui \
+    dialogavaragefilter.ui \
+    dialogmedianfilter.ui
 
 unix:!macx: LIBS += -lqcustomplot
 
