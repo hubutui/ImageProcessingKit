@@ -414,3 +414,46 @@ void im::on_actionCustomFilter_triggered()
     connect(dlgCustomFilter, SIGNAL(sendData(int,int,int,int,int,int,int,int,int)),
             this, SLOT(customFilter(int,int,int,int,int,int,int,int,int)));
 }
+
+void im::on_actionPseudocolor_triggered()
+{
+    CImg<float> img(fileName.toStdString().data());
+    CImg<float> dest(img.width(), img.height(), 1, 3);
+
+    // transformation for R channel
+    cimg_forXY(img, x, y) {
+        if (img(x, y) < 128) {
+            dest(x, y, 0, 0) = 0;
+        } else if (img(x, y) < 200) {
+            dest(x, y, 0, 0) = 255/128*(img(x, y) - 128);
+        } else {
+            dest(x, y, 0, 0) = 255;
+        }
+    }
+
+    // transformation for G channel
+    cimg_forXY(img, x, y) {
+        if (img(x, y) < 64) {
+            dest(x, y, 0, 1) = 255/64*img(x, y);
+        } else if (img(x, y) < 200) {
+            dest(x, y, 0, 1) = 255;
+        } else {
+            dest(x, y, 0, 1) = -255/(255 - 200)*(img(x, y) - 200) + 255;
+        }
+    }
+
+    // transformation for B channel
+    cimg_forXY(img, x, y) {
+        if (img(x, y) < 64) {
+            dest(x, y, 0, 2) = 255;
+        } else if (img(x, y) < 128) {
+            dest(x, y, 0, 2) = -255/(128 - 64)*(img(x, y) - 64) + 255;
+        } else {
+            dest(x, y, 0, 2) = 0;
+        }
+    }
+
+    dest.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}

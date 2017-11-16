@@ -140,6 +140,7 @@
     <addaction name="actionCustomFilter"/>
     <addaction name="actionAverage_filter"/>
     <addaction name="actionLaplacian_filter"/>
+    <addaction name="actionPseudocolor"/>
    </widget>
    <widget class="QMenu" name="menuFrequency_Filter">
     <property name="title">
@@ -373,6 +374,11 @@
   <action name="actionLaplacian_filter">
    <property name="text">
     <string>Laplacian filter</string>
+   </property>
+  </action>
+  <action name="actionPseudocolor">
+   <property name="text">
+    <string>Pseudocolor</string>
    </property>
   </action>
  </widget>

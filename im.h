@@ -86,6 +86,8 @@ private slots:
 
     void on_actionCustomFilter_triggered();
 
+    void on_actionPseudocolor_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
