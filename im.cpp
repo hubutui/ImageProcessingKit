@@ -228,6 +228,26 @@ void im::minimumFilter(const int &size)
     updateOutScene("tmp.png");
 }
 
+void im::customFilter(const int &w00, const int &w01, const int &w02, const int &w10, const int &w11, const int &w12, const int &w20, const int &w21, const int &w22)
+{
+    CImg<float> img(fileName.toStdString().data());
+    int size = 3;
+    CImg<float> kernel(size, size, 1, 1,
+                       w00, w01, w02,
+                       w10, w11, w12,
+                       w20, w21, w22);
+    // if sum of all pixels in kernel is not zero
+    // make sure it's 1
+    if (!kernel.sum() < DBL_EPSILON) {
+        kernel = kernel/(size*size);
+    }
+
+    img.convolve(kernel);
+    img.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -383,4 +403,14 @@ void im::on_actionMinimum_filter_triggered()
 
     connect(dlgMinimumFilter, SIGNAL(sendData(int)), this, SLOT(minimumFilter(int)));
 
+}
+
+void im::on_actionCustomFilter_triggered()
+{
+    dlgCustomFilter = new DialogCustomFilter;
+    dlgCustomFilter->setModal(true);
+    dlgCustomFilter->show();
+
+    connect(dlgCustomFilter, SIGNAL(sendData(int,int,int,int,int,int,int,int,int)),
+            this, SLOT(customFilter(int,int,int,int,int,int,int,int,int)));
 }

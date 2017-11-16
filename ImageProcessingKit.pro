@@ -33,7 +33,8 @@ SOURCES += \
     dialogavaragefilter.cpp \
     dialogmedianfilter.cpp \
     dialogmaximumfilter.cpp \
-    dialogminimumfilter.cpp
+    dialogminimumfilter.cpp \
+    dialogcustomfilter.cpp
 
 HEADERS += \
         im.h \
@@ -44,7 +45,8 @@ HEADERS += \
     dialogavaragefilter.h \
     dialogmedianfilter.h \
     dialogmaximumfilter.h \
-    dialogminimumfilter.h
+    dialogminimumfilter.h \
+    dialogcustomfilter.h
 
 FORMS += \
         im.ui \
@@ -54,7 +56,8 @@ FORMS += \
     dialogavaragefilter.ui \
     dialogmedianfilter.ui \
     dialogmaximumfilter.ui \
-    dialogminimumfilter.ui
+    dialogminimumfilter.ui \
+    dialogcustomfilter.ui
 
 unix:!macx: LIBS += -lqcustomplot
 
