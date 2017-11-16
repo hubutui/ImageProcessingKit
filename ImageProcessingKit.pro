@@ -31,7 +31,8 @@ SOURCES += \
     dialoglineartransform.cpp \
     dialogpiecewiselineartransformation.cpp \
     dialogavaragefilter.cpp \
-    dialogmedianfilter.cpp
+    dialogmedianfilter.cpp \
+    dialogmaximumfilter.cpp
 
 HEADERS += \
         im.h \
@@ -40,7 +41,8 @@ HEADERS += \
     dialoglineartransform.h \
     dialogpiecewiselineartransformation.h \
     dialogavaragefilter.h \
-    dialogmedianfilter.h
+    dialogmedianfilter.h \
+    dialogmaximumfilter.h
 
 FORMS += \
         im.ui \
@@ -48,7 +50,8 @@ FORMS += \
     dialoglineartransform.ui \
     dialogpiecewiselineartransformation.ui \
     dialogavaragefilter.ui \
-    dialogmedianfilter.ui
+    dialogmedianfilter.ui \
+    dialogmaximumfilter.ui
 
 unix:!macx: LIBS += -lqcustomplot
 

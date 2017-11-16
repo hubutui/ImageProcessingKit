@@ -192,6 +192,24 @@ void im::medianFilter(const int &size)
     updateOutScene("tmp.png");
 }
 
+void im::maximumFilter(const int &size)
+{
+    CImg<unsigned int> img(fileName.toStdString().data());
+    CImg<unsigned int> tmp(size, size, 1, 1, 0);
+    CImg<unsigned int> dest = img;
+
+    cimg_forXY(img, x, y) {
+        cimg_forXY(tmp, u, v) {
+            tmp(u, v) = img(x + u, y + v);
+        }
+        dest(x + (size - 1), y + (size - 1)/2) = tmp.max();
+    }
+
+    dest.save_png("tmp.png");
+
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -328,4 +346,13 @@ void im::on_actionMedian_filter_triggered()
     dlgMedianFilter->show();
 
     connect(dlgMedianFilter, SIGNAL(sendData(int)), this, SLOT(medianFilter(int)));
+}
+
+void im::on_actionMaximum_filter_triggered()
+{
+    dlgMaximumFilter = new DialogMaximumFilter;
+    dlgMaximumFilter->setModal(true);;
+    dlgMaximumFilter->show();
+
+    connect(dlgMaximumFilter, SIGNAL(sendData(int)), this, SLOT(maximumFilter(int)));
 }

@@ -135,7 +135,7 @@
      <string>&amp;Spatial Filter</string>
     </property>
     <addaction name="actionMedian_filter"/>
-    <addaction name="actionMaxmun_filter"/>
+    <addaction name="actionMaximum_filter"/>
     <addaction name="actionMinimum_filter"/>
     <addaction name="actionTemplate_filter"/>
     <addaction name="actionAverage_filter"/>
@@ -287,7 +287,7 @@
     <string>Median filter</string>
    </property>
   </action>
-  <action name="actionMaxmun_filter">
+  <action name="actionMaximum_filter">
    <property name="text">
     <string>Maximum filter</string>
    </property>
