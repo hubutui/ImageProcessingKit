@@ -192,17 +192,31 @@ void im::medianFilter(const int &size)
     updateOutScene("tmp.png");
 }
 
+// maximum filter
+// with size x size window
+// just slide window over the image
+// replace the middle pixel's intensity with
+// maximum of the window
 void im::maximumFilter(const int &size)
 {
-    CImg<unsigned int> img(fileName.toStdString().data());
-    CImg<unsigned int> tmp(size, size, 1, 1, 0);
-    CImg<unsigned int> dest(img);
+    CImg<unsigned char> img(fileName.toStdString().data());
+    // slide window, just like a kernel, but not for convolve
+    // so it's not a good idea to name it kernel
+    // use window instead
+    CImg<unsigned char> window(size, size);
+    CImg<unsigned char> dest(img);
 
     cimg_forXY(img, x, y) {
-        cimg_forXY(tmp, u, v) {
-            tmp(u, v) = img(x + u, y + v);
+        cimg_forXY(window, u, v) {
+            window(u, v) = img(x + u, y + v);
         }
-        dest(x + (size - 1)/2, y + (size - 1)/2) = tmp.max();
+        // (x + (size - 1)/2, y + (size - 1)/2) is the middle pos
+        // of the slide window
+        // check if it's out of array boundary
+        if (x + (size - 1)/2 < img.width() && y + (size - 1)/2 < img.height()) {
+            dest(x, y) = window.max();
+            qDebug() << dest(x, y) << endl;
+        }
     }
 
     dest.save_png("tmp.png");
@@ -210,17 +224,21 @@ void im::maximumFilter(const int &size)
     updateOutScene("tmp.png");
 }
 
+// minimum filter, just like maximum filter
+// but use minimum instead of maximum
 void im::minimumFilter(const int &size)
 {
-    CImg<unsigned int> img(fileName.toStdString().data());
-    CImg<unsigned int> tmp(size, size, 1, 1, 255);
-    CImg<unsigned int> dest(img);
+    CImg<unsigned char> img(fileName.toStdString().data());
+    CImg<unsigned char> window(size, size, 1, 1, 255);
+    CImg<unsigned char> dest(img);
 
     cimg_forXY(img, x, y) {
-        cimg_forXY(tmp, u, v) {
-            tmp(u, v) = img(x + u, y + v);
+        cimg_forXY(window, u, v) {
+            window(u, v) = img(x + u, y + v);
         }
-        dest(x + (size - 1)/2, y + (size - 1)/2) = tmp.min();
+        if (x + (size - 1)/2 < img.width() && y + (size - 1)/2 < img.height()) {
+            dest(x + (size - 1)/2, y + (size - 1)/2) = window.min();
+        }
     }
 
     dest.save_png("tmp.png");
