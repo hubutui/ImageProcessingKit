@@ -192,6 +192,11 @@ void im::medianFilter(const int &size)
     updateOutScene("tmp.png");
 }
 
+// one might consider using dilate & erode function from CImg
+// they're faster with some optimization
+// I don't know that maximum & minimum filters are usually know as dilate & erode until now
+// sedd https://github.com/dtschump/CImg/issues/171
+//
 // maximum filter
 // with size x size window
 // just slide window over the image
@@ -326,14 +331,13 @@ void im::on_action_Linear_transformation_triggered()
 void im::on_action_Histogram_triggered()
 {
     CImg<float> img(fileName.toStdString().data());
-    // 计算直方图
-    // hist 中保存每个灰度级的像素数量
+    // get histogam
     CImg<float> hist = img.histogram(255);
-    // 直方图窗口标题
+    // set title
     QString title = "Histogram of " + fileName;
-    // 新建一个 CImgDisplay 对象用来显示直方图
+    // create an object to show window
     CImgDisplay display(800, 600, title.toStdString().data());
-    // 直方图显示
+    // show histogram
     hist.display_graph(display, 3);
 }
 
