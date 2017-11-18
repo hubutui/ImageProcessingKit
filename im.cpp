@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QColor>
 #include <QRgb>
+#include <QMap>
 #include <algorithm>
 #include <qcustomplot.h>
 
@@ -343,10 +344,14 @@ void im::on_action_Histogram_triggered()
 
 void im::on_actionHistogram_equalization_triggered()
 {
-    CImg<unsigned char> img(fileName.toStdString().data());
-    CImg<unsigned char> dest = img.get_equalize(256);
+    CImg<unsigned int> img(fileName.toStdString().data());
+    QMap<int, int> map = getHistogramEqualizationMap(img, 256);
+    // do the histogram equalization
+    CImg<int> dest(img.width(), img.height());
+    cimg_forXY(dest, x, y) {
+        dest(x, y) = map[img(x, y)];
+    }
     dest.save_png("tmp.png");
-
     updateOutScene("tmp.png");
 }
 
@@ -478,4 +483,24 @@ void im::on_actionPseudocolor_triggered()
     dest.save_png("tmp.png");
 
     updateOutScene("tmp.png");
+}
+
+template<typename T>
+QMap<int, int> im::getHistogramEqualizationMap(CImg<T> img, const int nLevel)
+{
+    // compute histogram
+    CImg<T> histogram = img.get_histogram(nLevel);
+    // compute cdf
+    for(int x = 1; x < histogram.width(); ++x) {
+        histogram(x) += histogram(x - 1);
+    }
+    // create mapping
+    // <int, int> = <old, new>
+    double imageSize = img.width()*img.height();
+    QMap<int, int> map;
+    cimg_forX(histogram, x) {
+        map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
+    }
+
+    return map;
 }

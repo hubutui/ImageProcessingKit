@@ -29,6 +29,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
+#include <QMap>
 
 // here we use Qt for GUI
 // disable CImg's display function by define this macro
@@ -112,6 +113,8 @@ private:
     void setFileName(const QString &fileName);
     void updateOutScene(const QString &fileName);
     inline int rgbToGray(const int &r, const int &g, const int &b);
+    // QMap<int, int> getHistogramEqualizationMap(const CImg<int> img, const int nLevel);
+    template<typename T> QMap<int, int> getHistogramEqualizationMap(CImg<T> img, const int nLevel);
 
     DialogPiecewiseLinearTransformation *dlgPiecewiseLinearTranformation;
     DialogAvarageFilter *dlgAverageFilter;
