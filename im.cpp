@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QColor>
 #include <QRgb>
-#include <QMap>
 #include <algorithm>
 #include <qcustomplot.h>
 
@@ -345,7 +344,7 @@ void im::on_action_Histogram_triggered()
 void im::on_actionHistogram_equalization_triggered()
 {
     CImg<unsigned int> img(fileName.toStdString().data());
-    QMap<int, int> map = getHistogramEqualizationMap(img, 256);
+    QMap<int, int> map = getHistogramEqualizationMap(img);
     // do the histogram equalization
     CImg<int> dest(img.width(), img.height());
     cimg_forXY(dest, x, y) {
@@ -355,24 +354,20 @@ void im::on_actionHistogram_equalization_triggered()
     updateOutScene("tmp.png");
 }
 
-void im::on_actionHistogram_Specication_triggered()
+void im::on_actionHistogram_specication_triggered()
 {
-    CImg<float> img(fileName.toStdString().data());
-    CImg<float> dest(img.width(), img.height());
-    float threshold = 128;
-    cimg_forXY(img, x, y) {
-        if (img(x, y) < threshold)
-        {
-            dest(x, y) = img(x, y);
-        } else {
-            dest(x, y) = 0.7 * img(x, y);
-        }
+    CImg<unsigned char> img(fileName.toStdString().data());
+    CImg<unsigned char> ref("reference.jpg");
+    QMap<int, int> map = getHistogramSpecificationMap(img, ref);
+    // do the thing
+    CImg<unsigned char> dest(img);
+    cimg_forXY(dest, x, y) {
+        dest(x, y) = map[img(x, y)];
     }
-    dest.save_png("hist-spec.png");
-    CImg<float> hist = dest.histogram(256);
-    hist.display_graph(0, 3);
 
-    updateOutScene("hist-spec.png");
+    dest.save("tmp.png");
+
+    updateOutScene("tmp.png");
 }
 
 void im::on_actionPiecewise_linear_transformation_triggered()
@@ -486,14 +481,16 @@ void im::on_actionPseudocolor_triggered()
 }
 
 template<typename T>
-QMap<int, int> im::getHistogramEqualizationMap(CImg<T> img, const int nLevel)
+QMap<int, int> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel)
 {
     // compute histogram
     CImg<T> histogram = img.get_histogram(nLevel);
     // compute cdf
-    for(int x = 1; x < histogram.width(); ++x) {
-        histogram(x) += histogram(x - 1);
-    }
+//    for(int x = 1; x < histogram.width(); ++x) {
+//        histogram(x) += histogram(x - 1);
+//    }
+    // use cumulate method from CImg to compute cdf, it's faster
+    histogram.cumulate("x");
     // create mapping
     // <int, int> = <old, new>
     double imageSize = img.width()*img.height();
@@ -503,4 +500,46 @@ QMap<int, int> im::getHistogramEqualizationMap(CImg<T> img, const int nLevel)
     }
 
     return map;
+}
+
+template<typename T>
+QMap<int, int> im::getHistogramSpecificationMap(const CImg<T> &src, const CImg<T> &ref, const int &nLevel)
+{
+    // compute histogram
+    CImg<unsigned int long> srcHistogram = src.get_histogram(nLevel);
+    CImg<unsigned int long> refHistogram = ref.get_histogram(nLevel);
+    // compute cdf
+    srcHistogram.cumulate("x");
+    refHistogram.cumulate("x");
+    double sizeSrc = src.width()*src.height();
+    double sizeRef = ref.width()*ref.height();
+    // get norm cdf
+    CImg<double> cdfSrc = srcHistogram/sizeSrc;
+    CImg<double> cdfRef = refHistogram/sizeRef;
+//    cdfSrc.display_graph(0, 3);
+//    cdfRef.display_graph(0, 3);
+    //
+    QMap<int, int> map;
+    int index;
+    CImg<double> tmp(cdfSrc);
+    cimg_forX(cdfSrc, x) {
+        tmp = abs(cdfSrc(x) - cdfRef);
+        index = getMinimumPos(tmp);
+        map.insert(x, index);
+    }
+
+    return map;
+}
+
+template<typename T>
+int im::getMinimumPos(const CImg<T> &img)
+{
+    int pos = 0;
+    for(int x = 0; x < img.width(); ++x) {
+        if (img(x) < img(pos)) {
+            pos = x;
+        }
+    }
+
+    return pos;
 }

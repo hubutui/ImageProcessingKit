@@ -71,7 +71,7 @@ private slots:
 
     void on_actionHistogram_equalization_triggered();
 
-    void on_actionHistogram_Specication_triggered();
+    void on_actionHistogram_specication_triggered();
 
     void on_actionPiecewise_linear_transformation_triggered();
 
@@ -114,7 +114,15 @@ private:
     void updateOutScene(const QString &fileName);
     inline int rgbToGray(const int &r, const int &g, const int &b);
     // QMap<int, int> getHistogramEqualizationMap(const CImg<int> img, const int nLevel);
-    template<typename T> QMap<int, int> getHistogramEqualizationMap(CImg<T> img, const int nLevel);
+    template<typename T>
+    QMap<int, int> getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel = 256);
+    template<typename T>
+    QMap<int, int> getHistogramSpecificationMap(const CImg<T> &src, const CImg<T> &ref, const int &nLevel = 256);
+    // get position of pixel with minimum value of image img
+    // where img is nLevel * 1 size
+    // nLevel is the gray value range
+    template<typename T>
+    int getMinimumPos(const CImg<T> &img);
 
     DialogPiecewiseLinearTransformation *dlgPiecewiseLinearTranformation;
     DialogAvarageFilter *dlgAverageFilter;
