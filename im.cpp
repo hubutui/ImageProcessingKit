@@ -59,8 +59,14 @@ void im::on_action_Quit_triggered()
 
 void im::on_action_Open_triggered()
 {
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
+    // image formats supported by Qt
+    // one might get all the image formats supported by Qt by:
+    // qDebug() << QImageReader::supportedImageFormats();
+    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
+    QString imagePath = QFileDialog::getOpenFileName(
+                this, tr("Open file"), QDir::homePath(), imageFormat);
 
+    // check if file is valid
     if (!imagePath.isEmpty()) {
         QFile file(imagePath);
 
@@ -77,11 +83,6 @@ void im::on_action_Open_triggered()
         inPixmapItem = inScene->addPixmap(*inPixmap);
         inScene->setSceneRect(QRectF(inPixmap->rect()));
 
-//  considering load image to outScene?
-//        outPixmap->load(imagePath);
-//        outPixmapItem = outScene->addPixmap(*outPixmap);
-//        outScene->setSceneRect(QRectF(outPixmap->rect()));
-
         // save fileName for later use
         setFileName(imagePath);
     }
@@ -89,7 +90,8 @@ void im::on_action_Open_triggered()
 
 void im::on_actionSave_as_triggered()
 {
-    QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QDir::homePath(), tr("All Images (*.bmp *.jpg *.jpeg *.png *.tif *.tiff);;"));
+    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
+    QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QDir::homePath(), imageFormat);
 
     if (!savePath.isEmpty()) {
         QFile file(savePath);
@@ -357,7 +359,21 @@ void im::on_actionHistogram_equalization_triggered()
 void im::on_actionHistogram_specication_triggered()
 {
     CImg<unsigned char> img(fileName.toStdString().data());
-    CImg<unsigned char> ref("reference.jpg");
+    // open reference file
+    // support image formats
+    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
+    QString refPath = QFileDialog::getOpenFileName(
+                this, tr("Choose reference image file"), QDir::homePath(), imageFormat);
+
+    if (!refPath.isEmpty()) {
+        QFile file(refPath);
+
+        if(!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Unable to read reference image!"));
+            return;
+        }
+    }
+    CImg<unsigned char> ref(refPath.toStdString().data());
     QMap<int, int> map = getHistogramSpecificationMap(img, ref);
     // do the thing
     CImg<unsigned char> dest(img);
