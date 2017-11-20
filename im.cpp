@@ -308,6 +308,12 @@ void im::on_action_Grayscale_triggered()
 {
     // read RGB file
     CImg<int> img(fileName.toStdString().data());
+    // if channel of image equals to 1
+    // it's a grayscale image, not RGB image
+    if (img.spectrum() == 1) {
+        QMessageBox::critical(this, tr("Error"), tr("Not an RGB image!"));
+        return;
+    }
     // create a gray scale image
     CImg<int> dest(img.width(), img.height());
 
