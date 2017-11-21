@@ -112,35 +112,64 @@ void im::on_actionClose_triggered()
 
 void im::showColorValue(const QPointF &position)
 {
-    // map position from scene to current item
-    QPointF pos = inPixmapItem->mapFromScene(position);
-	QPoint pixel;
-	pixel.setX(int(pos.x()));
-	pixel.setY(int(pos.y()));
-    QRgb rgbValue = inPixmap->toImage().pixel(pixel);
-    QColor color(rgbValue);
-    int gray = qGray(rgbValue);
-    QRect rect = inPixmap->rect();
-    if (rect.contains(pixel)) {
-        ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
-        ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+    CImg<unsigned char> img(fileName.toStdString().data());
+
+    if (isRGB(img)) {
+        // map position from scene to current item
+        QPointF pos = inPixmapItem->mapFromScene(position);
+        QPoint pixel;
+        pixel.setX(int(pos.x()));
+        pixel.setY(int(pos.y()));
+        QRgb rgbValue = inPixmap->toImage().pixel(pixel);
+        QColor color(rgbValue);
+        int gray = qGray(rgbValue);
+        QRect rect = inPixmap->rect();
+        if (rect.contains(pixel)) {
+            ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
+            ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+        }
+    } else if(isGrayscale(img)) {
+        // map position from scene to current item
+        QPointF pos = inPixmapItem->mapFromScene(position);
+        QPoint pixel;
+        pixel.setX(int(pos.x()));
+        pixel.setY(int(pos.y()));
+        QRgb rgbValue = inPixmap->toImage().pixel(pixel);
+        QColor color(rgbValue);
+        int gray = qGray(rgbValue);
+        QRect rect = inPixmap->rect();
+        if (rect.contains(pixel)) {
+            ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
+            ui->label_color_value->setText(tr("gray: %4").arg(gray));
+        }
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Something is wrong."));
+        return;
     }
 }
 
 void im::adjustHsv(const int &h, const float &s, const float &v)
 {
     CImg<float> img(fileName.toStdString().data());
-    img.RGBtoHSV();
-    qDebug() << "h = " << h << ", s = " << s << ", v = " << v << endl;
 
-    cimg_forXY(img, x, y) {
-        img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
-        img(x, y, 1) = s*img(x, y, 1);
-        img(x, y, 2) = v*img(x, y, 2);
+    if (isRGB(img)) {
+        // for RGB image, convert to HSV, adjust HSV
+        // and then convert back to RGB
+        img.RGBtoHSV();
+        cimg_forXY(img, x, y) {
+            img(x, y, 0) = std::fmod(img(x, y, 0) + h, 360);
+            img(x, y, 1) = s*img(x, y, 1);
+            img(x, y, 2) = v*img(x, y, 2);
+        }
+        img.HSVtoRGB().save_png("tmp.png");
+        updateOutScene("tmp.png");
+    } else if (isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not an RGB image."));
+        return;
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+        return;
     }
-
-    img.HSVtoRGB().save_png("tmp.png");
-    updateOutScene("tmp.png");
 }
 
 void im::linearTransformation(const double &k, const double &b)
@@ -344,23 +373,28 @@ void im::on_action_Grayscale_triggered()
 {
     // read RGB file
     CImg<int> img(fileName.toStdString().data());
-    // if channel of image equals to 1
-    // it's a grayscale image, not RGB image
-    if (img.spectrum() == 1) {
-        QMessageBox::critical(this, tr("Error"), tr("Not an RGB image!"));
+
+    if (isGrayscale(img)) {
+        // for grayscale image, do nothing
+        QMessageBox::critical(this, tr("Error!"), tr("Not an RGB image!"));
+        return;
+    } else if (isRGB(img)) {
+        // for RGB image, convert to grayscale
+        // create a gray scale image
+        CImg<int> dest(img.width(), img.height());
+
+        // convert RGB to gray scale, store in dest
+        cimg_forXY(dest, x, y) {
+            dest(x, y) = rgbToGray(img(x, y, 0), img(x, y, 1), img(x, y, 2));
+        }
+
+        // save image
+        dest.save_png("tmp.png");
+        updateOutScene("tmp.png");
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
         return;
     }
-    // create a gray scale image
-    CImg<int> dest(img.width(), img.height());
-
-    // convert RGB to gray scale, store in dest
-    cimg_forXY(dest, x, y) {
-        dest(x, y) = rgbToGray(img(x, y, 0), img(x, y, 1), img(x, y, 2));
-    }
-
-    // save image
-    dest.save_png("tmp.png");
-    updateOutScene("tmp.png");
 }
 
 void im::on_action_Linear_transformation_triggered()
