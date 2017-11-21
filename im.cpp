@@ -147,13 +147,18 @@ void im::linearTransformation(const double &k, const double &b)
 {
     CImg<double> img(fileName.toStdString().data());
 
-    //
-    if (img.spectrum() == 1) {
+    if (isGrayscale(img)) {
+        // grayscale image, just do it
         cimg_forXY(img, x, y) {
             img(x, y, 0) = img(x, y, 0)*k + b;
         }
-    } else {
-
+    } else if (isRGB(img)) {
+        // RGB image, convert to HSV, adjust V, convert back to RGB
+        img.RGBtoHSV();
+        cimg_forXY(img, x, y) {
+            img(x, y, 2) = img(x, y, 2)*k + b;
+        }
+        img.HSVtoRGB();
     }
 
     img.save_png("tmp.png");
