@@ -101,7 +101,10 @@ void im::on_actionSave_as_triggered()
             return;
         }
 
+        // save output image to file
         outPixmapItem->pixmap().save(savePath);
+        // update saveFileName, so that one could just save it
+        setSaveFileName(savePath);
     }
 }
 
@@ -341,6 +344,11 @@ void im::customFilter(const int &w00, const int &w01, const int &w02, const int 
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
+}
+
+void im::setSaveFileName(const QString &saveFileName)
+{
+    this->saveFileName = saveFileName;
 }
 
 void im::updateOutScene(const QString &fileName)
@@ -673,5 +681,17 @@ bool im::isRGB(const CImg<T> &img)
         return true;
     } else {
         return false;
+    }
+}
+
+void im::on_action_Save_triggered()
+{
+    if (!saveFileName.isEmpty()) {
+        // if saveFileName is not empty
+        // just save output image to saveFileName
+        outPixmapItem->pixmap().save(saveFileName);
+    } else {
+        // else call save as function
+        on_actionSave_as_triggered();
     }
 }

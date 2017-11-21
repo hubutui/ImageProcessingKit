@@ -89,6 +89,8 @@ private slots:
 
     void on_actionPseudocolor_triggered();
 
+    void on_action_Save_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -110,7 +112,9 @@ private:
     DialogAdjustHsv *dialogAdjustHsv;
     DialogLinearTransform *dialogLinearTransform;
     QString fileName;
+    QString saveFileName;
     void setFileName(const QString &fileName);
+    void setSaveFileName(const QString &saveFileName);
     void updateOutScene(const QString &fileName);
     inline int rgbToGray(const int &r, const int &g, const int &b);
     // QMap<int, int> getHistogramEqualizationMap(const CImg<int> img, const int nLevel);
