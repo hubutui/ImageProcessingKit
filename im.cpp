@@ -147,8 +147,13 @@ void im::linearTransformation(const double &k, const double &b)
 {
     CImg<double> img(fileName.toStdString().data());
 
-    cimg_forXY(img, x, y) {
-        img(x, y, 0) = img(x, y, 0)*k + b;
+    //
+    if (img.spectrum() == 1) {
+        cimg_forXY(img, x, y) {
+            img(x, y, 0) = img(x, y, 0)*k + b;
+        }
+    } else {
+
     }
 
     img.save_png("tmp.png");
@@ -564,4 +569,24 @@ int im::getMinimumPos(const CImg<T> &img)
     }
 
     return pos;
+}
+
+template<typename T>
+bool im::isGrayscale(const CImg<T> &img)
+{
+    if (img.spectrum() == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template<typename T>
+bool im::isRGB(const CImg<T> &img)
+{
+    if (img.spectrum() == 3) {
+        return true;
+    } else {
+        return false;
+    }
 }

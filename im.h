@@ -130,6 +130,11 @@ private:
     DialogMaximumFilter *dlgMaximumFilter;
     DialogMinimumFilter *dlgMinimumFilter;
     DialogCustomFilter *dlgCustomFilter;
+
+    template <typename T>
+    bool isGrayscale(const CImg<T> &img);
+    template <typename T>
+    bool isRGB(const CImg<T> &img);
 };
 
 #endif // IM_H
