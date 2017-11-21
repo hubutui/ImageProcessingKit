@@ -252,11 +252,6 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionRGB2HSV">
-   <property name="text">
-    <string>RGB2HSV</string>
-   </property>
-  </action>
   <action name="actionAdjust_HSV">
    <property name="text">
     <string>Adjust HSV</string>
