@@ -535,20 +535,37 @@ void im::on_actionPseudocolor_triggered()
 template<typename T>
 QMap<int, int> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel)
 {
-    // compute histogram
-    CImg<T> histogram = img.get_histogram(nLevel);
-    // compute cdf
-//    for(int x = 1; x < histogram.width(); ++x) {
-//        histogram(x) += histogram(x - 1);
-//    }
-    // use cumulate method from CImg to compute cdf, it's faster
-    histogram.cumulate("x");
+    double imageSize = img.width()*img.height();
     // create mapping
     // <int, int> = <old, new>
-    double imageSize = img.width()*img.height();
     QMap<int, int> map;
-    cimg_forX(histogram, x) {
-        map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
+    if (isGrayscale(img)) {
+        // for grayscale image, just get histogram
+        // and do create the mapping
+        // compute histogram
+        CImg<T> histogram = img.get_histogram(nLevel);
+        // compute cdf
+        //    for(int x = 1; x < histogram.width(); ++x) {
+        //        histogram(x) += histogram(x - 1);
+        //    }
+        // use cumulate method from CImg to compute cdf, it's faster
+        histogram.cumulate("x");
+        cimg_forX(histogram, x) {
+            map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
+        }
+    } else if (isRGB(img)) {
+        // for RGB image
+
+        CImg<T> hsv = img.get_RGBtoHSV();
+        CImg<T> v(hsv.width(), hsv.height());
+        cimg_for(v, x, y) {
+            v(x, y) = hsv(x, y, 2);
+        }
+        CImg<T> histogram = v.histogram(nLevel);
+        histogram.cumulate("x");
+        cimg_forX(histogram, x) {
+            map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
+        }
     }
 
     return map;
