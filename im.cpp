@@ -169,14 +169,34 @@ void im::piecewiseLinearTransformation(const double &r1, const double &s1, const
 {
     CImg<double> img(fileName.toStdString().data());
 
-    cimg_forXY(img, x, y) {
-        if (img(x, y) < r1) {
-            img(x, y) = s1/r1*img(x, y);
-        } else if (img(x, y) < r2) {
-            img(x, y) = (s2 - s1)/(r2 - r1)*(img(x, y) - r1) + s1;
-        } else {
-            img(x, y) = (255 - s2)/(255 - r1)*(img(x, y) - r2) + s2;
+    if (isGrayscale(img)) {
+        // for grayscale image, just do the transformation
+        cimg_forXY(img, x, y) {
+            if (img(x, y) < r1) {
+                img(x, y) = s1/r1*img(x, y);
+            } else if (img(x, y) < r2) {
+                img(x, y) = (s2 - s1)/(r2 - r1)*(img(x, y) - r1) + s1;
+            } else {
+                img(x, y) = (255 - s2)/(255 - r1)*(img(x, y) - r2) + s2;
+            }
         }
+    } else if (isRGB(img)) {
+        // for RGB image, convert to YUV, adjust Y
+        // then convert back to RGB
+        // why not HSV, and adjust V?
+        // V range (0, 100%), Y range (0, 255)
+        // the transformation assume gray range (0, 255)
+        img.RGBtoYUV();
+        cimg_forXY(img, x, y) {
+            if (img(x, y, 0) < r1) {
+                img(x, y, 0) = s1/r1*img(x, y, 0);
+            } else if (img(x, y, 2) < r2) {
+                img(x, y, 0) = (s2 - s1)/(r2 - r1)*(img(x, y, 0) - r1) + s1;
+            } else {
+                img(x, y, 0) = (255 - s2)/(255 - r1)*(img(x, y, 0) - r2) + s2;
+            }
+        }
+        img.YUVtoRGB();
     }
 
     img.save_png("tmp.png");
