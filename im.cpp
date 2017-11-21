@@ -159,6 +159,9 @@ void im::linearTransformation(const double &k, const double &b)
             img(x, y, 2) = img(x, y, 2)*k + b;
         }
         img.HSVtoRGB();
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+        return;
     }
 
     img.save_png("tmp.png");
@@ -197,6 +200,9 @@ void im::piecewiseLinearTransformation(const double &r1, const double &s1, const
             }
         }
         img.YUVtoRGB();
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+        return;
     }
 
     img.save_png("tmp.png");
@@ -558,7 +564,7 @@ QMap<int, int> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nL
 
         CImg<T> hsv = img.get_RGBtoHSV();
         CImg<T> v(hsv.width(), hsv.height());
-        cimg_for(v, x, y) {
+        cimg_forXY(v, x, y) {
             v(x, y) = hsv(x, y, 2);
         }
         CImg<T> histogram = v.histogram(nLevel);
@@ -566,6 +572,9 @@ QMap<int, int> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nL
         cimg_forX(histogram, x) {
             map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
         }
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+        QApplication::quit();
     }
 
     return map;
