@@ -119,7 +119,7 @@ private:
     inline int rgbToGray(const int &r, const int &g, const int &b);
     // QMap<int, int> getHistogramEqualizationMap(const CImg<int> img, const int nLevel);
     template<typename T>
-    QMap<int, int> getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel = 256);
+    QMap<T, T> getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel = 256);
     template<typename T>
     QMap<int, int> getHistogramSpecificationMap(const CImg<T> &src, const CImg<T> &ref, const int &nLevel = 256);
     // get position of pixel with minimum value of image img
