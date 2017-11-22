@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = ImageProcessingKit
 TEMPLATE = app
@@ -27,13 +27,38 @@ SOURCES += \
         main.cpp \
         im.cpp \
     qgraphicssceneplus.cpp \
-    dialogadjusthsv.cpp
+    dialogadjusthsv.cpp \
+    dialoglineartransform.cpp \
+    dialogpiecewiselineartransformation.cpp \
+    dialogavaragefilter.cpp \
+    dialogmedianfilter.cpp \
+    dialogmaximumfilter.cpp \
+    dialogminimumfilter.cpp \
+    dialogcustomfilter.cpp
 
 HEADERS += \
         im.h \
     qgraphicssceneplus.h \
-    dialogadjusthsv.h
+    dialogadjusthsv.h \
+    dialoglineartransform.h \
+    dialogpiecewiselineartransformation.h \
+    dialogavaragefilter.h \
+    dialogmedianfilter.h \
+    dialogmaximumfilter.h \
+    dialogminimumfilter.h \
+    dialogcustomfilter.h
 
 FORMS += \
         im.ui \
-    dialogadjusthsv.ui
+    dialogadjusthsv.ui \
+    dialoglineartransform.ui \
+    dialogpiecewiselineartransformation.ui \
+    dialogavaragefilter.ui \
+    dialogmedianfilter.ui \
+    dialogmaximumfilter.ui \
+    dialogminimumfilter.ui \
+    dialogcustomfilter.ui
+
+unix:!macx: LIBS += -lqcustomplot
+
+unix|win32: LIBS += -lX11

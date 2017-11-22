@@ -125,18 +125,22 @@
     <property name="title">
      <string>&amp;Gray Transform</string>
     </property>
-    <addaction name="action_Linear_transform"/>
+    <addaction name="action_Linear_transformation"/>
     <addaction name="actionPiecewise_linear_transformation"/>
     <addaction name="actionHistogram_equalization"/>
+    <addaction name="actionHistogram_specication"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Filter">
     <property name="title">
      <string>&amp;Spatial Filter</string>
     </property>
     <addaction name="actionMedian_filter"/>
-    <addaction name="actionMaxmun_filter"/>
+    <addaction name="actionMaximum_filter"/>
     <addaction name="actionMinimum_filter"/>
-    <addaction name="actionTemplate_filter"/>
+    <addaction name="actionCustomFilter"/>
+    <addaction name="actionAverage_filter"/>
+    <addaction name="actionLaplacian_filter"/>
+    <addaction name="actionPseudocolor"/>
    </widget>
    <widget class="QMenu" name="menuFrequency_Filter">
     <property name="title">
@@ -248,19 +252,17 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionRGB2HSV">
-   <property name="text">
-    <string>RGB2HSV</string>
-   </property>
-  </action>
   <action name="actionAdjust_HSV">
    <property name="text">
     <string>Adjust HSV</string>
    </property>
   </action>
-  <action name="action_Linear_transform">
+  <action name="action_Linear_transformation">
    <property name="text">
-    <string>&amp;Linear transform</string>
+    <string>&amp;Linear transformation</string>
+   </property>
+   <property name="toolTip">
+    <string>Linear transformation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
@@ -281,7 +283,7 @@
     <string>Median filter</string>
    </property>
   </action>
-  <action name="actionMaxmun_filter">
+  <action name="actionMaximum_filter">
    <property name="text">
     <string>Maximum filter</string>
    </property>
@@ -291,9 +293,12 @@
     <string>Minimum filter</string>
    </property>
   </action>
-  <action name="actionTemplate_filter">
+  <action name="actionCustomFilter">
    <property name="text">
-    <string>Template filter</string>
+    <string>Custom filter</string>
+   </property>
+   <property name="toolTip">
+    <string>filter with custom kernel</string>
    </property>
   </action>
   <action name="actionlow_pass_filter">
@@ -349,6 +354,29 @@
   <action name="actionClose">
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="actionHistogram_specication">
+   <property name="text">
+    <string>Histogram specification</string>
+   </property>
+   <property name="toolTip">
+    <string>Histogram specification</string>
+   </property>
+  </action>
+  <action name="actionAverage_filter">
+   <property name="text">
+    <string>Average filter</string>
+   </property>
+  </action>
+  <action name="actionLaplacian_filter">
+   <property name="text">
+    <string>Laplacian filter</string>
+   </property>
+  </action>
+  <action name="actionPseudocolor">
+   <property name="text">
+    <string>Pseudocolor</string>
    </property>
   </action>
  </widget>
