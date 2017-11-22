@@ -429,13 +429,49 @@ void im::on_action_Histogram_triggered()
 
 void im::on_actionHistogram_equalization_triggered()
 {
+    // we need CImg<T = unsigned int>, using unsigned char is wrong
+    // not sure why yet
     CImg<unsigned int> img(fileName.toStdString().data());
-    QMap<int, int> map = getHistogramEqualizationMap(img);
+    QMap<int, int> map;
+    CImg<unsigned int> dest(img);
     // do the histogram equalization
-    CImg<int> dest(img.width(), img.height());
-    cimg_forXY(dest, x, y) {
-        dest(x, y) = map[img(x, y)];
+//    CImg<int> dest(img.width(), img.height());
+//    cimg_forXY(dest, x, y) {
+//        dest(x, y) = map[img(x, y)];
+//    }
+    if (isGrayscale(img)) {
+        map = getHistogramEqualizationMap(img);
+        cimg_forXY(img, x, y) {
+            if (map.contains(img(x, y))) {
+                dest(x, y) = map.value(img(x, y));
+            }
+        }
+    } else if (isRGB(img)) {
+        CImg<unsigned int> R(img.width(), img.height()),
+                G(img.width(), img.height()),
+                B(img.width(), img.height());
+        QMap<int, int> mapR = getHistogramEqualizationMap(R),
+                mapG = getHistogramEqualizationMap(G),
+                mapB = getHistogramEqualizationMap(B);
+
+        cimg_forXY(img, x, y) {
+            if (mapR.contains(img(x, y, 0))) {
+                dest(x, y, 0) = mapR.value(img(x, y, 0));
+            }
+
+            if (mapG.contains(img(x, y, 0))) {
+                dest(x, y, 0) = mapG.value(img(x, y, 0));
+            }
+
+            if (mapB.contains(img(x, y, 0))) {
+                dest(x, y, 0) = mapB.value(img(x, y, 0));
+            }
+        } else {
+            QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+            return;
+        }
     }
+
     dest.save_png("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -587,36 +623,16 @@ QMap<int, int> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nL
     // create mapping
     // <int, int> = <old, new>
     QMap<int, int> map;
-    if (isGrayscale(img)) {
-        // for grayscale image, just get histogram
-        // and do create the mapping
-        // compute histogram
-        CImg<T> histogram = img.get_histogram(nLevel);
-        // compute cdf
-        //    for(int x = 1; x < histogram.width(); ++x) {
-        //        histogram(x) += histogram(x - 1);
-        //    }
-        // use cumulate method from CImg to compute cdf, it's faster
-        histogram.cumulate("x");
-        cimg_forX(histogram, x) {
-            map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
-        }
-    } else if (isRGB(img)) {
-        // for RGB image
-
-        CImg<T> hsv = img.get_RGBtoHSV();
-        CImg<T> v(hsv.width(), hsv.height());
-        cimg_forXY(v, x, y) {
-            v(x, y) = hsv(x, y, 2);
-        }
-        CImg<T> histogram = v.histogram(nLevel);
-        histogram.cumulate("x");
-        cimg_forX(histogram, x) {
-            map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
-        QApplication::quit();
+    // compute histogram
+    CImg<T> histogram = img.get_histogram(nLevel);
+    // compute cdf
+    //    for(int x = 1; x < histogram.width(); ++x) {
+    //        histogram(x) += histogram(x - 1);
+    //    }
+    // use cumulate method from CImg to compute cdf, it's faster
+    histogram.cumulate("x");
+    cimg_forX(histogram, x) {
+        map.insert(x, static_cast<int>(round(histogram(x)*(nLevel - 1)/imageSize)));
     }
 
     return map;
