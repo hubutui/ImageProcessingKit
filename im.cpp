@@ -445,41 +445,29 @@ void im::on_actionHistogram_equalization_triggered()
                 dest(x, y) = map.value(img(x, y));
             }
         }
-    } else if (isRGB(img)) {
-//        CImg<unsigned int> R(img.width(), img.height()),
-//                G(img.width(), img.height()),
-//                B(img.width(), img.height());
-//        QMap<unsigned int, unsigned int> mapR = getHistogramEqualizationMap(R),
-//                mapG = getHistogramEqualizationMap(G),
-//                mapB = getHistogramEqualizationMap(B);
+    } // else if (isRGB(img)) {
+    //        CImg<unsigned int> R(img.width(), img.height()),
+    //                G(img.width(), img.height()),
+    //                B(img.width(), img.height());
+    //        QMap<unsigned int, unsigned int> mapR = getHistogramEqualizationMap(R),
+    //                mapG = getHistogramEqualizationMap(G),
+    //                mapB = getHistogramEqualizationMap(B);
 
-//        cimg_forXY(img, x, y) {
-//            if (mapR.contains(img(x, y, 0))) {
-//                dest(x, y, 0) = mapR.value(img(x, y, 0));
-//            }
+    //        cimg_forXY(img, x, y) {
+    //            if (mapR.contains(img(x, y, 0))) {
+    //                dest(x, y, 0) = mapR.value(img(x, y, 0));
+    //            }
 
-//            if (mapG.contains(img(x, y, 0))) {
-//                dest(x, y, 0) = mapG.value(img(x, y, 0));
-//            }
+    //            if (mapG.contains(img(x, y, 0))) {
+    //                dest(x, y, 0) = mapG.value(img(x, y, 0));
+    //            }
 
-//            if (mapB.contains(img(x, y, 0))) {
-//                dest(x, y, 0) = mapB.value(img(x, y, 0));
-//            }
-//        }
-        CImg<double> HSV = img.get_RGBtoHSV();
-        CImg<double> V(HSV.width(), HSV.height());
-        cimg_forXY(HSV, x, y) {
-            V(x, y) = HSV(x, y, 2);
-        }
-        QMap<double, double> map = getHistogramEqualizationMap(V);
-        cimg_forXY(HSV, x, y) {
-            if (map.contains(V(x, y))) {
-                HSV(x, y, 2) = map.value(V(x, y));
-            }
-        }
-        dest = HSV.get_HSVtoRGB();
-    } else {
-            QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
+    //            if (mapB.contains(img(x, y, 0))) {
+    //                dest(x, y, 0) = mapB.value(img(x, y, 0));
+    //            }
+    //        }
+        else {
+            QMessageBox::critical(this, tr("Error!"), tr("Not an RGB image."));
             return;
     }
 
