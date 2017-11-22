@@ -467,7 +467,7 @@ void im::on_actionHistogram_equalization_triggered()
     //            }
     //        }
         else {
-            QMessageBox::critical(this, tr("Error!"), tr("Not an RGB image."));
+            QMessageBox::critical(this, tr("Error!"), tr("Not a grayscale image."));
             return;
     }
 
@@ -478,6 +478,11 @@ void im::on_actionHistogram_equalization_triggered()
 void im::on_actionHistogram_specication_triggered()
 {
     CImg<unsigned char> img(fileName.toStdString().data());
+    // for non-grayscale image, do nothing, just return
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not a grayscale image."));
+        return;
+    }
     // open reference file
     // support image formats
     QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
@@ -493,11 +498,19 @@ void im::on_actionHistogram_specication_triggered()
         }
     }
     CImg<unsigned char> ref(refPath.toStdString().data());
-    QMap<int, int> map = getHistogramSpecificationMap(img, ref);
+    // refernce image shall be grayscale too
+    if (!isGrayscale(ref)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not a grayscale image."));
+        return;
+    }
+    // get mapping
+    QMap<unsigned char, unsigned char> map = getHistogramSpecificationMap(img, ref);
     // do the thing
     CImg<unsigned char> dest(img);
     cimg_forXY(dest, x, y) {
-        dest(x, y) = map[img(x, y)];
+        if (map.contains(img(x, y))) {
+            dest(x, y) = map.value(img(x, y));
+        }
     }
 
     dest.save("tmp.png");
@@ -637,8 +650,11 @@ QMap<T, T> im::getHistogramEqualizationMap(const CImg<T> &img, const int &nLevel
     return map;
 }
 
+// It seems that one shall not use template here
+// if he or she is not that crazy about tempate.
+// But, I will just keep it this way.
 template<typename T>
-QMap<int, int> im::getHistogramSpecificationMap(const CImg<T> &src, const CImg<T> &ref, const int &nLevel)
+QMap<T, T> im::getHistogramSpecificationMap(const CImg<T> &src, const CImg<T> &ref, const int &nLevel)
 {
     // compute histogram
     CImg<unsigned int long> srcHistogram = src.get_histogram(nLevel);
@@ -654,7 +670,7 @@ QMap<int, int> im::getHistogramSpecificationMap(const CImg<T> &src, const CImg<T
 //    cdfSrc.display_graph(0, 3);
 //    cdfRef.display_graph(0, 3);
     //
-    QMap<int, int> map;
+    QMap<T, T> map;
     int index;
     CImg<double> tmp(cdfSrc);
     cimg_forX(cdfSrc, x) {
