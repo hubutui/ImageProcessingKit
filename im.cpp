@@ -5,6 +5,7 @@
 #include <QRgb>
 #include <algorithm>
 #include <qcustomplot.h>
+#include <QtGlobal>
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -725,4 +726,18 @@ void im::on_action_Save_triggered()
         // else call save as function
         on_action_Save_As_triggered();
     }
+}
+
+// about Qt
+// just call QApplication::aboutQt()
+// to show some information
+void im::on_action_About_Qt_triggered()
+{
+    QApplication::aboutQt();
+}
+
+// about dialog
+void im::on_action_About_ImageProcessingKit_triggered()
+{
+    QMessageBox::about(this, tr("About - ImageProcessingKit"), tr("<H1>ImageProcessingKit</H1> Power by Qt."));
 }

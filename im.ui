@@ -161,7 +161,7 @@
     <property name="title">
      <string>Image &amp;Thresholding</string>
     </property>
-    <addaction name="actionManual_threshold"/>
+    <addaction name="action_Manual_Threshold"/>
     <addaction name="action_Ostu_method"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -358,9 +358,12 @@
     <string>Inverse Filter</string>
    </property>
   </action>
-  <action name="actionManual_threshold">
+  <action name="action_Manual_Threshold">
    <property name="text">
-    <string>Manual threshold</string>
+    <string>Manual Threshold</string>
+   </property>
+   <property name="toolTip">
+    <string>Manual Threshold</string>
    </property>
   </action>
   <action name="action_Ostu_method">

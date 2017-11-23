@@ -91,6 +91,10 @@ private slots:
 
     void on_action_Save_triggered();
 
+    void on_action_About_Qt_triggered();
+
+    void on_action_About_ImageProcessingKit_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
