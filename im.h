@@ -57,37 +57,37 @@ private slots:
 
     void on_action_Open_triggered();
 
-    void on_actionSave_as_triggered();
+    void on_action_Save_As_triggered();
 
-    void on_actionClose_triggered();
+    void on_action_Close_triggered();
 
-    void on_actionAdjust_HSV_triggered();
+    void on_action_Adjust_HSV_triggered();
 
     void on_action_Grayscale_triggered();
 
-    void on_action_Linear_transformation_triggered();
+    void on_action_Linear_Transformation_triggered();
 
     void on_action_Histogram_triggered();
 
-    void on_actionHistogram_equalization_triggered();
+    void on_action_Histogram_Equalization_triggered();
 
-    void on_actionHistogram_specication_triggered();
+    void on_action_Histogram_Specification_triggered();
 
-    void on_actionPiecewise_linear_transformation_triggered();
+    void on_action_Piecewise_Linear_Transformation_triggered();
 
-    void on_actionAverage_filter_triggered();
+    void on_action_Average_Filter_triggered();
 
-    void on_actionLaplacian_filter_triggered();
+    void on_action_Laplacian_Filter_triggered();
 
-    void on_actionMedian_filter_triggered();
+    void on_action_Median_Filter_triggered();
 
-    void on_actionMaximum_filter_triggered();
+    void on_action_Maximum_Filter_triggered();
 
-    void on_actionMinimum_filter_triggered();
+    void on_action_Minimum_Filter_triggered();
 
-    void on_actionCustomFilter_triggered();
+    void on_action_Custom_Filter_triggered();
 
-    void on_actionPseudocolor_triggered();
+    void on_action_Pseudocolor_triggered();
 
     void on_action_Save_triggered();
 

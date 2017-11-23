@@ -102,8 +102,8 @@
     </property>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
-    <addaction name="actionSave_as"/>
-    <addaction name="actionClose"/>
+    <addaction name="action_Save_As"/>
+    <addaction name="action_Close"/>
     <addaction name="action_Print"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -119,25 +119,25 @@
     <property name="title">
      <string>&amp;Color Space</string>
     </property>
-    <addaction name="actionAdjust_HSV"/>
+    <addaction name="action_Adjust_HSV"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Transform">
     <property name="title">
      <string>&amp;Gray Transform</string>
     </property>
-    <addaction name="action_Linear_transformation"/>
-    <addaction name="actionPiecewise_linear_transformation"/>
-    <addaction name="actionHistogram_equalization"/>
-    <addaction name="actionHistogram_specication"/>
+    <addaction name="action_Linear_Transformation"/>
+    <addaction name="action_Piecewise_Linear_Transformation"/>
+    <addaction name="action_Histogram_Equalization"/>
+    <addaction name="action_Histogram_Specification"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Filter">
     <property name="title">
      <string>&amp;Spatial Filter</string>
     </property>
-    <addaction name="actionMedian_filter"/>
-    <addaction name="actionMaximum_filter"/>
-    <addaction name="actionMinimum_filter"/>
-    <addaction name="actionCustomFilter"/>
+    <addaction name="action_Median_Filter"/>
+    <addaction name="action_Maximum_Filter"/>
+    <addaction name="action_Minimum_Filter"/>
+    <addaction name="action_Custom_Filter"/>
     <addaction name="actionAverage_filter"/>
     <addaction name="actionLaplacian_filter"/>
     <addaction name="actionPseudocolor"/>
@@ -163,7 +163,7 @@
      <string>Image &amp;Thresholding</string>
     </property>
     <addaction name="actionManual_threshold"/>
-    <addaction name="actionOstu_s_method"/>
+    <addaction name="action_Ostu_method"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -207,9 +207,12 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSave_as">
+  <action name="action_Save_As">
    <property name="text">
-    <string>Save as</string>
+    <string>Save As</string>
+   </property>
+   <property name="toolTip">
+    <string>Save As</string>
    </property>
   </action>
   <action name="action_Print">
@@ -252,50 +255,65 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionAdjust_HSV">
+  <action name="action_Adjust_HSV">
    <property name="text">
     <string>Adjust HSV</string>
    </property>
   </action>
-  <action name="action_Linear_transformation">
+  <action name="action_Linear_Transformation">
    <property name="text">
-    <string>&amp;Linear transformation</string>
+    <string>&amp;Linear Transformation</string>
    </property>
    <property name="toolTip">
-    <string>Linear transformation</string>
+    <string>Linear Transformation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
    </property>
   </action>
-  <action name="actionPiecewise_linear_transformation">
+  <action name="action_Piecewise_Linear_Transformation">
    <property name="text">
-    <string>Piecewise linear transformation</string>
+    <string>Piecewise Linear Transformation</string>
+   </property>
+   <property name="toolTip">
+    <string>Piecewise Linear Transformation</string>
    </property>
   </action>
-  <action name="actionHistogram_equalization">
+  <action name="action_Histogram_Equalization">
    <property name="text">
-    <string>Histogram equalization</string>
+    <string>Histogram Equalization</string>
+   </property>
+   <property name="toolTip">
+    <string>Histogram Equalization</string>
    </property>
   </action>
-  <action name="actionMedian_filter">
+  <action name="action_Median_Filter">
    <property name="text">
-    <string>Median filter</string>
+    <string>Median Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Median Filter</string>
    </property>
   </action>
-  <action name="actionMaximum_filter">
+  <action name="action_Maximum_Filter">
    <property name="text">
-    <string>Maximum filter</string>
+    <string>Maximum Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Maximum Filter</string>
    </property>
   </action>
-  <action name="actionMinimum_filter">
+  <action name="action_Minimum_Filter">
    <property name="text">
-    <string>Minimum filter</string>
+    <string>Minimum Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Minimum Filter</string>
    </property>
   </action>
-  <action name="actionCustomFilter">
+  <action name="action_Custom_Filter">
    <property name="text">
-    <string>Custom filter</string>
+    <string>Custom Filter</string>
    </property>
    <property name="toolTip">
     <string>filter with custom kernel</string>
@@ -336,7 +354,7 @@
     <string>Manual threshold</string>
    </property>
   </action>
-  <action name="actionOstu_s_method">
+  <action name="action_Ostu_method">
    <property name="text">
     <string>Ostu's method</string>
    </property>
@@ -351,17 +369,17 @@
     <string>About Qt</string>
    </property>
   </action>
-  <action name="actionClose">
+  <action name="action_Close">
    <property name="text">
     <string>Close</string>
    </property>
   </action>
-  <action name="actionHistogram_specication">
+  <action name="action_Histogram_Specification">
    <property name="text">
-    <string>Histogram specification</string>
+    <string>Histogram Specification</string>
    </property>
    <property name="toolTip">
-    <string>Histogram specification</string>
+    <string>Histogram Specification</string>
    </property>
   </action>
   <action name="actionAverage_filter">

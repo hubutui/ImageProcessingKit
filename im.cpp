@@ -88,7 +88,7 @@ void im::on_action_Open_triggered()
     }
 }
 
-void im::on_actionSave_as_triggered()
+void im::on_action_Save_As_triggered()
 {
     QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
     QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QDir::homePath(), imageFormat);
@@ -108,7 +108,7 @@ void im::on_actionSave_as_triggered()
     }
 }
 
-void im::on_actionClose_triggered()
+void im::on_action_Close_triggered()
 {
     cleanImage();
 }
@@ -368,7 +368,7 @@ int im::rgbToGray(const int &r, const int &g, const int &b)
     return (r * 11 + g * 16 + b * 5)/32;
 }
 
-void im::on_actionAdjust_HSV_triggered()
+void im::on_action_Adjust_HSV_triggered()
 {
     dialogAdjustHsv = new DialogAdjustHsv;
     dialogAdjustHsv->setModal(true);
@@ -405,7 +405,7 @@ void im::on_action_Grayscale_triggered()
     }
 }
 
-void im::on_action_Linear_transformation_triggered()
+void im::on_action_Linear_Transformation_triggered()
 {
     dialogLinearTransform = new DialogLinearTransform;
     dialogLinearTransform->setModal(true);
@@ -427,7 +427,7 @@ void im::on_action_Histogram_triggered()
     hist.display_graph(display, 3);
 }
 
-void im::on_actionHistogram_equalization_triggered()
+void im::on_action_Histogram_Equalization_triggered()
 {
     // we need CImg<T = unsigned int>, using unsigned char is wrong
     // not sure why yet
@@ -475,7 +475,7 @@ void im::on_actionHistogram_equalization_triggered()
     updateOutScene("tmp.png");
 }
 
-void im::on_actionHistogram_specication_triggered()
+void im::on_action_Histogram_Specification_triggered()
 {
     CImg<unsigned char> img(fileName.toStdString().data());
     // for non-grayscale image, do nothing, just return
@@ -518,7 +518,7 @@ void im::on_actionHistogram_specication_triggered()
     updateOutScene("tmp.png");
 }
 
-void im::on_actionPiecewise_linear_transformation_triggered()
+void im::on_action_Piecewise_Linear_Transformation_triggered()
 {
     dlgPiecewiseLinearTranformation = new DialogPiecewiseLinearTransformation;
     dlgPiecewiseLinearTranformation->setModal(true);
@@ -527,7 +527,7 @@ void im::on_actionPiecewise_linear_transformation_triggered()
     connect(dlgPiecewiseLinearTranformation, SIGNAL(sendData(double, double, double, double)), this, SLOT(piecewiseLinearTransformation(double, double, double, double)));
 }
 
-void im::on_actionAverage_filter_triggered()
+void im::on_action_Average_Filter_triggered()
 {
     dlgAverageFilter = new DialogAvarageFilter;
     dlgAverageFilter->setModal(true);
@@ -536,7 +536,7 @@ void im::on_actionAverage_filter_triggered()
     connect(dlgAverageFilter, SIGNAL(sendData(int)), this, SLOT(averageFilter(int)));
 }
 
-void im::on_actionLaplacian_filter_triggered()
+void im::on_action_Laplacian_Filter_triggered()
 {
     CImg<float> img(fileName.toStdString().data());
     CImg<float> dest = img.get_laplacian();
@@ -547,7 +547,7 @@ void im::on_actionLaplacian_filter_triggered()
     updateOutScene("tmp.png");
 }
 
-void im::on_actionMedian_filter_triggered()
+void im::on_action_Median_Filter_triggered()
 {
     dlgMedianFilter = new DialogMedianFilter;
     dlgMedianFilter->setModal(true);
@@ -556,7 +556,7 @@ void im::on_actionMedian_filter_triggered()
     connect(dlgMedianFilter, SIGNAL(sendData(int)), this, SLOT(medianFilter(int)));
 }
 
-void im::on_actionMaximum_filter_triggered()
+void im::on_action_Maximum_Filter_triggered()
 {
     dlgMaximumFilter = new DialogMaximumFilter;
     dlgMaximumFilter->setModal(true);;
@@ -565,7 +565,7 @@ void im::on_actionMaximum_filter_triggered()
     connect(dlgMaximumFilter, SIGNAL(sendData(int)), this, SLOT(maximumFilter(int)));
 }
 
-void im::on_actionMinimum_filter_triggered()
+void im::on_action_Minimum_Filter_triggered()
 {
     dlgMinimumFilter = new DialogMinimumFilter;
     dlgMinimumFilter->setModal(true);
@@ -575,7 +575,7 @@ void im::on_actionMinimum_filter_triggered()
 
 }
 
-void im::on_actionCustomFilter_triggered()
+void im::on_action_Custom_Filter_triggered()
 {
     dlgCustomFilter = new DialogCustomFilter;
     dlgCustomFilter->setModal(true);
@@ -585,7 +585,7 @@ void im::on_actionCustomFilter_triggered()
             this, SLOT(customFilter(int,int,int,int,int,int,int,int,int)));
 }
 
-void im::on_actionPseudocolor_triggered()
+void im::on_action_Pseudocolor_triggered()
 {
     CImg<float> img(fileName.toStdString().data());
     CImg<float> dest(img.width(), img.height(), 1, 3);
@@ -723,6 +723,6 @@ void im::on_action_Save_triggered()
         outPixmapItem->pixmap().save(saveFileName);
     } else {
         // else call save as function
-        on_actionSave_as_triggered();
+        on_action_Save_As_triggered();
     }
 }
