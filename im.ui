@@ -138,25 +138,24 @@
     <addaction name="action_Maximum_Filter"/>
     <addaction name="action_Minimum_Filter"/>
     <addaction name="action_Custom_Filter"/>
-    <addaction name="actionAverage_filter"/>
-    <addaction name="actionLaplacian_filter"/>
-    <addaction name="actionPseudocolor"/>
+    <addaction name="action_Average_Filter"/>
+    <addaction name="action_Laplacian_Filter"/>
+    <addaction name="action_Pseudocolor"/>
    </widget>
    <widget class="QMenu" name="menuFrequency_Filter">
     <property name="title">
      <string>Freq&amp;uency Filter</string>
     </property>
-    <addaction name="actionlow_pass_filter"/>
-    <addaction name="actionIdeal_high_pass_filter"/>
-    <addaction name="actionButterworth_filter"/>
-    <addaction name="actionButterworth_high_pass_filter"/>
+    <addaction name="action_Low_Pass_Filter"/>
+    <addaction name="action_Ideal_High_Pass_Filter"/>
+    <addaction name="action_Butterworth_Low_Pass_Filter"/>
+    <addaction name="action_Butterworth_High_Pass_Filter"/>
    </widget>
    <widget class="QMenu" name="menuImage_Recovery">
     <property name="title">
      <string>Image &amp;Recovery</string>
     </property>
-    <addaction name="actionInverse_filter"/>
-    <addaction name="actionWiener_filter"/>
+    <addaction name="action_Inverse_filter"/>
    </widget>
    <widget class="QMenu" name="menuImage_Thresholding">
     <property name="title">
@@ -169,8 +168,8 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionAbout_ImageProcessingKit"/>
-    <addaction name="actionAbout_Qt"/>
+    <addaction name="action_About_ImageProcessingKit"/>
+    <addaction name="action_About_Qt"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -319,34 +318,44 @@
     <string>filter with custom kernel</string>
    </property>
   </action>
-  <action name="actionlow_pass_filter">
+  <action name="action_Low_Pass_Filter">
    <property name="text">
-    <string>Ideal low-pass filter</string>
+    <string>Ideal Low Pass Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Ideal Low Pass Filter</string>
    </property>
   </action>
-  <action name="actionIdeal_high_pass_filter">
+  <action name="action_Ideal_High_Pass_Filter">
    <property name="text">
-    <string>Ideal high-pass filter</string>
+    <string>Ideal High Pass Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Ideal High Pass Filter</string>
    </property>
   </action>
-  <action name="actionButterworth_filter">
+  <action name="action_Butterworth_Low_Pass_Filter">
    <property name="text">
-    <string>Butterworth low-pass filter</string>
+    <string>Butterworth Low Pass Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Butterworth Low Pass Filter</string>
    </property>
   </action>
-  <action name="actionButterworth_high_pass_filter">
+  <action name="action_Butterworth_High_Pass_Filter">
    <property name="text">
-    <string>Butterworth high-pass filter</string>
+    <string>Butterworth High Pass Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Butterworth High Pass Filter</string>
    </property>
   </action>
-  <action name="actionInverse_filter">
+  <action name="action_Inverse_filter">
    <property name="text">
-    <string>Inverse filter</string>
+    <string>Inverse Filter</string>
    </property>
-  </action>
-  <action name="actionWiener_filter">
-   <property name="text">
-    <string>Wiener filter</string>
+   <property name="toolTip">
+    <string>Inverse Filter</string>
    </property>
   </action>
   <action name="actionManual_threshold">
@@ -359,12 +368,12 @@
     <string>Ostu's method</string>
    </property>
   </action>
-  <action name="actionAbout_ImageProcessingKit">
+  <action name="action_About_ImageProcessingKit">
    <property name="text">
     <string>About ImageProcessingKit</string>
    </property>
   </action>
-  <action name="actionAbout_Qt">
+  <action name="action_About_Qt">
    <property name="text">
     <string>About Qt</string>
    </property>
@@ -382,17 +391,23 @@
     <string>Histogram Specification</string>
    </property>
   </action>
-  <action name="actionAverage_filter">
+  <action name="action_Average_Filter">
    <property name="text">
-    <string>Average filter</string>
+    <string>Average Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Average Filter</string>
    </property>
   </action>
-  <action name="actionLaplacian_filter">
+  <action name="action_Laplacian_Filter">
    <property name="text">
-    <string>Laplacian filter</string>
+    <string>Laplacian Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Laplacian Filter</string>
    </property>
   </action>
-  <action name="actionPseudocolor">
+  <action name="action_Pseudocolor">
    <property name="text">
     <string>Pseudocolor</string>
    </property>
