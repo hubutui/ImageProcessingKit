@@ -890,6 +890,7 @@ void im::on_action_XOR_triggered()
         return;
     }
 
+    tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorXor(img, tmpImg);
     result.save_png("tmp.png");
     updateOutScene("tmp.png");
@@ -912,7 +913,7 @@ void im::on_action_AND_triggered()
     }
 
     CImg<int> tmpImg(tmpFile.toStdString().data());
-
+    tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorAnd(img, tmpImg);
 
     result.save_png("tmp.png");
@@ -936,7 +937,7 @@ void im::on_action_OR_triggered()
     }
 
     CImg<int> tmpImg(tmpFile.toStdString().data());
-
+    tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorOr(img, tmpImg);
 
     result.save_png("tmp.png");
