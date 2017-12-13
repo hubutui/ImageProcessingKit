@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1100</width>
+    <width>1258</width>
     <height>1024</height>
    </rect>
   </property>
@@ -92,7 +92,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1100</width>
+     <width>1258</width>
      <height>32</height>
     </rect>
    </property>
@@ -171,6 +171,19 @@
     <addaction name="action_About_ImageProcessingKit"/>
     <addaction name="action_About_Qt"/>
    </widget>
+   <widget class="QMenu" name="menuOperation">
+    <property name="title">
+     <string>Operation</string>
+    </property>
+    <addaction name="action_Addition"/>
+    <addaction name="action_Subtraction"/>
+    <addaction name="action_Multiplication"/>
+    <addaction name="action_Division"/>
+    <addaction name="action_Negative"/>
+    <addaction name="action_XOR"/>
+    <addaction name="action_AND"/>
+    <addaction name="action_OR"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menuColor_Space"/>
@@ -179,6 +192,7 @@
    <addaction name="menuFrequency_Filter"/>
    <addaction name="menuImage_Recovery"/>
    <addaction name="menuImage_Thresholding"/>
+   <addaction name="menuOperation"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -413,6 +427,46 @@
   <action name="action_Pseudocolor">
    <property name="text">
     <string>Pseudocolor</string>
+   </property>
+  </action>
+  <action name="action_Addition">
+   <property name="text">
+    <string>Addition</string>
+   </property>
+  </action>
+  <action name="action_Subtraction">
+   <property name="text">
+    <string>Subtraction</string>
+   </property>
+  </action>
+  <action name="action_Multiplication">
+   <property name="text">
+    <string>Multiplication</string>
+   </property>
+  </action>
+  <action name="action_Division">
+   <property name="text">
+    <string>Division</string>
+   </property>
+  </action>
+  <action name="action_Negative">
+   <property name="text">
+    <string>Negative</string>
+   </property>
+  </action>
+  <action name="action_XOR">
+   <property name="text">
+    <string>XOR</string>
+   </property>
+  </action>
+  <action name="action_AND">
+   <property name="text">
+    <string>AND</string>
+   </property>
+  </action>
+  <action name="action_OR">
+   <property name="text">
+    <string>OR</string>
    </property>
   </action>
  </widget>
