@@ -161,6 +161,12 @@ private:
     bool isRGB(const CImg<T> &img);
     bool isBinary(const CImg<int> &img);
     CImg<int> operatorAnd(const CImg<int> &img1, const CImg<int> &img2);
+    CImg<int> operatorOr(const CImg<int> &img1, const CImg<int> &img2);
+    CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
+    // image formats supported by Qt
+    // one might get all the image formats supported by Qt by:
+    // qDebug() << QImageReader::supportedImageFormats();
+    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
 };
 
 #endif // IM_H

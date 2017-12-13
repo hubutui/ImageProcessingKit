@@ -60,10 +60,6 @@ void im::on_action_Quit_triggered()
 
 void im::on_action_Open_triggered()
 {
-    // image formats supported by Qt
-    // one might get all the image formats supported by Qt by:
-    // qDebug() << QImageReader::supportedImageFormats();
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
     QString imagePath = QFileDialog::getOpenFileName(
                 this, tr("Open file"), QDir::homePath(), imageFormat);
 
@@ -91,7 +87,6 @@ void im::on_action_Open_triggered()
 
 void im::on_action_Save_As_triggered()
 {
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
     QString savePath = QFileDialog::getSaveFileName(this, tr("Save image"), QDir::homePath(), imageFormat);
 
     if (!savePath.isEmpty()) {
@@ -373,6 +368,10 @@ bool im::isBinary(const CImg<int> &img)
 {
     bool result = true;
 
+    if (!isGrayscale(img)) {
+        return false;
+    }
+
     cimg_forXY(img, x, y) {
         if (img(x, y) != 0 && img(x, y) != 255) {
             result = false;
@@ -391,6 +390,37 @@ CImg<int> im::operatorAnd(const CImg<int> &img1, const CImg<int> &img2)
             result(x, y) = 255;
         } else {
             result(x, y) = 0;
+        }
+    }
+
+    return result;
+}
+
+CImg<int> im::operatorOr(const CImg<int> &img1, const CImg<int> &img2)
+{
+    CImg<int> result(img1);
+
+    cimg_forXY(result, x, y) {
+        if (img1(x, y) == 0 && img2(x, y) == 0) {
+            result(x, y) = 0;
+        } else {
+            result(x, y) = 255;
+        }
+    }
+
+    return result;
+}
+
+CImg<int> im::operatorXor(const CImg<int> &img1, const CImg<int> &img2)
+{
+    CImg<int> result(img1);
+
+    cimg_forXY(result, x, y) {
+        if ((img1(x, y) == 0 && img2(x, y) == 0)
+                || (img1(x, y) == 255 && img2(x, y) == 255)) {
+            result(x, y) = 0;
+        } else {
+            result(x, y) = 255;
         }
     }
 
@@ -513,8 +543,6 @@ void im::on_action_Histogram_Specification_triggered()
         return;
     }
     // open reference file
-    // support image formats
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
     QString refPath = QFileDialog::getOpenFileName(
                 this, tr("Choose reference image file"), QDir::homePath(), imageFormat);
 
@@ -772,35 +800,35 @@ void im::on_action_About_ImageProcessingKit_triggered()
 
 void im::on_action_Addition_triggered()
 {
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File(s)"), QDir::homePath(), imageFormat);
+    QStringList tmpFiles = QFileDialog::getOpenFileNames(this, tr("Open File(s)"), QDir::homePath(), imageFormat);
 
-    if (!fileNames.isEmpty()) {
-        CImg<double> sum(fileName.toStdString().data());
+    if (!tmpFiles.isEmpty()) {
+        CImg<double> img(fileName.toStdString().data());
 
-        for(int i = 0; i < fileNames.count(); ++i) {
-            CImg<double> img(fileNames.at(i).toStdString().data());
-            img.resize(sum.width(), sum.height(), sum.depth(), sum.spectrum());
-            sum += img;
-            sum /= 2;
+        for(int i = 0; i < tmpFiles.count(); ++i) {
+            CImg<double> tmp(tmpFiles.at(i).toStdString().data());
+            // resize image before operation
+            tmp.resize(img.width(), img.height(), img.depth(), img.spectrum());
+            img += tmp;
+            img /= 2;
         }
 
-        sum.save_png("tmp.png");
+        img.save_png("tmp.png");
         updateOutScene("tmp.png");
     }
 }
 
 void im::on_action_Subtraction_triggered()
 {
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
-    QString subFileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
 
-    if (!subFileName.isEmpty()) {
-        CImg<double> subImg(subFileName.toStdString().data());
+    if (!tmpFile.isEmpty()) {
+        CImg<double> tmpImg(tmpFile.toStdString().data());
         CImg<double> img(fileName.toStdString().data());
 
-        subImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
-        img -= subImg;
+        // resize image before operation
+        tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
+        img -= tmpImg;
         img.save_png("tmp.png");
         updateOutScene("tmp.png");
     }
@@ -808,15 +836,14 @@ void im::on_action_Subtraction_triggered()
 
 void im::on_action_Multiplication_triggered()
 {
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
-    QString mulFileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
 
-    if (!mulFileName.isEmpty()) {
-        CImg<double> mulImg(mulFileName.toStdString().data());
+    if (!tmpFile.isEmpty()) {
+        CImg<double> tmpImg(tmpFile.toStdString().data());
         CImg<double> img(fileName.toStdString().data());
 
-        mulImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
-        img.mul(mulImg);
+        tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
+        img.mul(tmpImg);
         img.save_png("tmp.png");
         updateOutScene("tmp.png");
     }
@@ -824,15 +851,14 @@ void im::on_action_Multiplication_triggered()
 
 void im::on_action_Division_triggered()
 {
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
-    QString divFileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
 
-    if (!divFileName.isEmpty()) {
-        CImg<double> divImg(divFileName.toStdString().data());
+    if (!tmpFile.isEmpty()) {
+        CImg<double> tmpImg(tmpFile.toStdString().data());
         CImg<double> img(fileName.toStdString().data());
 
-        divImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
-        img.div(divImg);
+        tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
+        img.div(tmpImg);
         img.save_png("tmp.png");
         updateOutScene("tmp.png");
     }
@@ -850,6 +876,23 @@ void im::on_action_Negative_triggered()
 void im::on_action_XOR_triggered()
 {
     CImg<int> img(fileName.toStdString().data());
+
+    if (!isBinary(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not binary image"));
+        return;
+    }
+
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+    CImg<int> tmpImg(tmpFile.toStdString().data());
+
+    if(!isBinary(tmpImg)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not binary image"));
+        return;
+    }
+
+    CImg<int> result = operatorXor(img, tmpImg);
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
 }
 
 void im::on_action_AND_triggered()
@@ -861,17 +904,16 @@ void im::on_action_AND_triggered()
         return;
     }
 
-    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
-    QString andFileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
 
     if(!isBinary(img)) {
         QMessageBox::critical(this, tr("Error!"), tr("Not binary image"));
         return;
     }
 
-    CImg<int> andImg(andFileName.toStdString().data());
+    CImg<int> tmpImg(tmpFile.toStdString().data());
 
-    CImg<int> result = operatorAnd(img, andImg);
+    CImg<int> result = operatorAnd(img, tmpImg);
 
     result.save_png("tmp.png");
     updateOutScene("tmp.png");
@@ -879,5 +921,24 @@ void im::on_action_AND_triggered()
 
 void im::on_action_OR_triggered()
 {
+    CImg<int> img(fileName.toStdString().data());
 
+    if (!isBinary(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not binary image"));
+        return;
+    }
+
+    QString tmpFile = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), imageFormat);
+
+    if(!isBinary(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Not binary image"));
+        return;
+    }
+
+    CImg<int> tmpImg(tmpFile.toStdString().data());
+
+    CImg<int> result = operatorOr(img, tmpImg);
+
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
 }
