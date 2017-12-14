@@ -943,3 +943,31 @@ void im::on_action_OR_triggered()
     result.save_png("tmp.png");
     updateOutScene("tmp.png");
 }
+
+void im::on_action_FFT_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImgList<double> fft = img.get_FFT();
+    //CImg<double> result = log(1 + sqrt(fft[0]*fft[0] + fft[1]*fft[1]));
+    CImg<double> result = log(1 + fft[0].abs());
+    result.normalize(0, 255);
+    result = fftshift(result);
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::on_action_IFFT_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImgList<double> fft = img.get_FFT();
+    CImgList<double> ifft = fft.get_FFT(true);
+
+    ifft[0].save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+template<typename T>
+CImg<T> im::fftshift(const CImg<T> &img)
+{
+    return img.get_shift(img.width()/2, img.height()/2, 0, 0, 2);
+}

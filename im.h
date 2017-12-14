@@ -111,6 +111,10 @@ private slots:
 
     void on_action_OR_triggered();
 
+    void on_action_FFT_triggered();
+
+    void on_action_IFFT_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -163,6 +167,8 @@ private:
     CImg<int> operatorAnd(const CImg<int> &img1, const CImg<int> &img2);
     CImg<int> operatorOr(const CImg<int> &img1, const CImg<int> &img2);
     CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
+    template <typename T>
+    CImg<T> fftshift(const CImg<T> &img);
     // image formats supported by Qt
     // one might get all the image formats supported by Qt by:
     // qDebug() << QImageReader::supportedImageFormats();

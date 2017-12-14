@@ -59,6 +59,4 @@ FORMS += \
     dialogminimumfilter.ui \
     dialogcustomfilter.ui
 
-unix:!macx: LIBS += -lqcustomplot
-
-unix|win32: LIBS += -lX11
+unix: LIBS += -lX11 -lqcustomplot
