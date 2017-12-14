@@ -95,6 +95,22 @@ private slots:
 
     void on_action_About_ImageProcessingKit_triggered();
 
+    void on_action_Addition_triggered();
+
+    void on_action_Subtraction_triggered();
+
+    void on_action_Multiplication_triggered();
+
+    void on_action_Division_triggered();
+
+    void on_action_Negative_triggered();
+
+    void on_action_XOR_triggered();
+
+    void on_action_AND_triggered();
+
+    void on_action_OR_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -143,6 +159,14 @@ private:
     bool isGrayscale(const CImg<T> &img);
     template <typename T>
     bool isRGB(const CImg<T> &img);
+    bool isBinary(const CImg<int> &img);
+    CImg<int> operatorAnd(const CImg<int> &img1, const CImg<int> &img2);
+    CImg<int> operatorOr(const CImg<int> &img1, const CImg<int> &img2);
+    CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
+    // image formats supported by Qt
+    // one might get all the image formats supported by Qt by:
+    // qDebug() << QImageReader::supportedImageFormats();
+    QString imageFormat = tr("All Images (*.bmp *.cur *.gif *.icns *.ico *.jp2 *.jpeg *.jpg *.mng *.pbm *.pgm *.png *.ppm *.svg *.svgz *.tga *.tif *.tiff *.wbmp *.webp *.xbm *.xpm);;");
 };
 
 #endif // IM_H
