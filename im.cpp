@@ -337,6 +337,18 @@ void im::customFilter(const int &w00, const int &w01, const int &w02, const int 
     updateOutScene("tmp.png");
 }
 
+void im::resize(const double &wFactor, const double &hFactor, const int &interpolationType)
+{
+    CImg<double> img(fileName.toStdString().data());
+
+    qDebug() << "Interpolation Type:" << interpolationType << endl;
+    CImg<double> result = img.get_resize(static_cast<int>(round(img.width()*wFactor)),
+                                         static_cast<int>(round(img.height()*hFactor)),
+                                         img.depth(), img.spectrum(), interpolationType);
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -970,4 +982,29 @@ template<typename T>
 CImg<T> im::fftshift(const CImg<T> &img)
 {
     return img.get_shift(img.width()/2, img.height()/2, 0, 0, 2);
+}
+
+void im::on_action_Resize_triggered()
+{
+    dlgResize = new DialogResize;
+
+    dlgResize->setModal(true);
+    dlgResize->show();
+    connect(dlgResize, SIGNAL(sendData(double, double, int)), this, SLOT(resize(double, double, int)));
+}
+
+void im::on_action_Mirror_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_mirror('x');
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::on_action_Flip_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_mirror('y');
+    result.save_png("tmp.png");
+    updateOutScene("tmp.png");
 }

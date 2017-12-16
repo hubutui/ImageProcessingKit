@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogresize.h"
+#include "ui_dialogresize.h"
 #include "dialogcustomfilter.h"
 #include "ui_dialogcustomfilter.h"
 #include "dialogminimumfilter.h"
@@ -115,6 +117,12 @@ private slots:
 
     void on_action_IFFT_triggered();
 
+    void on_action_Resize_triggered();
+
+    void on_action_Mirror_triggered();
+
+    void on_action_Flip_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -127,6 +135,7 @@ public slots:
     void customFilter(const int &w00, const int &w01, const int &w02,
                       const int &w10, const int &w11, const int &w12,
                       const int &w20, const int &w21, const int &w22);
+    void resize(const double &wFactor, const double &hFactor, const int &interpolationType);
 
 private:
     Ui::im *ui;
@@ -158,6 +167,7 @@ private:
     DialogMaximumFilter *dlgMaximumFilter;
     DialogMinimumFilter *dlgMinimumFilter;
     DialogCustomFilter *dlgCustomFilter;
+    DialogResize *dlgResize;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
