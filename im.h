@@ -123,6 +123,8 @@ private slots:
 
     void on_action_Flip_triggered();
 
+    void on_action_Inverse_filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -179,6 +181,12 @@ private:
     CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
     template <typename T>
     CImg<T> fftshift(const CImg<T> &img);
+    template <typename T>
+    CImg<T> fft(const CImg<T> &img);
+    // 计算复数除法
+    CImgList<double> div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
+    // 计算复数的乘法
+    CImgList<double> mul(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
     // image formats supported by Qt
     // one might get all the image formats supported by Qt by:
     // qDebug() << QImageReader::supportedImageFormats();

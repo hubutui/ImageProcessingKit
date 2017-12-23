@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <qcustomplot.h>
 #include <QtGlobal>
+#include <ccomplex>
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -437,6 +438,30 @@ CImg<int> im::operatorXor(const CImg<int> &img1, const CImg<int> &img2)
     }
 
     return result;
+}
+
+CImgList<double> im::div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag)
+{
+    std::complex<double> tmp1, tmp2, tmp3;
+    CImgList<double> result(2, img1_real);
+
+    cimg_forXY(result[0], x, y) {
+        tmp1 = std::complex<double>(img1_real(x, y), img1_imag(x, y));
+        tmp2 = std::complex<double>(img2_real(x, y), img2_imag(x, y));
+        tmp3 = tmp1/tmp2;
+        result[0](x, y) = tmp3.real();
+        result[1](x, y) = tmp3.imag();
+    }
+
+    return result;
+}
+
+CImgList<double> im::mul(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag)
+{
+    CImg<double> result_real = img1_real.get_mul(img2_real) - img1_imag.get_mul(img2_imag);
+    CImg<double> result_imag = img1_imag.get_mul(img2_real) + img1_real.get_mul(img2_imag);
+
+    return CImgList<double>(result_real, result_imag);
 }
 
 void im::on_action_Adjust_HSV_triggered()
@@ -961,7 +986,8 @@ void im::on_action_FFT_triggered()
     CImg<double> img(fileName.toStdString().data());
     CImgList<double> fft = img.get_FFT();
     //CImg<double> result = log(1 + sqrt(fft[0]*fft[0] + fft[1]*fft[1]));
-    CImg<double> result = log(1 + fft[0].abs());
+    //CImg<double> result = log(1 + fft[0].abs());
+    CImg<double> result = log(1 + sqrt(fft[0].get_mul(fft[0]) + fft[1].get_mul(fft[1])));
     result.normalize(0, 255);
     result = fftshift(result);
     result.save_png("tmp.png");
@@ -971,10 +997,12 @@ void im::on_action_FFT_triggered()
 void im::on_action_IFFT_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
+    // fft forward
     CImgList<double> fft = img.get_FFT();
-    CImgList<double> ifft = fft.get_FFT(true);
-
-    ifft[0].save_png("tmp.png");
+    // fft backward, aka ifft
+    CImg<double>::FFT(fft[0], fft[1], true);
+    // take only real part, and normalize to (0, 255)
+    fft[0].normalize(0, 255).save_png("tmp.png");
     updateOutScene("tmp.png");
 }
 
@@ -1007,4 +1035,37 @@ void im::on_action_Flip_triggered()
     CImg<double> result = img.get_mirror('y');
     result.save_png("tmp.png");
     updateOutScene("tmp.png");
+}
+
+// 逆滤波
+// 运动模糊，fspecial('motion', 41, 0) 产生的模糊模板
+void im::on_action_Inverse_filter_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+    // PSF
+    int len = 41;
+    CImg<double> psf(len, 1, 1, 1, 1.0f/len);
+    CImg<double> psf_img(img.width(), img.height(), 1, 1, 0.0f);
+
+    cimg_forXY(psf, x, y) {
+        psf_img(x, y) = psf(x, y)*255;
+    }
+    CImg<double> G = img.get_convolve(psf);
+    CImgList<double> H = psf_img.get_FFT();
+
+    CImgList<double> fft = G.get_FFT();
+    CImgList<double> result_fft = div(fft[0], fft[1], H[0], H[1]);
+    CImg<double>::FFT(result_fft[0], result_fft[1], true);
+    result_fft[0].save_png("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+template<typename T>
+CImg<T> im::fft(const CImg<T> &img)
+{
+    // pad zeros to make width x height = 2^M x 2^N
+    int width = static_cast<int>(pow(2, ceil(log2(img.width()))));
+    int heigth = static_cast<int>(pow(2, ceil(log2(img.height()))));
+
+    CImg<T> result(width, heigth, img.depth(), img.spectrum(), 0);
 }
