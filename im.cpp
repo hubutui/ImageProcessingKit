@@ -350,6 +350,29 @@ void im::resize(const double &wFactor, const double &hFactor, const int &interpo
     updateOutScene("tmp.png");
 }
 
+void im::threshold(const int &threshold)
+{
+    CImg<unsigned char> img(fileName.toStdString().data());
+
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error"), tr("Non-grayscale image."));
+        return;
+    }
+
+    CImg<unsigned char> result(img);
+
+    cimg_forXY(result, x, y) {
+        if (img(x, y) < threshold) {
+            result(x, y) = 0;
+        } else {
+            result(x, y) = 255;
+        }
+    }
+
+    result.save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1070,4 +1093,12 @@ CImg<T> im::fft(const CImg<T> &img)
     int heigth = static_cast<int>(pow(2, ceil(log2(img.height()))));
 
     CImg<T> result(width, heigth, img.depth(), img.spectrum(), 0);
+}
+
+void im::on_action_Manual_Threshold_triggered()
+{
+    dlgManualThreshold = new DialogManualThreshold;
+    dlgManualThreshold->setModal(true);
+    dlgManualThreshold->show();
+    connect(dlgManualThreshold, SIGNAL(sendData(int)), this, SLOT(threshold(int)));
 }

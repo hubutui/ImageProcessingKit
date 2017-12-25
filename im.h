@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogmanualthreshold.h"
+#include "ui_dialogmanualthreshold.h"
 #include "dialogresize.h"
 #include "ui_dialogresize.h"
 #include "dialogcustomfilter.h"
@@ -125,6 +127,8 @@ private slots:
 
     void on_action_Inverse_filter_triggered();
 
+    void on_action_Manual_Threshold_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -138,6 +142,7 @@ public slots:
                       const int &w10, const int &w11, const int &w12,
                       const int &w20, const int &w21, const int &w22);
     void resize(const double &wFactor, const double &hFactor, const int &interpolationType);
+    void threshold(const int &threshold);
 
 private:
     Ui::im *ui;
@@ -170,6 +175,7 @@ private:
     DialogMinimumFilter *dlgMinimumFilter;
     DialogCustomFilter *dlgCustomFilter;
     DialogResize *dlgResize;
+    DialogManualThreshold *dlgManualThreshold;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
