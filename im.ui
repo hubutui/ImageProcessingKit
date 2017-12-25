@@ -165,6 +165,8 @@
     </property>
     <addaction name="action_Manual_Threshold"/>
     <addaction name="action_Ostu_method"/>
+    <addaction name="action_Region_Growth"/>
+    <addaction name="action_Region_Split_and_Merge"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -497,6 +499,16 @@
   <action name="action_Flip">
    <property name="text">
     <string>Flip</string>
+   </property>
+  </action>
+  <action name="action_Region_Growth">
+   <property name="text">
+    <string>Region Growth</string>
+   </property>
+  </action>
+  <action name="action_Region_Split_and_Merge">
+   <property name="text">
+    <string>Region Split and Merge</string>
    </property>
   </action>
  </widget>

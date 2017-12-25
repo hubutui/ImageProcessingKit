@@ -1135,6 +1135,7 @@ void im::on_action_Ostu_method_triggered()
         u0 += t*hist(t);
         u1 = mu - u0;
 
+        qDebug() << "sigma = " << w0*w1*(u0 - u1)*(u0 - u1) << "threshold = " << t << endl;
         // 类间方差
         if (sigma < w0*w1*(u0 - u1)*(u0 - u1)) {
             sigma = w0*w1*(u0 - u1)*(u0 - u1);
@@ -1142,8 +1143,15 @@ void im::on_action_Ostu_method_triggered()
         }
     }
 
-    qDebug() << "sigma = " << sigma << endl;
+    qDebug() << "Final: sigma = " << sigma << endl;
     qDebug() << "threshold = " << threshold << endl;
 
     this->threshold(threshold);
+}
+
+// 简单起见，取图像中心点为种子点
+// 生长条件为邻域与种子点的差值小于 T = 5.
+void im::on_action_Region_Growth_triggered()
+{
+    updateOutScene("tmp.png");
 }
