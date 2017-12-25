@@ -129,6 +129,8 @@ private slots:
 
     void on_action_Manual_Threshold_triggered();
 
+    void on_action_Ostu_method_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);

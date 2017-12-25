@@ -362,7 +362,7 @@ void im::threshold(const int &threshold)
     CImg<unsigned char> result(img);
 
     cimg_forXY(result, x, y) {
-        if (img(x, y) < threshold) {
+        if (img(x, y) <= threshold) {
             result(x, y) = 0;
         } else {
             result(x, y) = 255;
@@ -1101,4 +1101,49 @@ void im::on_action_Manual_Threshold_triggered()
     dlgManualThreshold->setModal(true);
     dlgManualThreshold->show();
     connect(dlgManualThreshold, SIGNAL(sendData(int)), this, SLOT(threshold(int)));
+}
+
+// see http://blog.csdn.net/dcrmg/article/details/52216622 for details
+void im::on_action_Ostu_method_triggered()
+{
+    CImg<double> img(fileName.toStdString().data());
+
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error"), tr("Non-grayscale image."));
+        return;
+    }
+
+    // histogram
+    CImg<double> hist = img.get_histogram(255);
+    hist /= (img.width() * img.height());
+    CImg<double> cum = hist.get_cumulate();
+
+    // 前景背景所占比率
+    double w0 = 0;
+    double w1 = 0;
+    // 前景背景的平均灰度
+    double u0 = 0;
+    double u1 = 0;
+    // 类间方差
+    double sigma = 0;
+    double mu = img.mean();
+    double threshold;
+
+    for(int t = 0; t < 256; ++t) {
+        w0 = cum(t);
+        w1 = 1 - cum(t);
+        u0 += t*hist(t);
+        u1 = mu - u0;
+
+        // 类间方差
+        if (sigma < w0*w1*(u0 - u1)*(u0 - u1)) {
+            sigma = w0*w1*(u0 - u1)*(u0 - u1);
+            threshold = t;
+        }
+    }
+
+    qDebug() << "sigma = " << sigma << endl;
+    qDebug() << "threshold = " << threshold << endl;
+
+    this->threshold(threshold);
 }
