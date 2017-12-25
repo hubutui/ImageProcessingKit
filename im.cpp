@@ -896,6 +896,7 @@ void im::on_action_Division_triggered()
 
         tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
         img.div(tmpImg);
+        img.normalize(0, 255);
         img.save_png("tmp.png");
         updateOutScene("tmp.png");
     }
@@ -1044,14 +1045,15 @@ void im::on_action_Inverse_filter_triggered()
     CImg<double> img(fileName.toStdString().data());
     // PSF
     int len = 41;
-    CImg<double> psf(len, 1, 1, 1, 1.0f/len);
-    CImg<double> psf_img(img.width(), img.height(), 1, 1, 0.0f);
+    CImg<double> kernel(len, 1, 1, 1, 1.0f/len);
+    CImg<double> psf(img.width(), img.height(), 1, 1, 0.0f);
 
-    cimg_forXY(psf, x, y) {
-        psf_img(x, y) = psf(x, y)*255;
+    for(int x = 0; x < len; ++x) {
+        img(x, 1) = 255.0f;
     }
-    CImg<double> G = img.get_convolve(psf);
-    CImgList<double> H = psf_img.get_FFT();
+
+    CImg<double> G = img.get_convolve(kernel);
+    CImgList<double> H = psf.get_FFT();
 
     CImgList<double> fft = G.get_FFT();
     CImgList<double> result_fft = div(fft[0], fft[1], H[0], H[1]);
