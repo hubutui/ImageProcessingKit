@@ -20,5 +20,5 @@ void DialogManualThreshold::on_buttonBox_accepted()
 
 void DialogManualThreshold::on_horizontalSlider_valueChanged(int value)
 {
-    ui->label->setText(tr("Threshold: %1").arg(ui->horizontalSlider->value()));
+    ui->label->setText(tr("Threshold: %1").arg(value));
 }
