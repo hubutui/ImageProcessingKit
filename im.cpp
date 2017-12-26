@@ -1169,32 +1169,45 @@ void im::on_action_Ostu_method_triggered()
 // 生长条件为邻域与种子点的差值小于 T = 5.
 void im::on_action_Region_Growth_triggered()
 {
-    CImg<unsigned char> img(fileName.toStdString().data());
-    CImg<unsigned char> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
-    int T = 50;
-
-    QStack<QPoint> seed;
+    CImg<int> img(fileName.toStdString().data());
+    CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
+    int T = 30;
+    int var;
+    QVector<QPoint> seed;
     QPoint currentSeed;
-    seed.push(QPoint(100, 100));
-    result(100, 100) = 0;
+    seed.append(QPoint(90, 90));
+    result(90, 90) = 0;
 
-    while(!seed.isEmpty()) {
-        currentSeed = seed.pop();
+    //qDebug() << img(100, 100) << endl;
+    //qDebug() << img(101, 100) << endl;
+
+    int oldLength;
+    do {
+        oldLength = seed.length();
+        currentSeed = seed.last();
         // 处理八邻域
         for(int i = -1; i < 2; ++i) {
             for(int j = -1; j < 2; ++j) {
-                if (i != 0 && j != 0) {
-                    if (!seed.contains(QPoint(currentSeed.x()+i, currentSeed.y()+j))
-                            && isInsideImage(QPoint(currentSeed.x()+i, currentSeed.y()+j), img)
-                            && abs(img(currentSeed.x(), currentSeed.y()
-                                       - img(currentSeed.x()+i, currentSeed.y()+j))) < T) {
-                        seed.push(QPoint(currentSeed.x()+i, currentSeed.y()+j));
-                        result(currentSeed.x() + i, currentSeed.y() + j) = 0;
+                if (!(i == 0 && j == 0)) {
+                    if (isInsideImage(QPoint(currentSeed.x()+i, currentSeed.y()+j), img)) {
+                        if(!seed.contains(QPoint(currentSeed.x()+i, currentSeed.y()+j))) {
+                            qDebug() << img(currentSeed.x()+i, currentSeed.y()+j) << endl;
+                            qDebug() << img(currentSeed.x(), currentSeed.y()) << endl;
+
+                            var = abs(img(currentSeed.x(), currentSeed.y())
+                                          - img(currentSeed.x()+i, currentSeed.y()+j));
+                            qDebug() << var << endl;
+                            if (var < T) {
+                                seed.append(QPoint(currentSeed.x()+i, currentSeed.y()+j));
+                                result(currentSeed.x() + i, currentSeed.y() + j) = 0;
+                            }
+                        }
                     }
                 }
             }
         }
-    }
+        //length = seed.length();
+    }  while(seed.length() > oldLength);
 
     result.save("tmp.png");
     updateOutScene("tmp.png");
