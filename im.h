@@ -203,6 +203,9 @@ private:
     CImgList<double> div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
     // 计算复数的乘法
     CImgList<double> mul(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
+    // check if point inside img
+    template <typename T>
+    bool isInsideImage(const QPoint &point, const CImg<T> &img);
     // image formats supported by Qt
     // one might get all the image formats supported by Qt by:
     // qDebug() << QImageReader::supportedImageFormats();

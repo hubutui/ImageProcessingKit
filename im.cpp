@@ -7,6 +7,8 @@
 #include <qcustomplot.h>
 #include <QtGlobal>
 #include <ccomplex>
+#include <QStack>
+#include <QPoint>
 
 im::im(QWidget *parent) :
     QMainWindow(parent),
@@ -1167,6 +1169,34 @@ void im::on_action_Ostu_method_triggered()
 // 生长条件为邻域与种子点的差值小于 T = 5.
 void im::on_action_Region_Growth_triggered()
 {
+    CImg<unsigned char> img(fileName.toStdString().data());
+    CImg<unsigned char> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
+    int T = 50;
+
+    QStack<QPoint> seed;
+    QPoint currentSeed;
+    seed.push(QPoint(100, 100));
+    result(100, 100) = 0;
+
+    while(!seed.isEmpty()) {
+        currentSeed = seed.pop();
+        // 处理八邻域
+        for(int i = -1; i < 2; ++i) {
+            for(int j = -1; j < 2; ++j) {
+                if (i != 0 && j != 0) {
+                    if (!seed.contains(QPoint(currentSeed.x()+i, currentSeed.y()+j))
+                            && isInsideImage(QPoint(currentSeed.x()+i, currentSeed.y()+j), img)
+                            && abs(img(currentSeed.x(), currentSeed.y()
+                                       - img(currentSeed.x()+i, currentSeed.y()+j))) < T) {
+                        seed.push(QPoint(currentSeed.x()+i, currentSeed.y()+j));
+                        result(currentSeed.x() + i, currentSeed.y() + j) = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    result.save("tmp.png");
     updateOutScene("tmp.png");
 }
 
@@ -1177,4 +1207,15 @@ void im::on_actionErode_triggered()
     dlgErode->setModal(true);;
     dlgErode->show();
     connect(dlgErode, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(erode(unsigned char[3][3])));
+}
+
+template<typename T>
+bool im::isInsideImage(const QPoint &point, const CImg<T> &img)
+{
+    if (point.x() < img.width() && point.x() >= 0
+            && point.y() < img.height() && point.y() >= 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
