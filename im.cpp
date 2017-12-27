@@ -473,6 +473,30 @@ void im::closing(unsigned char structureElement[3][3])
 void im::idealHighPassFilter(const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+    CImgList<double> F = img.get_FFT();
+    CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
+
+    // generate H
+    double D;
+    cimg_forXY(img, x, y) {
+        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height())*(y - img.height()));
+        if (D > D0) {
+            H[0](x, y) = 1.0f;
+            H[1](x, y) = 1.0f;
+        }
+    }
+    // shift FFT result
+    F[0] = fftshift(F[0]);
+    F[1] = fftshift(F[1]);
+
+    CImgList<double> G = mul(H[0], H[1], F[0], F[1]);
+    // shift
+    G[0] = fftshift(G[0]);
+    G[1] = fftshift(G[1]);
+    CImg<double>::FFT(G[0], G[1], true);
+
+    G[0].save("tmp.png");
+    updateOutScene("tmp.png");
 }
 
 void im::setFileName(const QString &fileName)
@@ -1132,6 +1156,9 @@ void im::on_action_IFFT_triggered()
     updateOutScene("tmp.png");
 }
 
+// shift high frequency from corner to middle
+// actually, it could also use for reverse
+// so fftshift & ifftshift use the same function/method
 template<typename T>
 CImg<T> im::fftshift(const CImg<T> &img)
 {
