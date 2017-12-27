@@ -524,8 +524,36 @@ void im::idealLowPassFilter(const int &D0)
     // shift
     G[0] = fftshift(G[0]);
     G[1] = fftshift(G[1]);
+    // IFFT
     CImg<double>::FFT(G[0], G[1], true);
+    G[0].normalize(G[0].min(), G[0].max());
+    G[0].save("tmp.png");
+    updateOutScene("tmp.png");
+}
 
+void im::butterworthLowPassFilter(const int &Order, const int &D0)
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImgList<double> F = img.get_FFT();
+    // shift
+    F[0] = fftshift(F[0]);
+    F[1] = fftshift(F[1]);
+    // generate H
+    double D;
+    CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
+
+    cimg_forXY(img, x, y) {
+        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height())*(y - img.height()));
+        H[0] = 1/(1 + pow(D/D0, 2*Order));
+    }
+
+    CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
+
+    // shift
+    G[0] = fftshift(G[0]);
+    G[1] = fftshift(G[1]);
+    // IFFT
+    CImg<double>::FFT(G[0], G[1], true);
     G[0].normalize(G[0].min(), G[0].max());
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
@@ -1424,4 +1452,14 @@ void im::on_action_Ideal_Low_Pass_Filter_triggered()
     dlgIdealLowPassFilter->show();
 
     connect(dlgIdealLowPassFilter, SIGNAL(sendData(int)), this, SLOT(idealLowPassFilter(int)));
+}
+
+void im::on_action_Butterworth_Low_Pass_Filter_triggered()
+{
+    dlgButterworthLowPassFilter = new DialogButterworthLowPassFilter;
+
+    dlgButterworthLowPassFilter->setModal(true);
+    dlgButterworthLowPassFilter->show();
+
+    connect(dlgButterworthLowPassFilter, SIGNAL(sendData(int, int)), this, SLOT(butterworthLowPassFilter(int, int)));
 }
