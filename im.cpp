@@ -375,7 +375,7 @@ void im::threshold(const int &threshold)
     updateOutScene("tmp.png");
 }
 
-void im::erode(unsigned char kernel[3][3])
+void im::erode(unsigned char structureElement[3][3])
 {
     CImg<unsigned char> s(3, 3);
 

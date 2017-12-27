@@ -165,7 +165,7 @@ public slots:
                       const int &w20, const int &w21, const int &w22);
     void resize(const double &wFactor, const double &hFactor, const int &interpolationType);
     void threshold(const int &threshold);
-    void erode(unsigned char kernel[3][3]);
+    void erode(unsigned char structureElement[3][3]);
     void regionGrowth(const QPoint &seed, const int &threshold);
     void dilate(unsigned char structureElement[3][3]);
     void opening(unsigned char structureElement[3][3]);
