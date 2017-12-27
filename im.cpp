@@ -380,7 +380,7 @@ void im::erode(unsigned char structureElement[3][3])
     CImg<unsigned char> s(3, 3);
 
     cimg_forXY(s, x, y) {
-        s(x, y) = kernel[x][y];
+        s(x, y) = structureElement[x][y];
     }
 
     CImg<double> img(fileName.toStdString().data());
