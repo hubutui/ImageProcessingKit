@@ -23,4 +23,12 @@ void QGraphicsScenePlus::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     emit coordChanged(position);
 }
 
+void QGraphicsScenePlus::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    seedPosition.setX(mouseEvent->scenePos().x());
+    seedPosition.setY(mouseEvent->scenePos().y());
+
+    emit seedSetted(seedPosition);
+}
+
 

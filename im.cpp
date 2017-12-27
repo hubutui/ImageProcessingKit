@@ -389,6 +389,42 @@ void im::erode(unsigned char kernel[3][3])
     updateOutScene("tmp.png");
 }
 
+void im::regionGrowth(const QPoint &seed, const int &threshold)
+{
+    CImg<int> img(fileName.toStdString().data());
+    CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
+    int T = threshold;
+    int x, y;
+    QStack<QPoint> seeds;
+    QPoint currentSeed;
+    seeds.push(seed);
+    result(90, 90) = 0;
+
+    while(!seeds.isEmpty()) {
+        currentSeed = seeds.pop();
+        x = currentSeed.x();
+        y = currentSeed.y();
+        for (int i = -1; i < 2; ++i) {
+            for (int j = -1; j < 2; ++j) {
+                if (isInsideImage(QPoint(x + i, y + j), img)) {
+                    if (result(x + i, y + j) != 0) {
+                        if (abs(img(x + i, y + j) - img(x, y)) < T) {
+                            seeds.push(QPoint(x + i, y + j));
+                            result(x + i, y + j) = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //qDebug() << img(100, 100) << endl;
+    //qDebug() << img(101, 100) << endl;
+
+    result.save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1169,38 +1205,45 @@ void im::on_action_Ostu_method_triggered()
 // 生长条件为邻域与种子点的差值小于 T = 5.
 void im::on_action_Region_Growth_triggered()
 {
-    CImg<int> img(fileName.toStdString().data());
-    CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
-    int T = 10;
-    int x, y;
-    QStack<QPoint> seed;
-    QPoint currentSeed;
-    seed.push(QPoint(90, 90));
-    result(90, 90) = 0;
+    dlgRegionGrowth = new DialogRegionGrowth;
+    dlgRegionGrowth->setModal(false);
+    dlgRegionGrowth->show();
 
-    while(!seed.isEmpty()) {
-        currentSeed = seed.pop();
-        x = currentSeed.x();
-        y = currentSeed.y();
-        for (int i = -1; i < 2; ++i) {
-            for (int j = -1; j < 2; ++j) {
-                if (isInsideImage(QPoint(x + i, y + j), img)) {
-                    if (result(x + i, y + j) != 0) {
-                        if (abs(img(x + i, y + j) - img(x, y)) < T) {
-                            seed.push(QPoint(x + i, y + j));
-                            result(x + i, y + j) = 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    connect(inScene, SIGNAL(seedSetted(QPoint)), dlgRegionGrowth, SLOT(setSeedCoord(QPoint)));
+    connect(dlgRegionGrowth, SIGNAL(sendData(QPoint,int)), this, SLOT(regionGrowth(QPoint,int)));
 
-    //qDebug() << img(100, 100) << endl;
-    //qDebug() << img(101, 100) << endl;        
+//    CImg<int> img(fileName.toStdString().data());
+//    CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
+//    int T = 10;
+//    int x, y;
+//    QStack<QPoint> seed;
+//    QPoint currentSeed;
+//    seed.push(QPoint(90, 90));
+//    result(90, 90) = 0;
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+//    while(!seed.isEmpty()) {
+//        currentSeed = seed.pop();
+//        x = currentSeed.x();
+//        y = currentSeed.y();
+//        for (int i = -1; i < 2; ++i) {
+//            for (int j = -1; j < 2; ++j) {
+//                if (isInsideImage(QPoint(x + i, y + j), img)) {
+//                    if (result(x + i, y + j) != 0) {
+//                        if (abs(img(x + i, y + j) - img(x, y)) < T) {
+//                            seed.push(QPoint(x + i, y + j));
+//                            result(x + i, y + j) = 0;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+//    //qDebug() << img(100, 100) << endl;
+//    //qDebug() << img(101, 100) << endl;
+
+//    result.save("tmp.png");
+//    updateOutScene("tmp.png");
 }
 
 void im::on_actionErode_triggered()

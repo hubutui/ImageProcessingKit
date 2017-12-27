@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogregiongrowth.h"
+#include "ui_dialogregiongrowth.h"
 #include "dialogerode.h"
 #include "ui_dialogerode.h"
 #include "dialogmanualthreshold.h"
@@ -152,6 +154,7 @@ public slots:
     void resize(const double &wFactor, const double &hFactor, const int &interpolationType);
     void threshold(const int &threshold);
     void erode(unsigned char kernel[3][3]);
+    void regionGrowth(const QPoint &seed, const int &threshold);
 
 private:
     Ui::im *ui;
@@ -186,6 +189,7 @@ private:
     DialogResize *dlgResize;
     DialogManualThreshold *dlgManualThreshold;
     DialogErode *dlgErode;
+    DialogRegionGrowth *dlgRegionGrowth;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
