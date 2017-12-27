@@ -1171,43 +1171,33 @@ void im::on_action_Region_Growth_triggered()
 {
     CImg<int> img(fileName.toStdString().data());
     CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
-    int T = 30;
-    int var;
-    QVector<QPoint> seed;
+    int T = 10;
+    int x, y;
+    QStack<QPoint> seed;
     QPoint currentSeed;
-    seed.append(QPoint(90, 90));
+    seed.push(QPoint(90, 90));
     result(90, 90) = 0;
 
-    //qDebug() << img(100, 100) << endl;
-    //qDebug() << img(101, 100) << endl;
-
-    int oldLength;
-    do {
-        oldLength = seed.length();
-        currentSeed = seed.last();
-        // 处理八邻域
-        for(int i = -1; i < 2; ++i) {
-            for(int j = -1; j < 2; ++j) {
-                if (!(i == 0 && j == 0)) {
-                    if (isInsideImage(QPoint(currentSeed.x()+i, currentSeed.y()+j), img)) {
-                        if(!seed.contains(QPoint(currentSeed.x()+i, currentSeed.y()+j))) {
-                            qDebug() << img(currentSeed.x()+i, currentSeed.y()+j) << endl;
-                            qDebug() << img(currentSeed.x(), currentSeed.y()) << endl;
-
-                            var = abs(img(currentSeed.x(), currentSeed.y())
-                                          - img(currentSeed.x()+i, currentSeed.y()+j));
-                            qDebug() << var << endl;
-                            if (var < T) {
-                                seed.append(QPoint(currentSeed.x()+i, currentSeed.y()+j));
-                                result(currentSeed.x() + i, currentSeed.y() + j) = 0;
-                            }
+    while(!seed.isEmpty()) {
+        currentSeed = seed.pop();
+        x = currentSeed.x();
+        y = currentSeed.y();
+        for (int i = -1; i < 2; ++i) {
+            for (int j = -1; j < 2; ++j) {
+                if (isInsideImage(QPoint(x + i, y + j), img)) {
+                    if (result(x + i, y + j) != 0) {
+                        if (abs(img(x + i, y + j) - img(x, y)) < T) {
+                            seed.push(QPoint(x + i, y + j));
+                            result(x + i, y + j) = 0;
                         }
                     }
                 }
             }
         }
-        //length = seed.length();
-    }  while(seed.length() > oldLength);
+    }
+
+    //qDebug() << img(100, 100) << endl;
+    //qDebug() << img(101, 100) << endl;        
 
     result.save("tmp.png");
     updateOutScene("tmp.png");
