@@ -42,7 +42,8 @@ SOURCES += \
     dialogdilate.cpp \
     dialogopening.cpp \
     dialogclosing.cpp \
-    dialogidealhighpassfilter.cpp
+    dialogidealhighpassfilter.cpp \
+    dialogideallowpassfilter.cpp
 
 HEADERS += \
         im.h \
@@ -62,7 +63,8 @@ HEADERS += \
     dialogdilate.h \
     dialogopening.h \
     dialogclosing.h \
-    dialogidealhighpassfilter.h
+    dialogidealhighpassfilter.h \
+    dialogideallowpassfilter.h
 
 FORMS += \
         im.ui \
@@ -81,6 +83,7 @@ FORMS += \
     dialogdilate.ui \
     dialogopening.ui \
     dialogclosing.ui \
-    dialogidealhighpassfilter.ui
+    dialogidealhighpassfilter.ui \
+    dialogideallowpassfilter.ui
 
 unix: LIBS += -lX11 -lqcustomplot

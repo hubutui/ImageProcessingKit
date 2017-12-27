@@ -146,7 +146,7 @@
     <property name="title">
      <string>Freq&amp;uency Filter</string>
     </property>
-    <addaction name="action_Low_Pass_Filter"/>
+    <addaction name="action_Ideal_Low_Pass_Filter"/>
     <addaction name="action_Ideal_High_Pass_Filter"/>
     <addaction name="action_Butterworth_Low_Pass_Filter"/>
     <addaction name="action_Butterworth_High_Pass_Filter"/>
@@ -349,7 +349,7 @@
     <string>filter with custom kernel</string>
    </property>
   </action>
-  <action name="action_Low_Pass_Filter">
+  <action name="action_Ideal_Low_Pass_Filter">
    <property name="text">
     <string>Ideal Low Pass Filter</string>
    </property>

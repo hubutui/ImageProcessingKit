@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogIdealHighPassFilter</class>
- <widget class="QDialog" name="DialogIdealHighPassFilter">
+ <class>DialogIdealLowPassFilter</class>
+ <widget class="QDialog" name="DialogIdealLowPassFilter">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>103</height>
+    <width>259</width>
+    <height>101</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ideal High Pass Filter Setting</string>
+   <string>Ideal Low Pass Filter Setting</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -56,7 +56,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogIdealHighPassFilter</receiver>
+   <receiver>DialogIdealLowPassFilter</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -72,7 +72,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogIdealHighPassFilter</receiver>
+   <receiver>DialogIdealLowPassFilter</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

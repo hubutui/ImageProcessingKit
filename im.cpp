@@ -473,6 +473,38 @@ void im::closing(unsigned char structureElement[3][3])
 void im::idealHighPassFilter(const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+
+    CImgList<double> F = img.get_FFT();
+    // shift FFT result
+    F[0] = fftshift(F[0]);
+    F[1] = fftshift(F[1]);
+
+    CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
+
+    // generate H
+    double D;
+    cimg_forXY(img, x, y) {
+        D = sqrt((x - img.width()/2)*(x - img.width()/2)
+                 + (y - img.height())*(y - img.height()));
+        if (D > D0) {
+            H[0](x, y) = 1.0f;
+        }
+    }
+
+    CImgList<double> G = mul(H[0], H[1], F[0], F[1]);
+    // shift
+    G[0] = fftshift(G[0]);
+    G[1] = fftshift(G[1]);
+    CImg<double>::FFT(G[0], G[1], true);
+
+    G[0].normalize(G[0].min(), G[1].max());
+    G[0].save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::idealLowPassFilter(const int &D0)
+{
+    CImg<double> img(fileName.toStdString().data());
     CImgList<double> F = img.get_FFT();
     CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
 
@@ -480,9 +512,8 @@ void im::idealHighPassFilter(const int &D0)
     double D;
     cimg_forXY(img, x, y) {
         D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height())*(y - img.height()));
-        if (D > D0) {
+        if (D <= D0) {
             H[0](x, y) = 1.0f;
-            H[1](x, y) = 1.0f;
         }
     }
     // shift FFT result
@@ -495,6 +526,7 @@ void im::idealHighPassFilter(const int &D0)
     G[1] = fftshift(G[1]);
     CImg<double>::FFT(G[0], G[1], true);
 
+    G[0].normalize(G[0].min(), G[0].max());
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -1382,4 +1414,14 @@ void im::on_action_Ideal_High_Pass_Filter_triggered()
     dlgIdealHighPassFilter->show();
 
     connect(dlgIdealHighPassFilter, SIGNAL(sendData(int)), this, SLOT(idealHighPassFilter(int)));
+}
+
+void im::on_action_Ideal_Low_Pass_Filter_triggered()
+{
+    dlgIdealLowPassFilter = new DialogIdealLowPassFilter;
+
+    dlgIdealLowPassFilter->setModal(true);
+    dlgIdealLowPassFilter->show();
+
+    connect(dlgIdealLowPassFilter, SIGNAL(sendData(int)), this, SLOT(idealLowPassFilter(int)));
 }
