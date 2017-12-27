@@ -40,7 +40,7 @@ SOURCES += \
     dialogerode.cpp \
     dialogregiongrowth.cpp \
     dialogdilate.cpp \
-    dialogopenmorphology.cpp
+    dialogopening.cpp
 
 HEADERS += \
         im.h \

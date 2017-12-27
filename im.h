@@ -203,7 +203,7 @@ private:
     DialogErode *dlgErode;
     DialogRegionGrowth *dlgRegionGrowth;
     DialogDilate *dlgDilate;
-    DialogOpenMorphology *dlgOpenMorphology;
+    DialogOpening *dlgOpening;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);

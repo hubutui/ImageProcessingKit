@@ -1,19 +1,19 @@
 #include "dialogopening.h"
 #include "ui_dialogopening.h"
 
-DialogOpenMorphology::DialogOpenMorphology(QWidget *parent) :
+DialogOpening::DialogOpening(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogOpenMorphology)
+    ui(new Ui::DialogOpening)
 {
     ui->setupUi(this);
 }
 
-DialogOpenMorphology::~DialogOpenMorphology()
+DialogOpening::~DialogOpening()
 {
     delete ui;
 }
 
-void DialogOpenMorphology::on_pushButton00_toggled(bool checked)
+void DialogOpening::on_pushButton00_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton00->setText(tr("1"));
@@ -22,7 +22,7 @@ void DialogOpenMorphology::on_pushButton00_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton01_toggled(bool checked)
+void DialogOpening::on_pushButton01_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton01->setText(tr("1"));
@@ -31,7 +31,7 @@ void DialogOpenMorphology::on_pushButton01_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton02_toggled(bool checked)
+void DialogOpening::on_pushButton02_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton02->setText(tr("1"));
@@ -40,7 +40,7 @@ void DialogOpenMorphology::on_pushButton02_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton10_toggled(bool checked)
+void DialogOpening::on_pushButton10_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton10->setText(tr("1"));
@@ -49,7 +49,7 @@ void DialogOpenMorphology::on_pushButton10_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton11_toggled(bool checked)
+void DialogOpening::on_pushButton11_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton11->setText(tr("1"));
@@ -58,7 +58,7 @@ void DialogOpenMorphology::on_pushButton11_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton12_toggled(bool checked)
+void DialogOpening::on_pushButton12_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton12->setText(tr("1"));
@@ -67,7 +67,7 @@ void DialogOpenMorphology::on_pushButton12_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton20_toggled(bool checked)
+void DialogOpening::on_pushButton20_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton20->setText(tr("1"));
@@ -76,7 +76,7 @@ void DialogOpenMorphology::on_pushButton20_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton21_toggled(bool checked)
+void DialogOpening::on_pushButton21_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton21->setText(tr("1"));
@@ -85,7 +85,7 @@ void DialogOpenMorphology::on_pushButton21_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_pushButton22_toggled(bool checked)
+void DialogOpening::on_pushButton22_toggled(bool checked)
 {
     if (checked) {
         ui->pushButton22->setText(tr("1"));
@@ -94,7 +94,7 @@ void DialogOpenMorphology::on_pushButton22_toggled(bool checked)
     }
 }
 
-void DialogOpenMorphology::on_buttonBox_accepted()
+void DialogOpening::on_buttonBox_accepted()
 {
     unsigned char strutureElement[3][3];
 

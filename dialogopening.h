@@ -1,19 +1,19 @@
-#ifndef DIALOGOPENMORPHOLOGY_H
-#define DIALOGOPENMORPHOLOGY_H
+#ifndef DIALOGOPENING_H
+#define DIALOGOPENING_H
 
 #include <QDialog>
 
 namespace Ui {
-class DialogOpenMorphology;
+class DialogOpening;
 }
 
-class DialogOpenMorphology : public QDialog
+class DialogOpening : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogOpenMorphology(QWidget *parent = 0);
-    ~DialogOpenMorphology();
+    explicit DialogOpening(QWidget *parent = 0);
+    ~DialogOpening();
 
 private slots:
     void on_pushButton00_toggled(bool checked);
@@ -38,8 +38,9 @@ private slots:
 
 signals:
     void sendData(unsigned char stuctureElement[3][3]);
+
 private:
-    Ui::DialogOpenMorphology *ui;
+    Ui::DialogOpening *ui;
 };
 
-#endif // DIALOGOPENMORPHOLOGY_H
+#endif // DIALOGOPENING_H
