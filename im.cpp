@@ -398,7 +398,7 @@ void im::regionGrowth(const QPoint &seed, const int &threshold)
     QStack<QPoint> seeds;
     QPoint currentSeed;
     seeds.push(seed);
-    result(90, 90) = 0;
+    result(seed.x(), seed.y()) = 0;
 
     while(!seeds.isEmpty()) {
         currentSeed = seeds.pop();
