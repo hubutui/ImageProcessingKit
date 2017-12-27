@@ -195,10 +195,10 @@
     <property name="title">
      <string>Morphology</string>
     </property>
-    <addaction name="actionErode"/>
-    <addaction name="actionDilate"/>
-    <addaction name="actionOpen"/>
-    <addaction name="actionClose"/>
+    <addaction name="action_Erode"/>
+    <addaction name="action_Dilate"/>
+    <addaction name="action_Open_Mophology"/>
+    <addaction name="action_Close_Morphology"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -521,22 +521,22 @@
     <string>Region Split and Merge</string>
    </property>
   </action>
-  <action name="actionErode">
+  <action name="action_Erode">
    <property name="text">
     <string>Erode</string>
    </property>
   </action>
-  <action name="actionDilate">
+  <action name="action_Dilate">
    <property name="text">
     <string>Dilate</string>
    </property>
   </action>
-  <action name="actionOpen">
+  <action name="action_Open_Mophology">
    <property name="text">
     <string>Open</string>
    </property>
   </action>
-  <action name="actionClose">
+  <action name="action_Close_Morphology">
    <property name="text">
     <string>Close</string>
    </property>

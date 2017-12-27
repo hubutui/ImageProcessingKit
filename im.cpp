@@ -1246,7 +1246,7 @@ void im::on_action_Region_Growth_triggered()
 //    updateOutScene("tmp.png");
 }
 
-void im::on_actionErode_triggered()
+void im::on_action_Erode_triggered()
 {
     dlgErode = new DialogErode;
 

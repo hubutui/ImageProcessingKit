@@ -137,7 +137,7 @@ private slots:
 
     void on_action_Region_Growth_triggered();
 
-    void on_actionErode_triggered();
+    void on_action_Erode_triggered();
 
 public slots:
     void showColorValue(const QPointF &position);
