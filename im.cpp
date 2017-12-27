@@ -425,6 +425,20 @@ void im::regionGrowth(const QPoint &seed, const int &threshold)
     updateOutScene("tmp.png");
 }
 
+void im::dilate(unsigned char structureElement[3][3])
+{
+    CImg<unsigned char> s(3, 3);
+
+    cimg_forXY(s, x, y) {
+        s(x, y) = structureElement[x][y];
+    }
+
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_dilate(s);
+    result.save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1264,4 +1278,14 @@ bool im::isInsideImage(const QPoint &point, const CImg<T> &img)
     } else {
         return false;
     }
+}
+
+void im::on_action_Dilate_triggered()
+{
+    dlgDilate = new DialogDilate;
+
+    dlgDilate->setModal(true);
+    dlgDilate->show();
+
+    connect(dlgDilate, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(dilate(unsigned char[3][3])));
 }

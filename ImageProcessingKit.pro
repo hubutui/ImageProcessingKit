@@ -38,7 +38,9 @@ SOURCES += \
     dialogresize.cpp \
     dialogmanualthreshold.cpp \
     dialogerode.cpp \
-    dialogregiongrowth.cpp
+    dialogregiongrowth.cpp \
+    dialogdilate.cpp \
+    dialogopenmorphology.cpp
 
 HEADERS += \
         im.h \
@@ -54,7 +56,9 @@ HEADERS += \
     dialogresize.h \
     dialogmanualthreshold.h \
     dialogerode.h \
-    dialogregiongrowth.h
+    dialogregiongrowth.h \
+    dialogdilate.h \
+    dialogopenmorphology.h
 
 FORMS += \
         im.ui \
@@ -69,6 +73,8 @@ FORMS += \
     dialogresize.ui \
     dialogmanualthreshold.ui \
     dialogerode.ui \
-    dialogregiongrowth.ui
+    dialogregiongrowth.ui \
+    dialogdilate.ui \
+    dialogopenmorphology.ui
 
 unix: LIBS += -lX11 -lqcustomplot

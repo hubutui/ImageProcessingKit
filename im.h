@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogdilate.h"
+#include "ui_dialogdilate.h"
 #include "dialogregiongrowth.h"
 #include "ui_dialogregiongrowth.h"
 #include "dialogerode.h"
@@ -139,6 +141,8 @@ private slots:
 
     void on_action_Erode_triggered();
 
+    void on_action_Dilate_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -155,6 +159,7 @@ public slots:
     void threshold(const int &threshold);
     void erode(unsigned char kernel[3][3]);
     void regionGrowth(const QPoint &seed, const int &threshold);
+    void dilate(unsigned char structureElement[3][3]);
 
 private:
     Ui::im *ui;
@@ -190,6 +195,7 @@ private:
     DialogManualThreshold *dlgManualThreshold;
     DialogErode *dlgErode;
     DialogRegionGrowth *dlgRegionGrowth;
+    DialogDilate *dlgDilate;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
