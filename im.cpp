@@ -455,6 +455,21 @@ void im::opening(unsigned char structureElement[3][3])
     updateOutScene("tmp.png");
 }
 
+void im::closing(unsigned char structureElement[3][3])
+{
+    CImg<unsigned char> s(3, 3);
+
+    cimg_forXY(s, x, y) {
+        s(x, y) = structureElement[x][y];
+    }
+
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_dilate(s).get_erode(s);
+
+    result.save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1282,6 +1297,7 @@ void im::on_action_Erode_triggered()
 
     dlgErode->setModal(true);;
     dlgErode->show();
+
     connect(dlgErode, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(erode(unsigned char[3][3])));
 }
 
@@ -1318,5 +1334,10 @@ void im::on_action_Opening_triggered()
 
 void im::on_action_Closing_triggered()
 {
+    dlgClosing = new DialogClosing;
 
+    dlgClosing->setModal(true);
+    dlgClosing->show();
+
+    connect(dlgClosing, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(closing(unsigned char[3][3])));
 }

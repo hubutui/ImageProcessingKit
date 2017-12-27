@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogclosing.h"
+#include "ui_dialogclosing.h"
 #include "dialogopening.h"
 #include "ui_dialogopening.h"
 #include "dialogdilate.h"
@@ -167,6 +169,7 @@ public slots:
     void regionGrowth(const QPoint &seed, const int &threshold);
     void dilate(unsigned char structureElement[3][3]);
     void opening(unsigned char structureElement[3][3]);
+    void closing(unsigned char structureElement[3][3]);
 
 private:
     Ui::im *ui;
@@ -204,6 +207,7 @@ private:
     DialogRegionGrowth *dlgRegionGrowth;
     DialogDilate *dlgDilate;
     DialogOpening *dlgOpening;
+    DialogClosing *dlgClosing;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);

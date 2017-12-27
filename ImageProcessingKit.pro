@@ -40,7 +40,8 @@ SOURCES += \
     dialogerode.cpp \
     dialogregiongrowth.cpp \
     dialogdilate.cpp \
-    dialogopening.cpp
+    dialogopening.cpp \
+    dialogclosing.cpp
 
 HEADERS += \
         im.h \
@@ -58,7 +59,8 @@ HEADERS += \
     dialogerode.h \
     dialogregiongrowth.h \
     dialogdilate.h \
-    dialogopening.h
+    dialogopening.h \
+    dialogclosing.h
 
 FORMS += \
         im.ui \
@@ -75,6 +77,7 @@ FORMS += \
     dialogerode.ui \
     dialogregiongrowth.ui \
     dialogdilate.ui \
-    dialogopening.ui
+    dialogopening.ui \
+    dialogclosing.ui
 
 unix: LIBS += -lX11 -lqcustomplot
