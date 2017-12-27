@@ -470,6 +470,11 @@ void im::closing(unsigned char structureElement[3][3])
     updateOutScene("tmp.png");
 }
 
+void im::idealHighPassFilter(const int &D0)
+{
+    CImg<double> img(fileName.toStdString().data());
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1340,4 +1345,14 @@ void im::on_action_Closing_triggered()
     dlgClosing->show();
 
     connect(dlgClosing, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(closing(unsigned char[3][3])));
+}
+
+void im::on_action_Ideal_High_Pass_Filter_triggered()
+{
+    dlgIdealHighPassFilter = new DialogIdealHighPassFilter;
+
+    dlgIdealHighPassFilter->setModal(true);
+    dlgIdealHighPassFilter->show();
+
+    connect(dlgIdealHighPassFilter, SIGNAL(sendData(int)), this, SLOT(idealHighPassFilter(int)));
 }

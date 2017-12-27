@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogidealhighpassfilter.h"
+#include "ui_dialogidealhighpassfilter.h"
 #include "dialogclosing.h"
 #include "ui_dialogclosing.h"
 #include "dialogopening.h"
@@ -151,6 +153,8 @@ private slots:
 
     void on_action_Closing_triggered();
 
+    void on_action_Ideal_High_Pass_Filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -170,6 +174,7 @@ public slots:
     void dilate(unsigned char structureElement[3][3]);
     void opening(unsigned char structureElement[3][3]);
     void closing(unsigned char structureElement[3][3]);
+    void idealHighPassFilter(const int &D0);
 
 private:
     Ui::im *ui;
@@ -208,6 +213,7 @@ private:
     DialogDilate *dlgDilate;
     DialogOpening *dlgOpening;
     DialogClosing *dlgClosing;
+    DialogIdealHighPassFilter *dlgIdealHighPassFilter;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
