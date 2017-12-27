@@ -1,5 +1,5 @@
-#include "dialogopenmorphology.h"
-#include "ui_dialogopenmorphology.h"
+#include "dialogopening.h"
+#include "ui_dialogopening.h"
 
 DialogOpenMorphology::DialogOpenMorphology(QWidget *parent) :
     QDialog(parent),

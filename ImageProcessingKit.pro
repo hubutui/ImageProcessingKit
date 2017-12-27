@@ -58,7 +58,7 @@ HEADERS += \
     dialogerode.h \
     dialogregiongrowth.h \
     dialogdilate.h \
-    dialogopenmorphology.h
+    dialogopening.h
 
 FORMS += \
         im.ui \
@@ -75,6 +75,6 @@ FORMS += \
     dialogerode.ui \
     dialogregiongrowth.ui \
     dialogdilate.ui \
-    dialogopenmorphology.ui
+    dialogopening.ui
 
 unix: LIBS += -lX11 -lqcustomplot

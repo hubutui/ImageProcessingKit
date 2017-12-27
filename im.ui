@@ -197,8 +197,8 @@
     </property>
     <addaction name="action_Erode"/>
     <addaction name="action_Dilate"/>
-    <addaction name="action_Open_Mophology"/>
-    <addaction name="action_Close_Morphology"/>
+    <addaction name="action_Opening"/>
+    <addaction name="action_Closing"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -531,14 +531,20 @@
     <string>Dilate</string>
    </property>
   </action>
-  <action name="action_Open_Mophology">
+  <action name="action_Opening">
    <property name="text">
-    <string>Open</string>
+    <string>Opening</string>
+   </property>
+   <property name="toolTip">
+    <string>Opening</string>
    </property>
   </action>
-  <action name="action_Close_Morphology">
+  <action name="action_Closing">
    <property name="text">
-    <string>Close</string>
+    <string>Closing</string>
+   </property>
+   <property name="toolTip">
+    <string>Closing</string>
    </property>
   </action>
  </widget>

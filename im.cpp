@@ -1294,3 +1294,13 @@ void im::on_action_Dilate_triggered()
 
     connect(dlgDilate, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(dilate(unsigned char[3][3])));
 }
+
+void im::on_action_Opening_triggered()
+{
+
+}
+
+void im::on_action_Closing_triggered()
+{
+
+}

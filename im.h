@@ -1,8 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
-#include "dialogopenmorphology.h"
-#include "ui_dialogopenmorphology.h"
+#include "dialogopening.h"
+#include "ui_dialogopening.h"
 #include "dialogdilate.h"
 #include "ui_dialogdilate.h"
 #include "dialogregiongrowth.h"
@@ -144,6 +144,10 @@ private slots:
     void on_action_Erode_triggered();
 
     void on_action_Dilate_triggered();
+
+    void on_action_Opening_triggered();
+
+    void on_action_Closing_triggered();
 
 public slots:
     void showColorValue(const QPointF &position);
