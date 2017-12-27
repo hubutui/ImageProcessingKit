@@ -1,6 +1,8 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogopenmorphology.h"
+#include "ui_dialogopenmorphology.h"
 #include "dialogdilate.h"
 #include "ui_dialogdilate.h"
 #include "dialogregiongrowth.h"
@@ -160,6 +162,7 @@ public slots:
     void erode(unsigned char kernel[3][3]);
     void regionGrowth(const QPoint &seed, const int &threshold);
     void dilate(unsigned char structureElement[3][3]);
+    void opening(unsigned char structureElement[3][3]);
 
 private:
     Ui::im *ui;
@@ -196,6 +199,7 @@ private:
     DialogErode *dlgErode;
     DialogRegionGrowth *dlgRegionGrowth;
     DialogDilate *dlgDilate;
+    DialogOpenMorphology *dlgOpenMorphology;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);

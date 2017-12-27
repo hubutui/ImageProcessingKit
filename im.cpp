@@ -439,6 +439,11 @@ void im::dilate(unsigned char structureElement[3][3])
     updateOutScene("tmp.png");
 }
 
+void im::opening(unsigned char structureElement[3][3])
+{
+
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
