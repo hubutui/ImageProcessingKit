@@ -485,7 +485,7 @@ void im::idealHighPassFilter(const int &D0)
     double D;
     cimg_forXY(img, x, y) {
         D = sqrt((x - img.width()/2)*(x - img.width()/2)
-                 + (y - img.height())*(y - img.height()));
+                 + (y - img.height()/2)*(y - img.height()/2));
         if (D > D0) {
             H[0](x, y) = 1.0f;
         }
@@ -511,7 +511,7 @@ void im::idealLowPassFilter(const int &D0)
     // generate H
     double D;
     cimg_forXY(img, x, y) {
-        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height())*(y - img.height()));
+        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height()/2)*(y - img.height()/2));
         if (D <= D0) {
             H[0](x, y) = 1.0f;
         }
@@ -526,7 +526,7 @@ void im::idealLowPassFilter(const int &D0)
     G[1] = fftshift(G[1]);
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
-    G[0].normalize(G[0].min(), G[0].max());
+    //G[0].normalize(G[0].min(), G[0].max());
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -543,7 +543,7 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
 
     cimg_forXY(img, x, y) {
-        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height())*(y - img.height()));
+        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height()/2)*(y - img.height()/2));
         H[0] = 1/(1 + pow(D/D0, 2*Order));
     }
 
@@ -554,7 +554,7 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     G[1] = fftshift(G[1]);
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
-    G[0].normalize(G[0].min(), G[0].max());
+    //G[0].normalize(G[0].min(), G[0].max());
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
