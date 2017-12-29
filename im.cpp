@@ -554,7 +554,9 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     G[1] = fftshift(G[1]);
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
-    G[0].normalize(G[0].min(), G[0].max());
+    qDebug() << "min: " << G[0].min() <<
+                "max: " << G[0].max() << endl;
+    //G[0].normalize(0, 255);
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -576,18 +578,42 @@ void im::butterworthHighPassFilter(const int &Order, const int &D0)
     }
 
     CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
-    // save frequency
-    CImg<double> tmp;
-    tmp = amp(G);
-    tmp.normalize(0, 255);
-    tmp.save("frequency.png");
 
     // shift
     G[0] = fftshift(G[0]);
     G[1] = fftshift(G[1]);
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
-    //G[0].normalize(G[0].min(), G[0].max());
+    qDebug() << "min: " << G[0].min() <<
+                "max: " << G[0].max() << endl;
+    //G[0].normalize(0, 255);
+    G[0].save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0)
+{
+    CImg<double> img(fileName.toStdString().data());
+    img.log();
+    // FFT
+    CImgList<double> F = img.get_FFT();
+    F[0] = fftshift(F[0]);
+    F[1] = fftshift(F[1]);
+    // generate H
+    CImgList<double> H(2, img.width(), img.height(), 1, 1, 0.0f);
+    double D;
+
+    cimg_forXY(img, u, v) {
+        D = sqrt((u - img.width()/2)*(u - img.width()/2) + (v - img.height()/2)*(v - img.height()/2));
+        H[0] = (gammaH - gammaL)*(1 - exp(-c*(D/D0)*(D/D0))) + gammaL;
+    }
+
+    CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
+    G[0] = fftshift(G[0]);
+    G[1] = fftshift(G[1]);
+    CImg<double>::FFT(G[0], G[1], true);
+    G[0] = exp(G[0]);
+    //G[0].normalize(0, 255);
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -698,12 +724,38 @@ CImgList<double> im::div(const CImg<double> &img1_real, const CImg<double> &img1
     return result;
 }
 
-CImgList<double> im::mul(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag)
+template<typename T>
+CImgList<T> im::mul(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag)
 {
-    CImg<double> result_real = img1_real.get_mul(img2_real) - img1_imag.get_mul(img2_imag);
-    CImg<double> result_imag = img1_imag.get_mul(img2_real) + img1_real.get_mul(img2_imag);
+    std::complex<T> tmp1, tmp2, tmp3;
+    CImgList<T> result(2, img1_real);
 
-    return CImgList<double>(result_real, result_imag);
+    cimg_forXY(result[0], x, y) {
+        tmp1 = std::complex<double>(img1_real(x, y), img1_imag(x, y));
+        tmp2 = std::complex<double>(img2_real(x, y), img2_imag(x, y));
+        tmp3 = tmp1*tmp2;
+        result[0](x, y) = tmp3.real();
+        result[1](x, y) = tmp3.imag();
+    }
+
+    return result;
+}
+
+template <typename T>
+CImgList<T> im::mul(const CImgList<T> &img1, const CImgList<T> &img2)
+{
+    std::complex<T> tmp1, tmp2, tmp3;
+    CImgList<T> result(img1);
+
+    cimg_forXY(result[0], x, y) {
+        tmp1 = std::complex<T>(img1[0](x, y), img1[1](x, y));
+        tmp2 = std::complex<T>(img2[0](x, y), img1[1](x, y));
+        tmp1 = tmp1*tmp2;
+        result[0](x, y) = tmp3.real();
+        result[1](x, y) = tmp3.imag();
+    }
+
+    return result;
 }
 
 CImg<double> im::amp(const CImgList<double> &img)
@@ -1508,5 +1560,21 @@ void im::on_action_Butterworth_High_Pass_Filter_triggered()
     dlgButterworthHighPassFilter->setModal(true);;
     dlgButterworthHighPassFilter->show();
 
-    connect(dlgButterworthHighPassFilter, SIGNAL(sendData(int, int)), this, SLOT(butterworthHighPassFilter(int, int)));
+    connect(dlgButterworthHighPassFilter,
+            SIGNAL(sendData(int, int)),
+            this,
+            SLOT(butterworthHighPassFilter(int, int)));
+}
+
+void im::on_action_Homomorphic_Filter_triggered()
+{
+    dlgHomomorphicFilter = new DialogHomomorphicFilter;
+
+    dlgHomomorphicFilter->setModal(true);
+    dlgHomomorphicFilter->show();
+
+    connect(dlgHomomorphicFilter,
+            SIGNAL(sendData(double, double, double, int)),
+            this,
+            SLOT(homomorphicFilter(double, double, double, int)));
 }

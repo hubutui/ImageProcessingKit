@@ -146,12 +146,13 @@
     <property name="title">
      <string>Freq&amp;uency Filter</string>
     </property>
+    <addaction name="action_FFT"/>
+    <addaction name="action_IFFT"/>
     <addaction name="action_Ideal_Low_Pass_Filter"/>
     <addaction name="action_Ideal_High_Pass_Filter"/>
     <addaction name="action_Butterworth_Low_Pass_Filter"/>
     <addaction name="action_Butterworth_High_Pass_Filter"/>
-    <addaction name="action_FFT"/>
-    <addaction name="action_IFFT"/>
+    <addaction name="action_Homomorphic_Filter"/>
    </widget>
    <widget class="QMenu" name="menuImage_Recovery">
     <property name="title">
@@ -545,6 +546,11 @@
    </property>
    <property name="toolTip">
     <string>Closing</string>
+   </property>
+  </action>
+  <action name="action_Homomorphic_Filter">
+   <property name="text">
+    <string>Homomorphic Filter</string>
    </property>
   </action>
  </widget>
