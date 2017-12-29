@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogbutterworthhighpassfilter.h"
 #include "dialogbutterworthlowpassfilter.h"
 #include "dialogideallowpassfilter.h"
 #include "dialogidealhighpassfilter.h"
@@ -161,6 +162,8 @@ private slots:
 
     void on_action_Butterworth_Low_Pass_Filter_triggered();
 
+    void on_action_Butterworth_High_Pass_Filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -183,6 +186,7 @@ public slots:
     void idealHighPassFilter(const int &D0);
     void idealLowPassFilter(const int &D0);
     void butterworthLowPassFilter(const int &Order, const int &D0);
+    void butterworthHighPassFilter(const int &Order, const int &D0);
 
 private:
     Ui::im *ui;
@@ -224,6 +228,7 @@ private:
     DialogIdealHighPassFilter *dlgIdealHighPassFilter;
     DialogIdealLowPassFilter *dlgIdealLowPassFilter;
     DialogButterworthLowPassFilter *dlgButterworthLowPassFilter;
+    DialogButterworthHighPassFilter *dlgButterworthHighPassFilter;
 
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
@@ -241,6 +246,8 @@ private:
     CImgList<double> div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
     // 计算复数的乘法
     CImgList<double> mul(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
+    // 计算傅里叶幅度谱
+    CImg<double> amp(const CImgList<double> &img);
     // check if point inside img
     template <typename T>
     bool isInsideImage(const QPoint &point, const CImg<T> &img);

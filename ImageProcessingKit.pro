@@ -44,7 +44,8 @@ SOURCES += \
     dialogclosing.cpp \
     dialogidealhighpassfilter.cpp \
     dialogideallowpassfilter.cpp \
-    dialogbutterworthlowpassfilter.cpp
+    dialogbutterworthlowpassfilter.cpp \
+    dialogbutterworthhighpassfilter.cpp
 
 HEADERS += \
         im.h \
@@ -66,7 +67,8 @@ HEADERS += \
     dialogclosing.h \
     dialogidealhighpassfilter.h \
     dialogideallowpassfilter.h \
-    dialogbutterworthlowpassfilter.h
+    dialogbutterworthlowpassfilter.h \
+    dialogbutterworthhighpassfilter.h
 
 FORMS += \
         im.ui \
@@ -87,6 +89,7 @@ FORMS += \
     dialogclosing.ui \
     dialogidealhighpassfilter.ui \
     dialogideallowpassfilter.ui \
-    dialogbutterworthlowpassfilter.ui
+    dialogbutterworthlowpassfilter.ui \
+    dialogbutterworthhighpassfilter.ui
 
 unix: LIBS += -lX11 -lqcustomplot

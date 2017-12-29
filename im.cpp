@@ -554,6 +554,39 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     G[1] = fftshift(G[1]);
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
+    G[0].normalize(G[0].min(), G[0].max());
+    G[0].save("tmp.png");
+    updateOutScene("tmp.png");
+}
+
+void im::butterworthHighPassFilter(const int &Order, const int &D0)
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImgList<double> F = img.get_FFT();
+    // shift
+    F[0] = fftshift(F[0]);
+    F[1] = fftshift(F[1]);
+    // generate H
+    double D;
+    CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
+
+    cimg_forXY(img, x, y) {
+        D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height()/2)*(y - img.height()/2));
+        H[0] = 1/(1 + pow(D0/D, 2*Order));
+    }
+
+    CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
+    // save frequency
+    CImg<double> tmp;
+    tmp = amp(G);
+    tmp.normalize(0, 255);
+    tmp.save("frequency.png");
+
+    // shift
+    G[0] = fftshift(G[0]);
+    G[1] = fftshift(G[1]);
+    // IFFT
+    CImg<double>::FFT(G[0], G[1], true);
     //G[0].normalize(G[0].min(), G[0].max());
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
@@ -671,6 +704,11 @@ CImgList<double> im::mul(const CImg<double> &img1_real, const CImg<double> &img1
     CImg<double> result_imag = img1_imag.get_mul(img2_real) + img1_real.get_mul(img2_imag);
 
     return CImgList<double>(result_real, result_imag);
+}
+
+CImg<double> im::amp(const CImgList<double> &img)
+{
+    return log(1 + sqrt((log(1 + sqrt(img[0].get_mul(img[0]) + img[1].get_mul(img[1]))))));
 }
 
 void im::on_action_Adjust_HSV_triggered()
@@ -1195,9 +1233,8 @@ void im::on_action_FFT_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
     CImgList<double> fft = img.get_FFT();
-    //CImg<double> result = log(1 + sqrt(fft[0]*fft[0] + fft[1]*fft[1]));
-    //CImg<double> result = log(1 + fft[0].abs());
-    CImg<double> result = log(1 + sqrt(fft[0].get_mul(fft[0]) + fft[1].get_mul(fft[1])));
+    CImg<double> result = amp(fft);
+
     result.normalize(0, 255);
     result = fftshift(result);
     result.save_png("tmp.png");
@@ -1462,4 +1499,14 @@ void im::on_action_Butterworth_Low_Pass_Filter_triggered()
     dlgButterworthLowPassFilter->show();
 
     connect(dlgButterworthLowPassFilter, SIGNAL(sendData(int, int)), this, SLOT(butterworthLowPassFilter(int, int)));
+}
+
+void im::on_action_Butterworth_High_Pass_Filter_triggered()
+{
+    dlgButterworthHighPassFilter = new DialogButterworthHighPassFilter;
+
+    dlgButterworthHighPassFilter->setModal(true);;
+    dlgButterworthHighPassFilter->show();
+
+    connect(dlgButterworthHighPassFilter, SIGNAL(sendData(int, int)), this, SLOT(butterworthHighPassFilter(int, int)));
 }
