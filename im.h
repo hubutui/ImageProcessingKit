@@ -248,12 +248,20 @@ private:
     template <typename T>
     CImg<T> fft(const CImg<T> &img);
     // 计算复数除法
-    CImgList<double> div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag);
+    template<typename T>
+    CImgList<T> div(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag);
+    template<typename T>
+    CImgList<T> div(const CImgList<T> &img1, const CImg<T> &img2);
     // 计算复数的乘法
     template<typename T>
     CImgList<T> mul(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag);
     template<typename T>
     CImgList<T> mul(const CImgList<T> &img1, const CImgList<T> &img2);
+    // 计算复数的指数运算
+    template<typename T>
+    CImgList<T> exp(const CImg<T> &img_real, const CImg<T> &img_imag);
+    template<typename T>
+    CImgList<T> exp(const CImgList<T> &img);
     // 计算傅里叶幅度谱
     CImg<double> amp(const CImgList<double> &img);
     // check if point inside img

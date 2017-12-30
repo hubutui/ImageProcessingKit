@@ -629,6 +629,7 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
         return;
     }
 
+    //img = log(1 + img);
     img.log();
     // FFT
     CImgList<double> F = img.get_FFT();
@@ -640,15 +641,18 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
 
     cimg_forXY(img, u, v) {
         D = sqrt((u - img.width()/2)*(u - img.width()/2) + (v - img.height()/2)*(v - img.height()/2));
-        H[0] = (gammaH - gammaL)*(1 - exp(-c*(D/D0)*(D/D0))) + gammaL;
+        H[0](u, v) = (gammaH - gammaL)*(1 - std::exp(-c*(D/D0)*(D/D0))) + gammaL;
     }
 
     CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
     G[0] = fftshift(G[0]);
     G[1] = fftshift(G[1]);
     CImg<double>::FFT(G[0], G[1], true);
-    G[0] = exp(G[0]);
-    //G[0].normalize(0, 255);
+    G = exp(G);
+//    G[0] = G[0] - 1;
+//    G[1] = G[1] - 1;
+    qDebug() << "max: " << G[0].max() << ", min: " << G[0].min() << endl;
+    G[0].normalize(0, 255);
     G[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
@@ -738,22 +742,6 @@ CImg<int> im::operatorXor(const CImg<int> &img1, const CImg<int> &img2)
         } else {
             result(x, y) = 255;
         }
-    }
-
-    return result;
-}
-
-CImgList<double> im::div(const CImg<double> &img1_real, const CImg<double> &img1_imag, const CImg<double> &img2_real, const CImg<double> &img2_imag)
-{
-    std::complex<double> tmp1, tmp2, tmp3;
-    CImgList<double> result(2, img1_real);
-
-    cimg_forXY(result[0], x, y) {
-        tmp1 = std::complex<double>(img1_real(x, y), img1_imag(x, y));
-        tmp2 = std::complex<double>(img2_real(x, y), img2_imag(x, y));
-        tmp3 = tmp1/tmp2;
-        result[0](x, y) = tmp3.real();
-        result[1](x, y) = tmp3.imag();
     }
 
     return result;
@@ -1637,4 +1625,68 @@ void im::on_action_Homomorphic_Filter_triggered()
             SIGNAL(sendData(double, double, double, int)),
             this,
             SLOT(homomorphicFilter(double, double, double, int)));
+}
+
+template<typename T>
+CImgList<T> im::exp(const CImg <T> &img_real, const CImg<T> &img_imag)
+{
+    std::complex<T> tmp;
+    CImgList<T> result(2, img_real);
+
+    cimg_forXY(result[0], x, y) {
+        tmp = std::exp(std::complex<T>(img_real(x, y), img_imag(x, y)));
+        result[0](x, y) = tmp.real();
+        result[1](x, y) = tmp.imag();
+    }
+
+    return result;
+}
+
+template<typename T>
+CImgList<T> im::exp(const CImgList<T> &img)
+{
+    std::complex<T> tmp;
+    CImgList<T> result(img);
+
+    cimg_forXY(result[0], x, y) {
+        tmp = std::exp(std::complex<T>(img[0](x, y), img[1](x, y)));
+        result[0](x, y) = tmp.real();
+        result[1](x, y) = tmp.imag();
+    }
+
+    return result;
+}
+
+template<typename T>
+CImgList<T> im::div(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag)
+{
+    std::complex<T> tmp1, tmp2, tmp3;
+    CImgList<T> result(2, img1_real);
+
+    cimg_forXY(result[0], x, y) {
+        tmp1 = std::complex<double>(img1_real(x, y), img1_imag(x, y));
+        tmp2 = std::complex<double>(img2_real(x, y), img2_imag(x, y));
+        tmp3 = tmp1/tmp2;
+        result[0](x, y) = tmp3.real();
+        result[1](x, y) = tmp3.imag();
+    }
+
+    return result;
+}
+
+template<typename T>
+CImgList<T> im::div(const CImgList<T> &img1, const CImg<T> &img2)
+{
+    std::complex<T> tmp1, tmp2, tmp3;
+    CImgList<T> result(img1);
+
+    cimg_forXY(result[0], x, y) {
+        tmp1 = std::complex<double>(img1[0](x, y), img1[1](x, y));
+        tmp2 = std::complex<double>(img2[0](x, y), img2[1](x, y));
+        tmp3 = tmp1/tmp2;
+        result[0](x, y) = tmp3.real();
+        result[1](x, y) = tmp3.imag();
+    }
+
+    return result;
 }
