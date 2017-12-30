@@ -628,9 +628,9 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
         QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
         return;
     }
-
-    //img = log(1 + img);
-    img.log();
+    // img's gray level might be 0, which make it no sence
+    // so add 1 before log
+    img = log(1 + img);
     // FFT
     CImgList<double> F = img.get_FFT();
     F[0] = fftshift(F[0]);
@@ -648,9 +648,8 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
     G[0] = fftshift(G[0]);
     G[1] = fftshift(G[1]);
     CImg<double>::FFT(G[0], G[1], true);
-    G = exp(G);
-//    G[0] = G[0] - 1;
-//    G[1] = G[1] - 1;
+    // only the real part matters, ignore imag part
+    G[0] = G[0].exp() - 1;
     qDebug() << "max: " << G[0].max() << ", min: " << G[0].min() << endl;
     G[0].normalize(0, 255);
     G[0].save("tmp.png");
@@ -1625,36 +1624,6 @@ void im::on_action_Homomorphic_Filter_triggered()
             SIGNAL(sendData(double, double, double, int)),
             this,
             SLOT(homomorphicFilter(double, double, double, int)));
-}
-
-template<typename T>
-CImgList<T> im::exp(const CImg <T> &img_real, const CImg<T> &img_imag)
-{
-    std::complex<T> tmp;
-    CImgList<T> result(2, img_real);
-
-    cimg_forXY(result[0], x, y) {
-        tmp = std::exp(std::complex<T>(img_real(x, y), img_imag(x, y)));
-        result[0](x, y) = tmp.real();
-        result[1](x, y) = tmp.imag();
-    }
-
-    return result;
-}
-
-template<typename T>
-CImgList<T> im::exp(const CImgList<T> &img)
-{
-    std::complex<T> tmp;
-    CImgList<T> result(img);
-
-    cimg_forXY(result[0], x, y) {
-        tmp = std::exp(std::complex<T>(img[0](x, y), img[1](x, y)));
-        result[0](x, y) = tmp.real();
-        result[1](x, y) = tmp.imag();
-    }
-
-    return result;
 }
 
 template<typename T>
