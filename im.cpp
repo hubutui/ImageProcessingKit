@@ -474,6 +474,12 @@ void im::idealHighPassFilter(const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
 
+    // only deal with grayscale image
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
+        return;
+    }
+
     CImgList<double> F = img.get_FFT();
     // shift FFT result
     F[0] = fftshift(F[0]);
@@ -505,6 +511,13 @@ void im::idealHighPassFilter(const int &D0)
 void im::idealLowPassFilter(const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+
+    // only deal with grayscale image
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
+        return;
+    }
+
     CImgList<double> F = img.get_FFT();
     CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
 
@@ -534,6 +547,13 @@ void im::idealLowPassFilter(const int &D0)
 void im::butterworthLowPassFilter(const int &Order, const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+
+    // only deal with grayscale image
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
+        return;
+    }
+
     CImgList<double> F = img.get_FFT();
     // shift
     F[0] = fftshift(F[0]);
@@ -565,6 +585,13 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
 void im::butterworthHighPassFilter(const int &Order, const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+
+    // only deal with grayscale image
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
+        return;
+    }
+
     CImgList<double> F = img.get_FFT();
     // shift
     F[0] = fftshift(F[0]);
@@ -595,6 +622,13 @@ void im::butterworthHighPassFilter(const int &Order, const int &D0)
 void im::homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0)
 {
     CImg<double> img(fileName.toStdString().data());
+
+    // only deal with grayscale image
+    if (!isGrayscale(img)) {
+        QMessageBox::critical(this, tr("Error!"), tr("Non-grayscale image!"));
+        return;
+    }
+
     img.log();
     // FFT
     CImgList<double> F = img.get_FFT();
