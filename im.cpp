@@ -540,12 +540,12 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     F[1] = fftshift(F[1]);
     // generate H
     double D;
-    CImgList<double> H(2, img);
+    CImgList<double> H(2, img.width(), img.height(), img.depth(), img.spectrum(), 0.0f);
 
     cimg_forXY(img, x, y) {
         D = sqrt((x - img.width()/2)*(x - img.width()/2)
                  + (y - img.height()/2)*(y - img.height()/2));
-        H[0] = 1/(1 + pow(D/D0, 2*Order));
+        H[0](x, y) = 1/(1 + pow(D/D0, 2*Order));
     }
 
     CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
@@ -575,7 +575,7 @@ void im::butterworthHighPassFilter(const int &Order, const int &D0)
 
     cimg_forXY(img, x, y) {
         D = sqrt((x - img.width()/2)*(x - img.width()/2) + (y - img.height()/2)*(y - img.height()/2));
-        H[0] = 1/(1 + pow(D0/D, 2*Order));
+        H[0](x, y) = 1/(1 + pow(D0/D, 2*Order));
     }
 
     CImgList<double> G = mul(F[0], F[1], H[0], H[1]);
