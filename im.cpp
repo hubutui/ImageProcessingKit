@@ -1428,16 +1428,20 @@ void im::on_action_Ostu_method_triggered()
     this->threshold(threshold);
 }
 
-// 简单起见，取图像中心点为种子点
-// 生长条件为邻域与种子点的差值小于 T = 5.
 void im::on_action_Region_Growth_triggered()
 {
     dlgRegionGrowth = new DialogRegionGrowth;
     dlgRegionGrowth->setModal(false);
     dlgRegionGrowth->show();
 
-    connect(inScene, SIGNAL(seedSetted(QPoint)), dlgRegionGrowth, SLOT(setSeedCoord(QPoint)));
-    connect(dlgRegionGrowth, SIGNAL(sendData(QPoint,int)), this, SLOT(regionGrowth(QPoint,int)));
+    connect(inScene,
+            SIGNAL(seedSetted(QPoint)),
+            dlgRegionGrowth,
+            SLOT(setSeedCoord(QPoint)));
+    connect(dlgRegionGrowth,
+            SIGNAL(sendData(QPoint,int)),
+            this,
+            SLOT(regionGrowth(QPoint,int)));
 
 //    CImg<int> img(fileName.toStdString().data());
 //    CImg<int> result(img.width(), img.height(), img.depth(), img.spectrum(), 255);
@@ -1480,7 +1484,10 @@ void im::on_action_Erode_triggered()
     dlgErode->setModal(true);;
     dlgErode->show();
 
-    connect(dlgErode, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(erode(unsigned char[3][3])));
+    connect(dlgErode,
+            SIGNAL(sendData(unsigned char[3][3])),
+            this,
+            SLOT(erode(unsigned char[3][3])));
 }
 
 template<typename T>
@@ -1501,7 +1508,10 @@ void im::on_action_Dilate_triggered()
     dlgDilate->setModal(true);
     dlgDilate->show();
 
-    connect(dlgDilate, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(dilate(unsigned char[3][3])));
+    connect(dlgDilate,
+            SIGNAL(sendData(unsigned char[3][3])),
+            this,
+            SLOT(dilate(unsigned char[3][3])));
 }
 
 void im::on_action_Opening_triggered()
@@ -1511,7 +1521,10 @@ void im::on_action_Opening_triggered()
     dlgOpening->setModal(true);
     dlgOpening->show();
 
-    connect(dlgOpening, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(opening(unsigned char[3][3])));
+    connect(dlgOpening,
+            SIGNAL(sendData(unsigned char[3][3])),
+            this,
+            SLOT(opening(unsigned char[3][3])));
 }
 
 void im::on_action_Closing_triggered()
@@ -1521,7 +1534,10 @@ void im::on_action_Closing_triggered()
     dlgClosing->setModal(true);
     dlgClosing->show();
 
-    connect(dlgClosing, SIGNAL(sendData(unsigned char[3][3])), this, SLOT(closing(unsigned char[3][3])));
+    connect(dlgClosing,
+            SIGNAL(sendData(unsigned char[3][3])),
+            this,
+            SLOT(closing(unsigned char[3][3])));
 }
 
 void im::on_action_Ideal_High_Pass_Filter_triggered()
@@ -1531,7 +1547,10 @@ void im::on_action_Ideal_High_Pass_Filter_triggered()
     dlgIdealHighPassFilter->setModal(true);
     dlgIdealHighPassFilter->show();
 
-    connect(dlgIdealHighPassFilter, SIGNAL(sendData(int)), this, SLOT(idealHighPassFilter(int)));
+    connect(dlgIdealHighPassFilter,
+            SIGNAL(sendData(int)),
+            this,
+            SLOT(idealHighPassFilter(int)));
 }
 
 void im::on_action_Ideal_Low_Pass_Filter_triggered()
@@ -1541,7 +1560,10 @@ void im::on_action_Ideal_Low_Pass_Filter_triggered()
     dlgIdealLowPassFilter->setModal(true);
     dlgIdealLowPassFilter->show();
 
-    connect(dlgIdealLowPassFilter, SIGNAL(sendData(int)), this, SLOT(idealLowPassFilter(int)));
+    connect(dlgIdealLowPassFilter,
+            SIGNAL(sendData(int)),
+            this,
+            SLOT(idealLowPassFilter(int)));
 }
 
 void im::on_action_Butterworth_Low_Pass_Filter_triggered()
