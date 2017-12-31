@@ -251,7 +251,7 @@ private:
     template<typename T>
     CImgList<T> div(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag);
     template<typename T>
-    CImgList<T> div(const CImgList<T> &img1, const CImg<T> &img2);
+    CImgList<T> div(const CImgList<T> &img1, const CImgList<T> &img2);
     // 计算复数的乘法
     template<typename T>
     CImgList<T> mul(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CImg<T> &img2_real, const CImg<T> &img2_imag);

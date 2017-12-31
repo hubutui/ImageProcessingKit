@@ -1366,22 +1366,17 @@ void im::on_action_Flip_triggered()
 void im::on_action_Inverse_filter_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
-    // PSF
-    int len = 41;
+    const int len = 9;
     CImg<double> kernel(len, 1, 1, 1, 1.0f/len);
-    CImg<double> psf(img.width(), img.height(), 1, 1, 0.0f);
 
-    for(int x = 0; x < len; ++x) {
-        img(x, 1) = 255.0f;
-    }
-
-    CImg<double> G = img.get_convolve(kernel);
-    CImgList<double> H = psf.get_FFT();
-
-    CImgList<double> fft = G.get_FFT();
-    CImgList<double> result_fft = div(fft[0], fft[1], H[0], H[1]);
-    CImg<double>::FFT(result_fft[0], result_fft[1], true);
-    result_fft[0].save_png("tmp.png");
+    CImg<double> imgBlured = img.get_convolve(kernel, img);
+    kernel.resize(img.width(), img.height(), 1, 1, 0);
+    CImgList<double> G = imgBlured.get_FFT();
+    CImgList<double> H = kernel.get_FFT();
+    CImgList<double> F = div(G, H);
+    CImg<double>::FFT(F[0], F[1], true);
+    F[0].normalize(0, 255);
+    F[0].save("tmp.png");
     updateOutScene("tmp.png");
 }
 
@@ -1644,7 +1639,7 @@ CImgList<T> im::div(const CImg<T> &img1_real, const CImg<T> &img1_imag, const CI
 }
 
 template<typename T>
-CImgList<T> im::div(const CImgList<T> &img1, const CImg<T> &img2)
+CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2)
 {
     std::complex<T> tmp1, tmp2, tmp3;
     CImgList<T> result(img1);
