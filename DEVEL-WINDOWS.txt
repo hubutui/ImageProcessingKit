@@ -10,14 +10,14 @@ Getting the source and contribute changes:
 Download and install tortoisegit from here:
 https://code.google.com/p/tortoisegit/wiki/Download
 
-https://github.com/allenh1/timefuse-client
-Go to the git repository of timefuse-client, create an account, and login. Next click "fork" at the top-left, then click @yourusername. Now the fork is created. Next press the button "Clone or download" from the top-left, and copy the URL. 
+https://github.com/hubutui/ImageProcessingKit
+Go to the git repository of ImageProcessingKit, create an account, and login. Next click "fork" at the top-left, then click @yourusername. Now the fork is created. Next press the button "Clone or download" from the top-left, and copy the URL. 
 
 create a new folder somewhere on your hard disk.
 right-click the folder, choose "Git Clone..."
 enter the copied URL into the line "URL:" and press OK, it should be something like this:
-https://github.com/yourusername/timefuse-client.git
-Now the folder "timefuse-client" appears.
+https://github.com/yourusername/ImageProcessingKit.git
+Now the folder "ImageProcessingKit" appears.
 
 Right-click on the folder, and choose TortoiseGit->Create branch. Now choose a fun name, for instance "devel-guide" and press OK.
 Right-click on the folder, and choose TortoiseGit->Switch/Checkout. From the pull down menu, choose "devel-guide" and press OK, and the close.
@@ -26,7 +26,7 @@ When you have edited or added files, right-click on the folder, choose commit ->
 You will be asked to enter information why you made the changes. This information is stored locally on your computer.
 Next, publish the changes you have made to github by right-click, and push and ok. You will be asked for your github password. Now the changes are transferred to your version on github. Click close
 
-Finally, login to github, navigate to your fork of timefuse-client, and click "New pull request"
+Finally, login to github, navigate to your fork of ImageProcessingKit, and click "New pull request"
 On the right choose "compare: devel-guide" from the pull down menu.
 Click "Create pull request"
 Provide a meaningful summary and description, then click "Create pull request". Now the developers are notified of your changes.
@@ -47,21 +47,21 @@ start menu shortcuts -> next
 install
 installation finished -> next -> launch
 
-======================
-Debug timefuse-client
-======================
-Start Qt creator, open project,  browse to timefuse-client\timefuse-client.pro and then choose open
+========================
+Debug ImageProcessingKit
+========================
+Start Qt creator, open project,  browse to ImageProcessingKit\ImageProcessingKit.pro and then choose open
 configure project
 debug->start debugging->start debugging (F5)
 
 ===============================
 Build a stand-alone executable:
 ===============================
-Start Qt creator, open project,  browse to timefuse-client\timefuse-client.pro and then choose open
+Start Qt creator, open project,  browse to ImageProcessingKit\ImageProcessingKit.pro and then choose open
 At the left, choose Projects-> choose Release from the "Edit build configuration" pull down menu.
 Then choose build->run Now the program is compiled in release mode
-Next select build-timefuse-client-Desktop_Qt_5_10_0_MinGW_32bit-Release\debug\timefuse-client.exe and drop it on C:\Qt\5.10.0\mingw53_32\bin\windeployqt.exe Now almost all needed files are copied into the folder with timefuse-client.exe.
-manually copy the following files from C:\Qt\5.10.0\mingw53_32\bin to build-timefuse-client-Desktop_Qt_5_10_0_MinGW_32bit-Release\debug\ :
+Next select build-ImageProcessingKit-Desktop_Qt_5_10_0_MinGW_32bit-Release\release\ImageProcessingKit.exe and drop it on C:\Qt\5.10.0\mingw53_32\bin\windeployqt.exe Now almost all needed files are copied into the folder with ImageProcessingKit.exe.
+manually copy the following files from C:\Qt\5.10.0\mingw53_32\bin to build-ImageProcessingKit-Desktop_Qt_5_10_0_MinGW_32bit-Release\release\ :
 libgcc_s_dw2-1.dll
 libwinpthread-1.dll
 libstdc++-6.dll

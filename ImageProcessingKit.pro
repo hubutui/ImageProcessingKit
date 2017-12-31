@@ -99,3 +99,4 @@ FORMS += \
     dialoghomomorphicfilter.ui
 
 unix: LIBS += -lX11 -lqcustomplot
+win32: LIBS += -lgdi32
