@@ -4,7 +4,7 @@
 #include <QColor>
 #include <QRgb>
 #include <algorithm>
-#include <qcustomplot.h>
+#include "qcustomplot.h"
 #include <QtGlobal>
 #include <ccomplex>
 #include <QStack>
