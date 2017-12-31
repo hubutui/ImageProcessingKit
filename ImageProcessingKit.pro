@@ -46,7 +46,8 @@ SOURCES += \
     dialogideallowpassfilter.cpp \
     dialogbutterworthlowpassfilter.cpp \
     dialogbutterworthhighpassfilter.cpp \
-    dialoghomomorphicfilter.cpp
+    dialoghomomorphicfilter.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         im.h \
@@ -70,7 +71,9 @@ HEADERS += \
     dialogideallowpassfilter.h \
     dialogbutterworthlowpassfilter.h \
     dialogbutterworthhighpassfilter.h \
-    dialoghomomorphicfilter.h
+    dialoghomomorphicfilter.h \
+    dialogpiecewiselineartransformation.h \
+    qcustomplot.h
 
 FORMS += \
         im.ui \

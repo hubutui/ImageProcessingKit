@@ -1,6 +1,6 @@
 #include "dialoglineartransform.h"
 #include "ui_dialoglineartransform.h"
-#include <qcustomplot.h>
+#include "qcustomplot.h"
 
 DialogLinearTransform::DialogLinearTransform(QWidget *parent) :
     QDialog(parent),
