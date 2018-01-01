@@ -322,6 +322,29 @@ void im::minimumFilter(const int &size)
     updateOutScene(resultFileName);
 }
 
+void im::invertFilter(const int &noiseType, const int &D0, const double &variance,
+                      const int &length, const int &angle)
+{
+    CImg<double> psf = getPsfKernel(length, angle);
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> imgMotionBlured = img.get_convolve(psf, img);
+
+    if (noiseType == 1) {
+        imgMotionBlured.noise(variance);
+    }
+
+    // resize psf to same size as img for FFT
+    psf.resize(img.width(), img.height(), 1, 1, 0);
+
+    CImgList<double> G = imgMotionBlured.get_FFT();
+    CImgList<double> H = psf.get_FFT();
+    CImgList<double> F = div(G, H);
+    CImg<double>::FFT(F[0], F[1], true);
+    F[0].normalize(0, 255);
+    F[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
+}
+
 void im::customFilter(const int &w00, const int &w01, const int &w02, const int &w10, const int &w11, const int &w12, const int &w20, const int &w21, const int &w22)
 {
     CImg<float> img(fileName.toStdString().data());
@@ -1387,21 +1410,17 @@ void im::on_action_Flip_triggered()
 
 // 逆滤波
 // 运动模糊，fspecial('motion', 41, 0) 产生的模糊模板
-void im::on_action_Inverse_filter_triggered()
+void im::on_action_Inverse_Filter_triggered()
 {
-    CImg<double> img(fileName.toStdString().data());
-    const int len = 9;
-    CImg<double> kernel(len, 1, 1, 1, 1.0f/len);
+    dlgInverseFilter = new DialogInverseFilter;
 
-    CImg<double> imgBlured = img.get_convolve(kernel, img);
-    kernel.resize(img.width(), img.height(), 1, 1, 0);
-    CImgList<double> G = imgBlured.get_FFT();
-    CImgList<double> H = kernel.get_FFT();
-    CImgList<double> F = div(G, H);
-    CImg<double>::FFT(F[0], F[1], true);
-    F[0].normalize(0, 255);
-    F[0].save(resultFileName.toStdString().data());
-    updateOutScene(resultFileName);
+    dlgInverseFilter->setModal(true);
+    dlgInverseFilter->show();
+
+    connect(dlgInverseFilter,
+            SIGNAL(sendData(int, int, double, int, int)),
+            this,
+            SLOT(invertFilter(int, int, double, int, int)));
 }
 
 template<typename T>

@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialoginversefilter.h"
 #include "dialogmotionblur.h"
 #include "dialoghomomorphicfilter.h"
 #include "dialogbutterworthhighpassfilter.h"
@@ -142,7 +143,7 @@ private slots:
 
     void on_action_Flip_triggered();
 
-    void on_action_Inverse_filter_triggered();
+    void on_action_Inverse_Filter_triggered();
 
     void on_action_Manual_Threshold_triggered();
 
@@ -179,6 +180,8 @@ public slots:
     void medianFilter(const int &size);
     void maximumFilter(const int &size);
     void minimumFilter(const int &size);
+    void invertFilter(const int &noiseType, const int &D0, const double &variance,
+                      const int &length, const int &angle);
     void customFilter(const int &w00, const int &w01, const int &w02,
                       const int &w10, const int &w11, const int &w12,
                       const int &w20, const int &w21, const int &w22);
@@ -241,6 +244,7 @@ private:
     DialogButterworthHighPassFilter *dlgButterworthHighPassFilter;
     DialogHomomorphicFilter *dlgHomomorphicFilter;
     DialogMotionBlur *dlgMotionBlur;
+    DialogInverseFilter *dlgInverseFilter;
 
     CImg<double> getPsfKernel(const int &length, const int &angle);
     template <typename T>

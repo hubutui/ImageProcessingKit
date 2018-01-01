@@ -48,7 +48,8 @@ SOURCES += \
     dialogbutterworthhighpassfilter.cpp \
     dialoghomomorphicfilter.cpp \
     qcustomplot.cpp \
-    dialogmotionblur.cpp
+    dialogmotionblur.cpp \
+    dialoginversefilter.cpp
 
 HEADERS += \
         im.h \
@@ -74,7 +75,8 @@ HEADERS += \
     dialogbutterworthhighpassfilter.h \
     dialoghomomorphicfilter.h \
     qcustomplot.h \
-    dialogmotionblur.h
+    dialogmotionblur.h \
+    dialoginversefilter.h
 
 FORMS += \
         im.ui \
@@ -98,7 +100,8 @@ FORMS += \
     dialogbutterworthlowpassfilter.ui \
     dialogbutterworthhighpassfilter.ui \
     dialoghomomorphicfilter.ui \
-    dialogmotionblur.ui
+    dialogmotionblur.ui \
+    dialoginversefilter.ui
 
 unix: LIBS += -lX11
 win32: LIBS += -lgdi32
