@@ -97,5 +97,5 @@ FORMS += \
     dialogbutterworthhighpassfilter.ui \
     dialoghomomorphicfilter.ui
 
-unix: LIBS += -lX11 -lqcustomplot
+unix: LIBS += -lX11
 win32: LIBS += -lgdi32
