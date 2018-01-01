@@ -72,7 +72,6 @@ HEADERS += \
     dialogbutterworthlowpassfilter.h \
     dialogbutterworthhighpassfilter.h \
     dialoghomomorphicfilter.h \
-    dialogpiecewiselineartransformation.h \
     qcustomplot.h
 
 FORMS += \

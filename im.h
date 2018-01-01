@@ -50,7 +50,11 @@
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QMap>
+#include <qglobal.h>
+
+#ifdef Q_OS_WIN
 #include <qt_windows.h>
+#endif
 
 // here we use Qt for GUI
 // disable CImg's display function by define this macro
