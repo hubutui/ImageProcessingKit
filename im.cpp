@@ -957,8 +957,8 @@ void im::on_action_Laplacian_Filter_triggered()
 {
     CImg<float> img(fileName.toStdString().data());
     CImg<float> dest = img.get_laplacian();
-    dest.save_png("laplacian.png");
     dest = img + 0.5*dest;
+
     dest.save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
 }
