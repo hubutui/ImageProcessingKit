@@ -196,11 +196,19 @@
     <addaction name="action_Opening"/>
     <addaction name="action_Closing"/>
    </widget>
+   <widget class="QMenu" name="menuNoise">
+    <property name="title">
+     <string>Noise</string>
+    </property>
+    <addaction name="action_Gaussian_Noise"/>
+    <addaction name="action_Motion_Blur"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menuSpatial_Transform"/>
    <addaction name="menuSpatial_Filter"/>
    <addaction name="menuFrequency_Filter"/>
+   <addaction name="menuNoise"/>
    <addaction name="menuImage_Recovery"/>
    <addaction name="menuImage_Thresholding"/>
    <addaction name="menuOperation"/>
@@ -545,6 +553,16 @@
   <action name="action_Homomorphic_Filter">
    <property name="text">
     <string>Homomorphic Filter</string>
+   </property>
+  </action>
+  <action name="action_Gaussian_Noise">
+   <property name="text">
+    <string>Gaussian Noise</string>
+   </property>
+  </action>
+  <action name="action_Motion_Blur">
+   <property name="text">
+    <string>Motion Blur</string>
    </property>
   </action>
  </widget>

@@ -658,6 +658,16 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
     updateOutScene(resultFileName);
 }
 
+void im::motionBlur(const int &length, const int &angle)
+{
+    CImg<double> psf = getPsfKernel(length, angle);
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_convolve(psf);
+
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -683,6 +693,19 @@ void im::updateOutScene(const QString &fileName)
 int im::rgbToGray(const int &r, const int &g, const int &b)
 {
     return (r * 11 + g * 16 + b * 5)/32;
+}
+
+// create motion blur psf kernel
+CImg<double> im::getPsfKernel(const int &length, const int &angle)
+{
+    CImg<double> psf(length, length, 1, 1, 0.0f);
+
+    cimg_forXY(psf, x, y) {
+        psf(y*tan(angle), y) = 1.0f/length;
+    }
+    psf.rotate(-90);
+
+    return psf;
 }
 
 bool im::isBinary(const CImg<int> &img)
@@ -1654,4 +1677,14 @@ CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2)
     }
 
     return result;
+}
+
+void im::on_action_Motion_Blur_triggered()
+{
+    dlgMotionBlur = new DialogMotionBlur;
+
+    dlgMotionBlur->setModal(true);
+    dlgMotionBlur->show();
+
+    connect(dlgMotionBlur, SIGNAL(sendData(int, int)), this, SLOT(motionBlur(int, int)));
 }

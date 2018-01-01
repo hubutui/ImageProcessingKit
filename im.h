@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogmotionblur.h"
 #include "dialoghomomorphicfilter.h"
 #include "dialogbutterworthhighpassfilter.h"
 #include "dialogbutterworthlowpassfilter.h"
@@ -167,6 +168,8 @@ private slots:
 
     void on_action_Homomorphic_Filter_triggered();
 
+    void on_action_Motion_Blur_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -191,6 +194,7 @@ public slots:
     void butterworthLowPassFilter(const int &Order, const int &D0);
     void butterworthHighPassFilter(const int &Order, const int &D0);
     void homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0);
+    void motionBlur(const int &length, const int &angle);
 
 private:
     Ui::im *ui;
@@ -236,7 +240,9 @@ private:
     DialogButterworthLowPassFilter *dlgButterworthLowPassFilter;
     DialogButterworthHighPassFilter *dlgButterworthHighPassFilter;
     DialogHomomorphicFilter *dlgHomomorphicFilter;
+    DialogMotionBlur *dlgMotionBlur;
 
+    CImg<double> getPsfKernel(const int &length, const int &angle);
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
     template <typename T>
