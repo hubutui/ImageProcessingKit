@@ -201,6 +201,8 @@ private:
     DialogLinearTransform *dialogLinearTransform;
     QString fileName;
     QString saveFileName;
+    // result file name used for update out scene
+    QString resultFileName;
     void setFileName(const QString &fileName);
     void setSaveFileName(const QString &saveFileName);
     void updateOutScene(const QString &fileName);

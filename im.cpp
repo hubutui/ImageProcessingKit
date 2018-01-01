@@ -42,6 +42,8 @@ im::im(QWidget *parent) :
     // once coord change, we emit a sinal from mouseMoveEvent
     // and then a slot is called to show the color value
     connect(inScene, SIGNAL(coordChanged(const QPointF&)), this, SLOT(showColorValue(const QPointF&)));
+    // use bmp for compatiable for Windows
+    resultFileName = "tmp.bmp";
 }
 
 im::~im()
@@ -163,8 +165,8 @@ void im::adjustHsv(const int &h, const float &s, const float &v)
             img(x, y, 1) = s*img(x, y, 1);
             img(x, y, 2) = v*img(x, y, 2);
         }
-        img.HSVtoRGB().save_png("tmp.png");
-        updateOutScene("tmp.png");
+        img.HSVtoRGB().save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     } else if (isGrayscale(img)) {
         QMessageBox::critical(this, tr("Error!"), tr("Not an RGB image."));
         return;
@@ -195,8 +197,8 @@ void im::linearTransformation(const double &k, const double &b)
         return;
     }
 
-    img.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    img.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::piecewiseLinearTransformation(const double &r1, const double &s1, const double &r2, const double &s2)
@@ -236,8 +238,8 @@ void im::piecewiseLinearTransformation(const double &r1, const double &s1, const
         return;
     }
 
-    img.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    img.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 
 }
 
@@ -247,18 +249,18 @@ void im::averageFilter(const int &size)
     CImg<float> kernel(size, size, 1, 1, 1.0f/size/size);
 
     CImg<float> dest = img.convolve(kernel);
-    dest.save_png("tmp.png");
+    dest.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 void im::medianFilter(const int &size)
 {
     CImg<float> img(fileName.toStdString().data());
     img.blur_median(size);
-    img.save_png("tmp.png");
+    img.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 // one might consider using dilate & erode function from CImg
@@ -293,9 +295,9 @@ void im::maximumFilter(const int &size)
         }
     }
 
-    dest.save_png("tmp.png");
+    dest.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 // minimum filter, just like maximum filter
@@ -315,9 +317,9 @@ void im::minimumFilter(const int &size)
         }
     }
 
-    dest.save_png("tmp.png");
+    dest.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 void im::customFilter(const int &w00, const int &w01, const int &w02, const int &w10, const int &w11, const int &w12, const int &w20, const int &w21, const int &w22)
@@ -335,9 +337,9 @@ void im::customFilter(const int &w00, const int &w01, const int &w02, const int 
     }
 
     img.convolve(kernel);
-    img.save_png("tmp.png");
+    img.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 void im::resize(const double &wFactor, const double &hFactor, const int &interpolationType)
@@ -348,8 +350,8 @@ void im::resize(const double &wFactor, const double &hFactor, const int &interpo
     CImg<double> result = img.get_resize(static_cast<int>(round(img.width()*wFactor)),
                                          static_cast<int>(round(img.height()*hFactor)),
                                          img.depth(), img.spectrum(), interpolationType);
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::threshold(const int &threshold)
@@ -371,8 +373,8 @@ void im::threshold(const int &threshold)
         }
     }
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::erode(unsigned char structureElement[3][3])
@@ -385,8 +387,8 @@ void im::erode(unsigned char structureElement[3][3])
 
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_erode(s);
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::regionGrowth(const QPoint &seed, const int &threshold)
@@ -421,8 +423,8 @@ void im::regionGrowth(const QPoint &seed, const int &threshold)
     //qDebug() << img(100, 100) << endl;
     //qDebug() << img(101, 100) << endl;
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::dilate(unsigned char structureElement[3][3])
@@ -436,8 +438,8 @@ void im::dilate(unsigned char structureElement[3][3])
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_dilate(s);
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::opening(unsigned char structureElement[3][3])
@@ -451,8 +453,8 @@ void im::opening(unsigned char structureElement[3][3])
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_erode(s).get_dilate(s);
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::closing(unsigned char structureElement[3][3])
@@ -466,8 +468,8 @@ void im::closing(unsigned char structureElement[3][3])
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_dilate(s).get_erode(s);
 
-    result.save("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::idealHighPassFilter(const int &D0)
@@ -504,8 +506,8 @@ void im::idealHighPassFilter(const int &D0)
     CImg<double>::FFT(G[0], G[1], true);
 
     G[0].normalize(0, 255);
-    G[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    G[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::idealLowPassFilter(const int &D0)
@@ -540,8 +542,8 @@ void im::idealLowPassFilter(const int &D0)
     // IFFT
     CImg<double>::FFT(G[0], G[1], true);
     G[0].normalize(0, 255);
-    G[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    G[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::butterworthLowPassFilter(const int &Order, const int &D0)
@@ -578,8 +580,8 @@ void im::butterworthLowPassFilter(const int &Order, const int &D0)
     qDebug() << "min: " << G[0].min() <<
                 "max: " << G[0].max() << endl;
     G[0].normalize(0, 255);
-    G[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    G[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::butterworthHighPassFilter(const int &Order, const int &D0)
@@ -615,8 +617,8 @@ void im::butterworthHighPassFilter(const int &Order, const int &D0)
     qDebug() << "min: " << G[0].min() <<
                 "max: " << G[0].max() << endl;
     G[0].normalize(0, 255);
-    G[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    G[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0)
@@ -652,8 +654,8 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
     G[0] = G[0].exp() - 1;
     qDebug() << "max: " << G[0].max() << ", min: " << G[0].min() << endl;
     G[0].normalize(0, 255);
-    G[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    G[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::setFileName(const QString &fileName)
@@ -814,8 +816,8 @@ void im::on_action_Grayscale_triggered()
         }
 
         // save image
-        dest.save_png("tmp.png");
-        updateOutScene("tmp.png");
+        dest.save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Unfortunately, something is wrong."));
         return;
@@ -888,8 +890,8 @@ void im::on_action_Histogram_Equalization_triggered()
             return;
     }
 
-    dest.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    dest.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_Histogram_Specification_triggered()
@@ -928,9 +930,9 @@ void im::on_action_Histogram_Specification_triggered()
         }
     }
 
-    dest.save("tmp.png");
+    dest.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_Piecewise_Linear_Transformation_triggered()
@@ -957,9 +959,8 @@ void im::on_action_Laplacian_Filter_triggered()
     CImg<float> dest = img.get_laplacian();
     dest.save_png("laplacian.png");
     dest = img + 0.5*dest;
-    dest.save_png("tmp.png");
-
-    updateOutScene("tmp.png");
+    dest.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_Median_Filter_triggered()
@@ -1038,9 +1039,9 @@ void im::on_action_Pseudocolor_triggered()
         }
     }
 
-    dest.save_png("tmp.png");
+    dest.save(resultFileName.toStdString().data());
 
-    updateOutScene("tmp.png");
+    updateOutScene(resultFileName);
 }
 
 template<typename T>
@@ -1171,8 +1172,8 @@ void im::on_action_Addition_triggered()
             img /= 2;
         }
 
-        img.save_png("tmp.png");
-        updateOutScene("tmp.png");
+        img.save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     }
 }
 
@@ -1187,8 +1188,8 @@ void im::on_action_Subtraction_triggered()
         // resize image before operation
         tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
         img -= tmpImg;
-        img.save_png("tmp.png");
-        updateOutScene("tmp.png");
+        img.save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     }
 }
 
@@ -1202,8 +1203,8 @@ void im::on_action_Multiplication_triggered()
 
         tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
         img.mul(tmpImg);
-        img.save_png("tmp.png");
-        updateOutScene("tmp.png");
+        img.save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     }
 }
 
@@ -1218,8 +1219,8 @@ void im::on_action_Division_triggered()
         tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
         img.div(tmpImg);
         img.normalize(0, 255);
-        img.save_png("tmp.png");
-        updateOutScene("tmp.png");
+        img.save(resultFileName.toStdString().data());
+        updateOutScene(resultFileName);
     }
 }
 
@@ -1228,8 +1229,8 @@ void im::on_action_Negative_triggered()
     CImg<int> img(fileName.toStdString().data());
 
     img = 255 - img;
-    img.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    img.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_XOR_triggered()
@@ -1251,8 +1252,8 @@ void im::on_action_XOR_triggered()
 
     tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorXor(img, tmpImg);
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_AND_triggered()
@@ -1275,8 +1276,8 @@ void im::on_action_AND_triggered()
     tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorAnd(img, tmpImg);
 
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_OR_triggered()
@@ -1299,8 +1300,8 @@ void im::on_action_OR_triggered()
     tmpImg.resize(img.width(), img.height(), img.depth(), img.spectrum());
     CImg<int> result = operatorOr(img, tmpImg);
 
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_FFT_triggered()
@@ -1311,8 +1312,8 @@ void im::on_action_FFT_triggered()
 
     result.normalize(0, 255);
     result = fftshift(result);
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_IFFT_triggered()
@@ -1323,8 +1324,8 @@ void im::on_action_IFFT_triggered()
     // fft backward, aka ifft
     CImg<double>::FFT(fft[0], fft[1], true);
     // take only real part, and normalize to (0, 255)
-    fft[0].normalize(0, 255).save_png("tmp.png");
-    updateOutScene("tmp.png");
+    fft[0].normalize(0, 255).save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 // shift high frequency from corner to middle
@@ -1349,16 +1350,16 @@ void im::on_action_Mirror_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_mirror('x');
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::on_action_Flip_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_mirror('y');
-    result.save_png("tmp.png");
-    updateOutScene("tmp.png");
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 // 逆滤波
@@ -1376,8 +1377,8 @@ void im::on_action_Inverse_filter_triggered()
     CImgList<double> F = div(G, H);
     CImg<double>::FFT(F[0], F[1], true);
     F[0].normalize(0, 255);
-    F[0].save("tmp.png");
-    updateOutScene("tmp.png");
+    F[0].save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 template<typename T>
