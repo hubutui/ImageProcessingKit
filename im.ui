@@ -112,14 +112,9 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="action_Reset"/>
+    <addaction name="action_Adjust_HSV"/>
     <addaction name="action_Histogram"/>
     <addaction name="action_Grayscale"/>
-   </widget>
-   <widget class="QMenu" name="menuColor_Space">
-    <property name="title">
-     <string>&amp;Color Space</string>
-    </property>
-    <addaction name="action_Adjust_HSV"/>
    </widget>
    <widget class="QMenu" name="menuSpatial_Transform">
     <property name="title">
@@ -203,7 +198,6 @@
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
-   <addaction name="menuColor_Space"/>
    <addaction name="menuSpatial_Transform"/>
    <addaction name="menuSpatial_Filter"/>
    <addaction name="menuFrequency_Filter"/>
