@@ -719,14 +719,25 @@ int im::rgbToGray(const int &r, const int &g, const int &b)
 }
 
 // create motion blur psf kernel
+// according to GNU Octave's fspecial implement
+// just generate a horizontal line across the middle
+// and then rotate to the specific angle
 CImg<double> im::getPsfKernel(const int &length, const int &angle)
 {
-    CImg<double> psf(length, length, 1, 1, 0.0f);
-
-    cimg_forXY(psf, x, y) {
-        psf(y*tan(angle), y) = 1.0f/length;
+    int len;
+    if (length % 2 == 0) {
+        len = length + 1;
+    } else {
+        len = length;
     }
-    psf.rotate(-90);
+
+    CImg<double> psf(len, len, 1, 1, 0.0f);
+
+    cimg_forY(psf, y) {
+        psf(len/2, y) = 1;
+    }
+    psf.rotate(angle);
+    psf /= psf.sum();
 
     return psf;
 }
