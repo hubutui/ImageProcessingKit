@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialoggaussiannoise.h"
 #include "dialoginversefilter.h"
 #include "dialogmotionblur.h"
 #include "dialoghomomorphicfilter.h"
@@ -171,6 +172,8 @@ private slots:
 
     void on_action_Motion_Blur_triggered();
 
+    void on_action_Gaussian_Noise_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -198,6 +201,7 @@ public slots:
     void butterworthHighPassFilter(const int &Order, const int &D0);
     void homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0);
     void motionBlur(const int &length, const int &angle);
+    void gaussianNoise(const double &variance);
 
 private:
     Ui::im *ui;
@@ -245,6 +249,7 @@ private:
     DialogHomomorphicFilter *dlgHomomorphicFilter;
     DialogMotionBlur *dlgMotionBlur;
     DialogInverseFilter *dlgInverseFilter;
+    DialogGaussianNoise *dlgGaussianNoise;
 
     CImg<double> getPsfKernel(const int &length, const int &angle);
     template <typename T>

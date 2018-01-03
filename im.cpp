@@ -704,6 +704,15 @@ void im::motionBlur(const int &length, const int &angle)
     updateOutScene(resultFileName);
 }
 
+void im::gaussianNoise(const double &variance)
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> result = img.get_noise(variance*255);
+
+    result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1752,4 +1761,14 @@ CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2, const int 
     }
 
     return result;
+}
+
+void im::on_action_Gaussian_Noise_triggered()
+{
+    dlgGaussianNoise = new DialogGaussianNoise;
+
+    dlgGaussianNoise->setModal(true);
+    dlgGaussianNoise->show();
+
+    connect(dlgGaussianNoise, SIGNAL(sendData(double)), this, SLOT(gaussianNoise(double)));
 }
