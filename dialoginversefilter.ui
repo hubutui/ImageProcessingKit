@@ -6,92 +6,107 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>451</width>
-    <height>272</height>
+    <width>480</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Inverse Filter Setting</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QRadioButton" name="radioButtonNoNoise">
-       <property name="text">
-        <string>No Noise</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QRadioButton" name="radioButtonGaussianNoise">
+        <widget class="QLabel" name="labelNoiseType">
          <property name="text">
-          <string>Gaussian Noise</string>
+          <string>Noise Type: </string>
          </property>
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelVariance">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QRadioButton" name="radioButtonNoNoise">
            <property name="text">
-            <string>Variance: </string>
+            <string>No Noise</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxVariance">
-           <property name="maximum">
-            <double>5.000000000000000</double>
-           </property>
-           <property name="singleStep">
-            <double>0.010000000000000</double>
-           </property>
-           <property name="value">
-            <double>0.010000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelCutoffFrequency">
-           <property name="text">
-            <string>Cutoff Frequency: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="spinBoxCutoffFrequency">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>1024</number>
-           </property>
-           <property name="value">
-            <number>100</number>
-           </property>
-          </widget>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QRadioButton" name="radioButtonGaussianNoise">
+             <property name="text">
+              <string>Gaussian Noise: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelVariance">
+             <property name="text">
+              <string>Variance: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBoxVariance">
+             <property name="maximum">
+              <double>5.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="labelMotionBlur">
+        <widget class="QLabel" name="labelCutoffFrequency">
          <property name="text">
-          <string>Motion Blur</string>
+          <string>Cutoff Frequency: </string>
          </property>
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_2">
+        <widget class="QSpinBox" name="spinBoxCutoffFrequency">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1024</number>
+         </property>
+         <property name="value">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="labelMotionBlur">
+         <property name="text">
+          <string>Motion Blur: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
           <widget class="QLabel" name="labelLength">
            <property name="text">
@@ -101,11 +116,14 @@
          </item>
          <item row="0" column="1">
           <widget class="QSpinBox" name="spinBoxLength">
+           <property name="minimum">
+            <number>1</number>
+           </property>
            <property name="maximum">
-            <number>512</number>
+            <number>99</number>
            </property>
            <property name="value">
-            <number>45</number>
+            <number>10</number>
            </property>
           </widget>
          </item>
