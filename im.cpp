@@ -710,7 +710,7 @@ void im::motionBlur(const int &length, const int &angle)
 void im::gaussianNoise(const double &variance)
 {
     CImg<double> img(fileName.toStdString().data());
-    CImg<double> result = img.get_noise(variance*255);
+    CImg<double> result = img.get_noise(variance);
 
     result.save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
