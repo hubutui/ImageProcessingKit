@@ -112,47 +112,46 @@ void im::on_action_Save_As_triggered()
 void im::on_action_Close_triggered()
 {
     cleanImage();
+    // also set fileName to empty
+    setFileName("");
 }
 
 void im::showColorValue(const QPointF &position)
 {
-    // check fileName before construct a CImg object
-    if (fileName.isNull()) {
-        return;
-    }
-    CImg<unsigned char> img(fileName.toStdString().data());
-
-    if (isRGB(img)) {
-        // map position from scene to current item
-        QPointF pos = inPixmapItem->mapFromScene(position);
-        QPoint pixel;
-        pixel.setX(int(pos.x()));
-        pixel.setY(int(pos.y()));
-        QRgb rgbValue = inPixmap->toImage().pixel(pixel);
-        QColor color(rgbValue);
-        int gray = qGray(rgbValue);
-        QRect rect = inPixmap->rect();
-        if (rect.contains(pixel)) {
-            ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
-            ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+    if (!fileName.isEmpty()) {
+        CImg<unsigned char> img(fileName.toStdString().data());
+        if (isRGB(img)) {
+            // map position from scene to current item
+            QPointF pos = inPixmapItem->mapFromScene(position);
+            QPoint pixel;
+            pixel.setX(int(pos.x()));
+            pixel.setY(int(pos.y()));
+            QRgb rgbValue = inPixmap->toImage().pixel(pixel);
+            QColor color(rgbValue);
+            int gray = qGray(rgbValue);
+            QRect rect = inPixmap->rect();
+            if (rect.contains(pixel)) {
+                ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
+                ui->label_color_value->setText(tr("R: %1\tG: %2\tB: %3\tgray: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(gray));
+            }
+        } else if(isGrayscale(img)) {
+            // map position from scene to current item
+            QPointF pos = inPixmapItem->mapFromScene(position);
+            QPoint pixel;
+            pixel.setX(int(pos.x()));
+            pixel.setY(int(pos.y()));
+            QRgb rgbValue = inPixmap->toImage().pixel(pixel);
+            QColor color(rgbValue);
+            int gray = qGray(rgbValue);
+            QRect rect = inPixmap->rect();
+            if (rect.contains(pixel)) {
+                ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
+                ui->label_color_value->setText(tr("gray: %4").arg(gray));
+            }
+        } else {
+            QMessageBox::critical(this, tr("Error!"), tr("Something is wrong."));
+            return;
         }
-    } else if(isGrayscale(img)) {
-        // map position from scene to current item
-        QPointF pos = inPixmapItem->mapFromScene(position);
-        QPoint pixel;
-        pixel.setX(int(pos.x()));
-        pixel.setY(int(pos.y()));
-        QRgb rgbValue = inPixmap->toImage().pixel(pixel);
-        QColor color(rgbValue);
-        int gray = qGray(rgbValue);
-        QRect rect = inPixmap->rect();
-        if (rect.contains(pixel)) {
-            ui->label_coord->setText(tr("coord: %1, %2").arg(pixel.x()).arg(pixel.y()));
-            ui->label_color_value->setText(tr("gray: %4").arg(gray));
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error!"), tr("Something is wrong."));
-        return;
     }
 }
 
