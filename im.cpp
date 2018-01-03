@@ -325,19 +325,14 @@ void im::minimumFilter(const int &size)
 void im::invertFilter(const int &noiseType, const int &D0, const double &variance,
                       const int &length, const int &angle)
 {
-//    CImg<double> psf = getPsfKernel(length, angle);
-    CImg<double> psf(length, length, 1, 1, 0.0f);
-    cimg_forX(psf, x) {
-        psf(x, length/2) = 1.0f;
-    }
+    CImg<double> psf = getPsfKernel(length, angle);
+
     CImg<double> img(fileName.toStdString().data());
     CImg<double> imgMotionBlured = img.get_convolve(psf, img);
 
     if (noiseType == 1) {
         imgMotionBlured.noise(variance);
-        imgMotionBlured.save("blur-with-noise.png");
     }
-    imgMotionBlured.save("blur.png");
 
     // resize psf to same size as img for FFT
     psf.resize(img.width(), img.height(), 1, 1, 0);
@@ -352,21 +347,7 @@ void im::invertFilter(const int &noiseType, const int &D0, const double &varianc
     H[0] = fftshift(H[0]);
     H[1] = fftshift(H[1]);
 
-    CImgList<double> F(G);
-    std::complex<double> tmp1, tmp2, tmp3;
-    double D;
-    cimg_forXY(F[0], x, y) {
-        D = sqrt((x - img.width()/2)*(x - img.height()/2)
-                 + (y - img.height()/2)*(y - img.height()/2));
-        if (D <= D0) {
-            tmp1 = std::complex<double>(G[0](x, y), G[1](x, y));
-            tmp2 = std::complex<double>(H[0](x, y), H[1](x, y));
-            tmp3 = tmp1/(tmp2 + DBL_EPSILON);
-            F[0](x, y) = tmp3.real();
-            F[1](x, y) = tmp3.imag();
-        }
-    }
-
+    CImgList<double> F = div(G, H, D0);
     F[0] = fftshift(F[0]);
     F[1] = fftshift(F[1]);
     CImg<double>::FFT(F[0], F[1], true);
@@ -714,8 +695,8 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
 void im::motionBlur(const int &length, const int &angle)
 {
     CImg<double> psf = getPsfKernel(length, angle);
-    psf.normalize(0, 255);
-    psf.save("psf.png");
+//    psf.normalize(0, 255);
+//    psf.save("psf.png");
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_convolve(psf);
 
@@ -1754,8 +1735,9 @@ void im::on_action_Motion_Blur_triggered()
 template<typename T>
 CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2, const int &D0)
 {
-    CImg<T> result(img1);
-    T D, tmp1, tmp2, tmp3;
+    CImgList<T> result(img1);
+    T D;
+    std::complex<T> tmp1, tmp2, tmp3;
 
     cimg_forXY(result[0], x, y) {
         D = sqrt((x - img1[0].width()/2)*(x - img1[0].height()/2)
