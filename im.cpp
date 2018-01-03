@@ -116,6 +116,10 @@ void im::on_action_Close_triggered()
 
 void im::showColorValue(const QPointF &position)
 {
+    // check fileName before construct a CImg object
+    if (fileName.isNull()) {
+        return;
+    }
     CImg<unsigned char> img(fileName.toStdString().data());
 
     if (isRGB(img)) {
