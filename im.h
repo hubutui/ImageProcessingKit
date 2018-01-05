@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogatmosphericcirculation.h"
 #include "dialoggaussiannoise.h"
 #include "dialoginversefilter.h"
 #include "dialogmotionblur.h"
@@ -174,6 +175,8 @@ private slots:
 
     void on_action_Gaussian_Noise_triggered();
 
+    void on_action_Atmospheric_Circulation_Blur_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -202,6 +205,7 @@ public slots:
     void homomorphicFilter(const double &gammaL, const double &gammaH, const double &c, const int &D0);
     void motionBlur(const int &length, const int &angle);
     void gaussianNoise(const double &variance);
+    void atmosphericCirculationBlur(const double &k);
 
 private:
     Ui::im *ui;
@@ -250,6 +254,7 @@ private:
     DialogMotionBlur *dlgMotionBlur;
     DialogInverseFilter *dlgInverseFilter;
     DialogGaussianNoise *dlgGaussianNoise;
+    DialogAtmosphericCirculation *dlgAtmosphericCirculation;
 
     CImg<double> getPsfKernel(const int &length, const int &angle);
     template <typename T>
@@ -262,6 +267,8 @@ private:
     CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
     template <typename T>
     CImg<T> fftshift(const CImg<T> &img);
+    template <typename T>
+    CImgList<T> fftshift(const CImgList<T> &img);
     template <typename T>
     CImg<T> fft(const CImg<T> &img);
     // 计算复数除法

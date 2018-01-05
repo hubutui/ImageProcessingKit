@@ -43,7 +43,11 @@ im::im(QWidget *parent) :
     // and then a slot is called to show the color value
     connect(inScene, SIGNAL(coordChanged(const QPointF&)), this, SLOT(showColorValue(const QPointF&)));
     // use bmp for compatiable for Windows
-    resultFileName = "tmp.bmp";
+#ifdef Q_OS_WIN
+      resultFileName = "tmp.bmp";
+#else
+    resultFileName = "tmp.png";
+#endif
 }
 
 im::~im()
@@ -713,6 +717,41 @@ void im::gaussianNoise(const double &variance)
     CImg<double> result = img.get_noise(variance);
 
     result.save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
+}
+
+void im::atmosphericCirculationBlur(const double &k)
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImgList<double> F = img.get_FFT();
+    F = fftshift(F);
+
+    // generate H
+    //CImgList<double> H(2, img.width(), img.height(), 1, 1, 0.0f);
+    CImgList<double> H(F, 0.0f);
+    double D;
+
+    cimg_forXY(H[0], x, y) {
+        D = (x - img.width()/2)*(x - img.width()/2)
+                 + (y - img.height()/2)*(y - img.height()/2);
+        H[0](x, y) = exp(-k*pow(D, 5.0f/6.0f));
+        H[1](x, y) = 0.0f;
+    }
+
+    CImgList<double> G(F);
+    std::complex<double> tmp1, tmp2, tmp3;
+
+    cimg_forXY(H[0], x, y) {
+        tmp1 = std::complex<double>(F[0](x, y), F[1](x, y));
+        tmp2 = std::complex<double>(H[0](x, y), H[1](x, y));
+        tmp3 = tmp1*tmp2;
+        G[0](x, y) = tmp3.real();
+        G[1](x, y) = tmp3.imag();
+    }
+    G = fftshift(G);
+    CImg<double>::FFT(G[0], G[1], true);
+    G[0].normalize(0, 255);
+    G[0].save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
 }
 
@@ -1774,4 +1813,29 @@ void im::on_action_Gaussian_Noise_triggered()
     dlgGaussianNoise->show();
 
     connect(dlgGaussianNoise, SIGNAL(sendData(double)), this, SLOT(gaussianNoise(double)));
+}
+
+template<typename T>
+CImgList<T> im::fftshift(const CImgList<T> &img)
+{
+    CImgList<T> result(img);
+
+    for(int i = 0; i < img.width(); ++i) {
+        result[i] = fftshift(img[i]);
+    }
+
+    return result;
+}
+
+void im::on_action_Atmospheric_Circulation_Blur_triggered()
+{
+    dlgAtmosphericCirculation = new DialogAtmosphericCirculation;
+
+    dlgAtmosphericCirculation->setModal(true);
+    dlgAtmosphericCirculation->show();
+
+    connect(dlgAtmosphericCirculation,
+            SIGNAL(sendData(double)),
+            this,
+            SLOT(atmosphericCirculationBlur(double)));
 }

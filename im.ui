@@ -202,6 +202,7 @@
     </property>
     <addaction name="action_Gaussian_Noise"/>
     <addaction name="action_Motion_Blur"/>
+    <addaction name="action_Atmospheric_Circulation_Blur"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -563,6 +564,11 @@
   <action name="action_Motion_Blur">
    <property name="text">
     <string>Motion Blur</string>
+   </property>
+  </action>
+  <action name="action_Atmospheric_Circulation_Blur">
+   <property name="text">
+    <string>Atmospheric Circulation Blur</string>
    </property>
   </action>
  </widget>

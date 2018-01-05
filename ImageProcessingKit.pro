@@ -50,7 +50,8 @@ SOURCES += \
     qcustomplot.cpp \
     dialogmotionblur.cpp \
     dialoginversefilter.cpp \
-    dialoggaussiannoise.cpp
+    dialoggaussiannoise.cpp \
+    dialogatmosphericcirculation.cpp
 
 HEADERS += \
         im.h \
@@ -78,7 +79,8 @@ HEADERS += \
     qcustomplot.h \
     dialogmotionblur.h \
     dialoginversefilter.h \
-    dialoggaussiannoise.h
+    dialoggaussiannoise.h \
+    dialogatmosphericcirculation.h
 
 FORMS += \
         im.ui \
@@ -104,7 +106,8 @@ FORMS += \
     dialoghomomorphicfilter.ui \
     dialogmotionblur.ui \
     dialoginversefilter.ui \
-    dialoggaussiannoise.ui
+    dialoggaussiannoise.ui \
+    dialogatmosphericcirculation.ui
 
 unix: LIBS += -lX11
 win32: LIBS += -lgdi32
