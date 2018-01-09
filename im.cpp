@@ -703,8 +703,6 @@ void im::homomorphicFilter(const double &gammaL, const double &gammaH, const dou
 void im::motionBlur(const int &length, const int &angle)
 {
     CImg<double> psf = getPsfKernel(length, angle);
-//    psf.normalize(0, 255);
-//    psf.save("psf.png");
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_convolve(psf);
 
@@ -778,6 +776,20 @@ void im::wienerFilter(const int &noiseType,
     }
 
     H = fftshift(H);
+    CImgList<double> G = imgMotionBlured.get_FFT();
+    G = fftshift(G);
+    CImgList<double> H2 = mul(H, H);
+    CImgList<double> tmp(H2);
+
+    cimg_forXY(H2[0], x, y) {
+        H2[0](x, y) += k;
+    }
+
+    CImgList<double> F = mul(div(G, H), div(H2, tmp));
+    F = fftshift(F);
+    CImg<double>::FFT(F[0], F[1], true);
+    F[0].normalize(0, 255).save(resultFileName.toStdString().data());
+    updateOutScene(resultFileName);
 }
 
 void im::setFileName(const QString &fileName)
