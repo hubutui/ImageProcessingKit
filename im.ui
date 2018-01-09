@@ -154,6 +154,7 @@
      <string>&amp;Recovery</string>
     </property>
     <addaction name="action_Inverse_Filter"/>
+    <addaction name="action_Wiener_Filter"/>
    </widget>
    <widget class="QMenu" name="menuImage_Thresholding">
     <property name="title">
@@ -569,6 +570,11 @@
   <action name="action_Atmospheric_Circulation_Blur">
    <property name="text">
     <string>Atmospheric Circulation Blur</string>
+   </property>
+  </action>
+  <action name="action_Wiener_Filter">
+   <property name="text">
+    <string>Wiener Filter</string>
    </property>
   </action>
  </widget>

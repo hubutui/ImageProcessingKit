@@ -329,8 +329,11 @@ void im::minimumFilter(const int &size)
     updateOutScene(resultFileName);
 }
 
-void im::invertFilter(const int &noiseType, const int &D0, const double &variance,
-                      const int &length, const int &angle)
+void im::invertFilter(const int &noiseType,
+                      const int &D0,
+                      const double &variance,
+                      const int &length,
+                      const int &angle)
 {
     CImg<double> psf = getPsfKernel(length, angle);
 
@@ -714,7 +717,7 @@ void im::motionBlur(const int &length, const int &angle)
 void im::gaussianNoise(const double &variance)
 {
     CImg<double> img(fileName.toStdString().data());
-    CImg<double> result = img.get_noise(variance);
+    CImg<double> result = img.get_noise(variance).get_normalize(0, 255);
 
     result.save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
@@ -753,6 +756,30 @@ void im::atmosphericCirculationBlur(const double &k)
     G[0].normalize(0, 255);
     G[0].save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
+}
+
+void im::wienerFilter(const int &noiseType,
+                  const double &variance,
+                  const int &length,
+                  const int &angle,
+                  const double &k)
+{
+    CImg<double> img(fileName.toStdString().data());
+    CImg<double> psf = getPsfKernel(length, angle);
+    CImgList<double> H = psfToOtf(psf, img.width(), img.height());
+    CImg<double> imgMotionBlured(img);
+    // generate blured image
+    if (noiseType == 0) {
+        imgMotionBlured = img.get_convolve(psf);
+    } else if (noiseType == 1) {
+        imgMotionBlured = img.get_convolve(psf);
+        imgMotionBlured = imgMotionBlured.get_noise(variance).get_normalize(0, 255);
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unknown noise type."));
+        return;
+    }
+
+    H = fftshift(H);
 }
 
 void im::setFileName(const QString &fileName)
@@ -800,7 +827,7 @@ CImg<double> im::getPsfKernel(const int &length, const int &angle)
     cimg_forX(psf, x) {
         psf(x, len/2) = 1;
     }
-    psf.rotate(angle);
+    psf.rotate(-angle);
     psf /= psf.sum();
 
     return psf;
@@ -1838,4 +1865,42 @@ void im::on_action_Atmospheric_Circulation_Blur_triggered()
             SIGNAL(sendData(double)),
             this,
             SLOT(atmosphericCirculationBlur(double)));
+}
+
+void im::on_action_Wiener_Filter_triggered()
+{
+    dlgWienerFilter = new DialogWienerFilter;
+
+    dlgWienerFilter->setModal(true);
+    dlgWienerFilter->show();
+    connect(dlgWienerFilter,
+            SIGNAL(sendData(int, double, int, int, double)),
+            this,
+            SLOT(wienerFilter(int, double, int, int, double)));
+}
+
+template<typename T>
+CImgList<T> im::getConj(const CImgList<T> &img)
+{
+    CImgList<T> result(img);
+    std::complex<T> tmp;
+
+    cimg_forXY(img[0], x, y) {
+        tmp = std::complex<T>(img[0](x, y), img[1](x, y));
+        result[0](x, y) = tmp.real();
+        result[1](x, y) = -tmp.imag();
+    }
+
+    return result;
+}
+
+// compute FFT of psf in size width x height
+// no fftshift apply
+template<typename T>
+CImgList<double> im::psfToOtf(const CImg<T> &img, const int &width, const int &height)
+{
+    // resize psf, pad zeros to size width x height
+    CImg<T> psf = img.get_resize(width, height, 1, 1, 0);
+
+    return psf.get_FFT();
 }

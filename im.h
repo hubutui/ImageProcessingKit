@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogwienerfilter.h"
 #include "dialogatmosphericcirculation.h"
 #include "dialoggaussiannoise.h"
 #include "dialoginversefilter.h"
@@ -177,6 +178,8 @@ private slots:
 
     void on_action_Atmospheric_Circulation_Blur_triggered();
 
+    void on_action_Wiener_Filter_triggered();
+
 public slots:
     void showColorValue(const QPointF &position);
     void adjustHsv(const int &h, const float &s, const float &v);
@@ -206,6 +209,11 @@ public slots:
     void motionBlur(const int &length, const int &angle);
     void gaussianNoise(const double &variance);
     void atmosphericCirculationBlur(const double &k);
+    void wienerFilter(const int &noiseType,
+                      const double &variance,
+                      const int &length,
+                      const int &angle,
+                      const double &k);
 
 private:
     Ui::im *ui;
@@ -255,8 +263,11 @@ private:
     DialogInverseFilter *dlgInverseFilter;
     DialogGaussianNoise *dlgGaussianNoise;
     DialogAtmosphericCirculation *dlgAtmosphericCirculation;
+    DialogWienerFilter *dlgWienerFilter;
 
     CImg<double> getPsfKernel(const int &length, const int &angle);
+    template<typename T>
+    CImgList<double> psfToOtf(const CImg<T> &img, const int &width, const int &height);
     template <typename T>
     bool isGrayscale(const CImg<T> &img);
     template <typename T>
@@ -265,6 +276,8 @@ private:
     CImg<int> operatorAnd(const CImg<int> &img1, const CImg<int> &img2);
     CImg<int> operatorOr(const CImg<int> &img1, const CImg<int> &img2);
     CImg<int> operatorXor(const CImg<int> &img1, const CImg<int> &img2);
+    template <typename T>
+    CImgList<T> getConj(const CImgList<T> &img);
     template <typename T>
     CImg<T> fftshift(const CImg<T> &img);
     template <typename T>
