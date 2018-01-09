@@ -338,28 +338,26 @@ void im::invertFilter(const int &noiseType,
     CImg<double> psf = getPsfKernel(length, angle);
 
     CImg<double> img(fileName.toStdString().data());
-    CImg<double> imgMotionBlured = img.get_convolve(psf, img);
+    CImg<double> imgMotionBlured(img);
 
-    if (noiseType == 1) {
+    if (noiseType == 0) {
+        imgMotionBlured = img.get_convolve(psf, img);
+    } else if (noiseType == 1) {
+        imgMotionBlured = img.get_convolve(psf, img);
         imgMotionBlured.noise(variance);
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unknown noise type."));
+        return;
     }
 
-    // resize psf to same size as img for FFT
-    psf.resize(img.width(), img.height(), 1, 1, 0);
-
     CImgList<double> G = imgMotionBlured.get_FFT();
+    G = fftshift(G);
 
-    G[0] = fftshift(G[0]);
-    G[1] = fftshift(G[1]);
-
-    CImgList<double> H = psf.get_FFT();
-
-    H[0] = fftshift(H[0]);
-    H[1] = fftshift(H[1]);
+    CImgList<double> H = psfToOtf(psf, img.width(), img.height());
+    H = fftshift(H);
 
     CImgList<double> F = div(G, H, D0);
-    F[0] = fftshift(F[0]);
-    F[1] = fftshift(F[1]);
+    F = fftshift(F);
     CImg<double>::FFT(F[0], F[1], true);
     F[0].normalize(0, 255);
     F[0].save(resultFileName.toStdString().data());
@@ -1510,8 +1508,6 @@ void im::on_action_Flip_triggered()
     updateOutScene(resultFileName);
 }
 
-// 逆滤波
-// 运动模糊，fspecial('motion', 41, 0) 产生的模糊模板
 void im::on_action_Inverse_Filter_triggered()
 {
     dlgInverseFilter = new DialogInverseFilter;
@@ -1810,6 +1806,7 @@ void im::on_action_Motion_Blur_triggered()
     connect(dlgMotionBlur, SIGNAL(sendData(int, int)), this, SLOT(motionBlur(int, int)));
 }
 
+// compute img1/img2 within D <= D0
 template<typename T>
 CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2, const int &D0)
 {
@@ -1818,11 +1815,11 @@ CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2, const int 
     std::complex<T> tmp1, tmp2, tmp3;
 
     cimg_forXY(result[0], x, y) {
-        D = sqrt((x - img1[0].width()/2)*(x - img1[0].height()/2)
+        D = sqrt((x - img1[0].width()/2)*(x - img1[0].width()/2)
                  + (y - img1[0].height()/2)*(y - img1[0].height()/2));
         if (D <= D0) {
             tmp1 = std::complex<T>(img1[0](x, y), img1[1](x, y));
-            tmp2 = std::complex<T>(img1[0](x, y), img2[1](x, y));
+            tmp2 = std::complex<T>(img2[0](x, y), img2[1](x, y));
             tmp3 = tmp1/(tmp2 + DBL_EPSILON);
             result[0](x, y) = tmp3.real();
             result[1](x, y) = tmp3.imag();
