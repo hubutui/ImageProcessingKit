@@ -60,6 +60,7 @@
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
+#include <complex>
 
 #include "CImg.h"
 using namespace cimg_library;
@@ -265,6 +266,7 @@ private:
     DialogAtmosphericCirculation *dlgAtmosphericCirculation;
     DialogWienerFilter *dlgWienerFilter;
 
+    CImgList<double> getMotionBlurH(const int &width, const int &height, const int &a, const int &b);
     CImg<double> getPsfKernel(const int &length, const int &angle);
     template<typename T>
     CImgList<double> psfToOtf(const CImg<T> &img, const int &width, const int &height);
@@ -298,6 +300,8 @@ private:
                     const CImg<T> &img2_real, const CImg<T> &img2_imag);
     template<typename T>
     CImgList<T> mul(const CImgList<T> &img1, const CImgList<T> &img2);
+    template<typename T>
+    CImgList<T> add(const CImgList<T> &img1, const std::complex<T> &val);
     // 计算傅里叶幅度谱
     CImg<double> amp(const CImgList<double> &img);
     // check if point inside img

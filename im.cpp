@@ -341,9 +341,9 @@ void im::invertFilter(const int &noiseType,
     CImg<double> imgMotionBlured(img);
 
     if (noiseType == 0) {
-        imgMotionBlured = img.get_convolve(psf, img);
+        imgMotionBlured = img.get_convolve(psf, img).get_normalize(0, 255);
     } else if (noiseType == 1) {
-        imgMotionBlured = img.get_convolve(psf, img);
+        imgMotionBlured = img.get_convolve(psf, img).get_normalize(0, 255);
         imgMotionBlured.noise(variance);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Unknown noise type."));
@@ -705,8 +705,7 @@ void im::motionBlur(const int &length, const int &angle)
     CImg<double> psf = getPsfKernel(length, angle);
     CImg<double> img(fileName.toStdString().data());
     CImg<double> result = img.get_convolve(psf);
-
-    result.save(resultFileName.toStdString().data());
+    result.normalize(0, 255).save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
 }
 
@@ -762,31 +761,29 @@ void im::wienerFilter(const int &noiseType,
 {
     CImg<double> img(fileName.toStdString().data());
     CImg<double> psf = getPsfKernel(length, angle);
-    CImgList<double> H = psfToOtf(psf, img.width(), img.height());
-    CImg<double> imgMotionBlured(img);
-    // generate blured image
+    CImg<double> imgMotionBlur(img);
+
     if (noiseType == 0) {
-        imgMotionBlured = img.get_convolve(psf);
+        imgMotionBlur = img.get_convolve(psf);
     } else if (noiseType == 1) {
-        imgMotionBlured = img.get_convolve(psf);
-        imgMotionBlured = imgMotionBlured.get_noise(variance).get_normalize(0, 255);
+        imgMotionBlur = img.get_convolve(psf);
+        imgMotionBlur = imgMotionBlur.get_noise(variance);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Unknown noise type."));
         return;
     }
 
-    H = fftshift(H);
-    CImgList<double> G = imgMotionBlured.get_FFT();
-    G = fftshift(G);
-    CImgList<double> H2 = mul(H, H);
-    CImgList<double> tmp(H2);
+    CImgList<double> H = psfToOtf(psf, img.width(), img.height());
+    CImgList<double> HConj = getConj(H);
+    CImgList<double> H2 = mul(H, HConj);
+    CImgList<double> dem(H2);
 
-    cimg_forXY(H2[0], x, y) {
-        H2[0](x, y) += k;
-    }
+    dem = add(dem, std::complex<double>(k, 0));
 
-    CImgList<double> F = mul(div(G, H), div(H2, tmp));
-    F = fftshift(F);
+    double S_x = img.variance();
+    qDebug() << "K:" << S_x/variance << endl;
+    CImgList<double> G = imgMotionBlur.get_FFT();
+    CImgList<double> F = mul(div(HConj, dem), G);
     CImg<double>::FFT(F[0], F[1], true);
     F[0].normalize(0, 255).save(resultFileName.toStdString().data());
     updateOutScene(resultFileName);
@@ -1832,7 +1829,8 @@ CImgList<T> im::div(const CImgList<T> &img1, const CImgList<T> &img2, const int 
         if (D <= D0) {
             tmp1 = std::complex<T>(img1[0](x, y), img1[1](x, y));
             tmp2 = std::complex<T>(img2[0](x, y), img2[1](x, y));
-            tmp3 = tmp1/(tmp2 + DBL_EPSILON);
+            tmp2 = std::abs(tmp2) > std::abs(sqrt(DBL_EPSILON))? tmp2 : std::complex<T>(sqrt(DBL_EPSILON));
+            tmp3 = tmp1/tmp2;
             result[0](x, y) = tmp3.real();
             result[1](x, y) = tmp3.imag();
         }
@@ -1909,7 +1907,19 @@ template<typename T>
 CImgList<double> im::psfToOtf(const CImg<T> &img, const int &width, const int &height)
 {
     // resize psf, pad zeros to size width x height
-    CImg<T> psf = img.get_resize(width, height, 1, 1, 0);
+    // and return FFT result
+    return img.get_resize(width, height, 1, 1, 0).get_FFT();
+}
 
-    return psf.get_FFT();
+template<typename T>
+CImgList<T> im::add(const CImgList<T> &img, const std::complex<T> &val)
+{
+    CImgList<T> result(img);
+
+    cimg_forXY(result[0], x, y) {
+        result[0](x, y) += val.real();
+        result[1](x, y) += val.imag();
+    }
+
+    return result;
 }
