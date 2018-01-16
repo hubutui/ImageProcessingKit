@@ -1,6 +1,7 @@
 #ifndef IM_H
 #define IM_H
 
+#include "dialogifft.h"
 #include "dialogwienerfilter.h"
 #include "dialogatmosphericcirculation.h"
 #include "dialoggaussiannoise.h"
@@ -215,6 +216,7 @@ public slots:
                       const int &length,
                       const int &angle,
                       const double &k);
+    void ifft(const int &ifftType);
 
 private:
     Ui::im *ui;
@@ -265,6 +267,7 @@ private:
     DialogGaussianNoise *dlgGaussianNoise;
     DialogAtmosphericCirculation *dlgAtmosphericCirculation;
     DialogWienerFilter *dlgWienerFilter;
+    DialogIFFT *dlgIFFT;
 
     CImgList<double> getMotionBlurH(const int &width, const int &height, const int &a, const int &b);
     CImg<double> getPsfKernel(const int &length, const int &angle);
@@ -307,6 +310,12 @@ private:
     // check if point inside img
     template <typename T>
     bool isInsideImage(const QPoint &point, const CImg<T> &img);
+    // keep only magnitude part, and set phase to 1
+    template<typename T>
+    CImgList<T> keepMagnitude(const CImgList<T> &img);
+    // keep only phase part, and set magnitude to 1
+    template<typename T>
+    CImgList<T> keepPhase(const CImgList<T> &img);
     // image formats supported by Qt
     // one might get all the image formats supported by Qt by:
     // qDebug() << QImageReader::supportedImageFormats();

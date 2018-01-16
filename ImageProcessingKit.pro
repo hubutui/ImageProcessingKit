@@ -52,7 +52,8 @@ SOURCES += \
     dialoginversefilter.cpp \
     dialoggaussiannoise.cpp \
     dialogatmosphericcirculation.cpp \
-    dialogwienerfilter.cpp
+    dialogwienerfilter.cpp \
+    dialogifft.cpp
 
 HEADERS += \
         im.h \
@@ -82,7 +83,8 @@ HEADERS += \
     dialoginversefilter.h \
     dialoggaussiannoise.h \
     dialogatmosphericcirculation.h \
-    dialogwienerfilter.h
+    dialogwienerfilter.h \
+    dialogifft.h
 
 FORMS += \
         im.ui \
@@ -110,7 +112,8 @@ FORMS += \
     dialoginversefilter.ui \
     dialoggaussiannoise.ui \
     dialogatmosphericcirculation.ui \
-    dialogwienerfilter.ui
+    dialogwienerfilter.ui \
+    dialogifft.ui
 
 unix: LIBS += -lX11
 win32: LIBS += -lgdi32

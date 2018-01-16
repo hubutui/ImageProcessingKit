@@ -789,6 +789,37 @@ void im::wienerFilter(const int &noiseType,
     updateOutScene(resultFileName);
 }
 
+void im::ifft(const int &ifftType)
+{
+    CImg<double> img(fileName.toStdString().data());
+    // fft forward
+    CImgList<double> F = img.get_FFT();
+    CImgList<double> magnitude = keepMagnitude(F);
+    CImgList<double> phase = keepPhase(F);
+    // fft backward, aka ifft
+    if (ifftType == 0) {
+        CImg<double>::FFT(F[0], F[1], true);
+        // take only real part, and normalize to (0, 255)
+        F[0].normalize(0, 255).save(resultFileName.toStdString().data());
+    } else if (ifftType == 1) {
+        CImg<double>::FFT(magnitude[0], magnitude[1], true);
+        magnitude[0].normalize(0, 255);
+        qDebug() << "max: " << magnitude[0].max() << endl;
+        qDebug() << "min: " << magnitude[0].min() << endl;
+        // take only real part, and normalize to (0, 255)
+        magnitude[0].save(resultFileName.toStdString().data());
+    } else if (ifftType == 2) {
+        CImg<double>::FFT(phase[0], phase[1], true);
+        // take only real part, and normalize to (0, 255)
+        phase[0].normalize(0, 255).save(resultFileName.toStdString().data());
+    } else {
+        QMessageBox::critical(this, tr("Error!"), tr("Unknown IFFT Type."));
+        return;
+    }
+
+    updateOutScene(resultFileName);
+}
+
 void im::setFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -1473,14 +1504,11 @@ void im::on_action_FFT_triggered()
 
 void im::on_action_IFFT_triggered()
 {
-    CImg<double> img(fileName.toStdString().data());
-    // fft forward
-    CImgList<double> fft = img.get_FFT();
-    // fft backward, aka ifft
-    CImg<double>::FFT(fft[0], fft[1], true);
-    // take only real part, and normalize to (0, 255)
-    fft[0].normalize(0, 255).save(resultFileName.toStdString().data());
-    updateOutScene(resultFileName);
+    dlgIFFT = new DialogIFFT;
+
+    dlgIFFT->setModal(true);
+    dlgIFFT->show();
+    connect(dlgIFFT, SIGNAL(sendData(int)), this, SLOT(ifft(int)));
 }
 
 // shift high frequency from corner to middle
@@ -1919,6 +1947,40 @@ CImgList<T> im::add(const CImgList<T> &img, const std::complex<T> &val)
     cimg_forXY(result[0], x, y) {
         result[0](x, y) += val.real();
         result[1](x, y) += val.imag();
+    }
+
+    return result;
+}
+
+// we keep magnitude, and set phase to 1
+template<typename T>
+CImgList<T> im::keepMagnitude(const CImgList<T> &img)
+{
+    CImgList<T> result(img);
+    std::complex<T> tmp1, tmp2;
+
+    cimg_forXYZ(img[0], x, y, z) {
+        tmp1 = std::complex<T>(img[0](x, y, z), img[1](x, y, z));
+        tmp2 = std::polar(std::abs(tmp1), static_cast<T>(1));
+        result[0](x, y, z) = tmp2.real();
+        result[1](x, y, z) = tmp2.imag();
+    }
+
+    return result;
+}
+
+// we keep phase, and set magnitude to 1
+template<typename T>
+CImgList<T> im::keepPhase(const CImgList<T> &img)
+{
+    CImgList<T> result(img);
+    std::complex<T> tmp1, tmp2;
+
+    cimg_forXYZ(img[0], x, y, z) {
+        tmp1 = std::complex<T>(img[0](x, y, z), img[1](x, y, z));
+        tmp2 = std::polar(static_cast<T>(1), std::arg(tmp1));
+        result[0](x, y, z) = tmp2.real();
+        result[1](x, y, z) = tmp2.imag();
     }
 
     return result;
