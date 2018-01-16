@@ -289,7 +289,7 @@ private:
     CImgList<T> fftshift(const CImgList<T> &img);
     template <typename T>
     CImg<T> fft(const CImg<T> &img);
-    // 计算复数除法
+    // compute division of two CImgList and other overload
     template<typename T>
     CImgList<T> div(const CImg<T> &img1_real, const CImg<T> &img1_imag,
                     const CImg<T> &img2_real, const CImg<T> &img2_imag);
@@ -297,7 +297,7 @@ private:
     CImgList<T> div(const CImgList<T> &img1, const CImgList<T> &img2);
     template<typename T>
     CImgList<T> div(const CImgList<T> &img1, const CImgList<T> &img2, const int &D0);
-    // 计算复数的乘法
+    // compute multiplication of two CImgList and other overload
     template<typename T>
     CImgList<T> mul(const CImg<T> &img1_real, const CImg<T> &img1_imag,
                     const CImg<T> &img2_real, const CImg<T> &img2_imag);
@@ -305,8 +305,8 @@ private:
     CImgList<T> mul(const CImgList<T> &img1, const CImgList<T> &img2);
     template<typename T>
     CImgList<T> add(const CImgList<T> &img1, const std::complex<T> &val);
-    // 计算傅里叶幅度谱
-    CImg<double> amp(const CImgList<double> &img);
+    // compute magnitude
+    CImg<double> magnitude(const CImgList<double> &img);
     // check if point inside img
     template <typename T>
     bool isInsideImage(const QPoint &point, const CImg<T> &img);

@@ -968,7 +968,7 @@ CImgList<T> im::mul(const CImgList<T> &img1, const CImgList<T> &img2)
     return result;
 }
 
-CImg<double> im::amp(const CImgList<double> &img)
+CImg<double> im::magnitude(const CImgList<double> &img)
 {
     return log(1 + sqrt((log(1 + sqrt(img[0].get_mul(img[0]) + img[1].get_mul(img[1]))))));
 }
@@ -1494,7 +1494,7 @@ void im::on_action_FFT_triggered()
 {
     CImg<double> img(fileName.toStdString().data());
     CImgList<double> fft = img.get_FFT();
-    CImg<double> result = amp(fft);
+    CImg<double> result = magnitude(fft);
 
     result.normalize(0, 255);
     result = fftshift(result);
